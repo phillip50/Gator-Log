@@ -60,6 +60,7 @@ public class GetTo extends JPanel implements ActionListener
     protected JTextField text;
     protected JTextField text2;
     protected JTextField text3;
+    protected JComboBox scrollDown;
     protected JLabel label;
     protected JLabel label1;
     protected JLabel label2;
@@ -79,6 +80,22 @@ public class GetTo extends JPanel implements ActionListener
         hasCage = false;
         hasRange = false;
         hasCapacity = false;
+        String[] cages = new String[148];
+        for (int i = 0; i < 99; i++)
+        {
+            int j = i + 1;
+            cages[i] = "" + j;
+        }
+        for (int i = 0; i < 16; i++)
+        {
+            int j = i + 1;
+            cages[i + 99] = "" + j + "A";
+        }
+        for (int i = 0; i < 33; i++)
+        {
+            int j = i + 1;
+            cages[i + 99 + 16] = "" + j + "B";
+        }
         
         Panel panelQuery1 = new Panel(new FlowLayout());
         label = new JLabel("Select Belly Range");
@@ -264,12 +281,14 @@ public class GetTo extends JPanel implements ActionListener
         
         Panel panelQuery3 = new Panel(new FlowLayout());
         label2 = new JLabel("Cage:");
-        text2 = new JTextField(10);
+        //text2 = new JTextField(10);
+        scrollDown = new JComboBox(cages);
+        scrollDown.setEditable(false);
         button35 = new JButton("Enter Cage");
         button35.addActionListener(this);
         button35.setActionCommand("cage");
         panelQuery3.add(label2);
-        panelQuery3.add(text2);
+        panelQuery3.add(scrollDown);
         panelQuery3.add(button35);
         
         Panel panelQuery4 = new Panel(new FlowLayout());
@@ -309,7 +328,7 @@ public class GetTo extends JPanel implements ActionListener
         }
         else if (s.equals("cage"))
         {
-            input3 = text2.getText();
+            input3 = scrollDown.getSelectedItem().toString();
             hasCage = true;
         }
         else if (s.equals("capacity"))
