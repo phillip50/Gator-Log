@@ -1,36 +1,5 @@
-/*  @Phillip Dingler
-
-    Main Objective:
-            Pre-designate a "From" cage that will be used 
-                for all entries                               *check*
-            Add running count for all entires coming from 
-                "From" cage                                   *check*
-            Designate "To" cage based on belly size           *check*
-            When "To" cage is filled, remove it
-            Stack "To" cages
-
-    To-Do:  Get row/column data from database                 *check*
-            Create Gui Interface                              *check*
-            Data check belly/year/class                       *check*
-            Be able to change key database attributes (year)  *check*
-            Tidy up interface
-            Port to Windows Surface
-            Run in terminal
-            Start-up window                                   *check*
-            Ability to create new databases                   *check*
-            Input until user quits                            *check*
-            Remember repeating values (?)                     *check*
-            "other" option in belly sizes                     /remove
-            Ability to load pre-existing database
-            
-    Known Bugs:
-            After removing a "to" cage, can no longer add 
-                another "to" cage                             *fixed*
-            Allows out-of-order ranges                        *fixed*
-
-    Functionality tbd:
-            Divided Cages
-            Attributes Length, Width, Date, Year, Class, Sex
+/*  
+    @Phillip Dingler
 */
 package test;
 
@@ -102,7 +71,7 @@ public class Test
                 }
                 else if (s.equals("from"))
                 {
-                    String temp = InputPanel.createAndShowGUI("From?");
+                    String temp = InputFrom.createAndShowGUI();
                     if (!temp.equals(""))
                     {
                         for (int i = 1; i < cages.length; i++)
@@ -259,7 +228,6 @@ public class Test
         {
             
         }
-        System.out.println(fromCount);
     }
 
     public static int[] addEntry(Table table, String from, String[] toCages, String[] toRanges, int[] capacities, int[] capacityCounter)
