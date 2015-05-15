@@ -1,11 +1,3 @@
-/*
-    Initial window displayed on program start
-    Allows the user to specify output databases and add entries to them
-
-    To-Do:
-        Add ability to specify databases based on belly size        *check*
-*/
-
 package test;
 
 import javax.swing.*; 
@@ -17,10 +9,9 @@ public class StartWindow extends JPanel implements ActionListener
 {
     protected JButton button;
     protected JButton button2;
-    //protected JButton button3;
+    protected JButton button3;
     protected JButton button4;
     protected JButton button5;
-    protected JButton button6;
     protected static String input;
     protected static boolean isDone;
  
@@ -39,28 +30,23 @@ public class StartWindow extends JPanel implements ActionListener
         button2.addActionListener(this);
         button2.setActionCommand("new");
         
-        //button3 = new JButton("Specify From Cage");
-        //button3.addActionListener(this);
-        //button3.setActionCommand("from");
+        button3 = new JButton("Add To Cage");
+        button3.addActionListener(this);
+        button3.setActionCommand("to");
         
-        button4 = new JButton("Add To Cage");
+        button4 = new JButton("Remove To Cage");
         button4.addActionListener(this);
-        button4.setActionCommand("to");
-        
-        button5 = new JButton("Remove To Cage");
-        button5.addActionListener(this);
-        button5.setActionCommand("modify");
+        button4.setActionCommand("modify");
  
-        button6 = new JButton("Quit");
-        button6.addActionListener(this);
-        button6.setActionCommand("quit");
+        button5 = new JButton("Quit");
+        button5.addActionListener(this);
+        button5.setActionCommand("quit");
         
         add(button);
         add(button2);
-        //add(button3);
+        add(button3);
         add(button4);
         add(button5);
-        add(button6);
         
         isDone = false;
     }

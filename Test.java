@@ -1,6 +1,3 @@
-/*  
-    @Phillip Dingler
-*/
 package test;
 
 import com.healthmarketscience.jackcess.DatabaseBuilder;
@@ -42,7 +39,8 @@ public class Test
         DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
         Date date = new Date();
         String currentDate = dateFormat.format(date);
-        String year = "";
+        String fromYear = "";
+        String fromRange = "";
         try
         {
             initCages();
@@ -123,6 +121,7 @@ public class Test
                 {
                     String temp = DatabasePanel.createAndShowGUI();
                     int index = temp.indexOf('_');
+                    int index2 = temp.indexOf('_', index+1);
                     
                     if (index == 0 || index == temp.length() - 1)
                     {
@@ -131,8 +130,9 @@ public class Test
                     else
                     {
                         from = temp.substring(0, index);
-                        year = temp.substring(index+1);
-                        String name = "Cage" + from + "_Birth" + year + "_" + currentDate;
+                        fromYear = temp.substring(index+1, index2);
+                        fromRange = temp.substring(index2+1);
+                        String name = "Cage" + from + "_Birth" + fromYear + "_" + currentDate;
                         file = new File(name + ".accdb");
                         db = new DatabaseBuilder(file).setFileFormat(Database.FileFormat.V2000).create();
                         table = new TableBuilder("Gator Relocation Report")
@@ -303,9 +303,9 @@ public class Test
                 }
             }
             
-            File log = new File("Cage" + from + "_Birth" + year + "_" + currentDate + "_log.txt");
+            File log = new File("Cage" + from + "_Birth" + fromYear + "_" + currentDate + "_log.txt");
             BufferedWriter writer = new BufferedWriter(new FileWriter(log));
-            writer.write("From Cage:\r\n\tCage Number: " + from + "\r\n\tTotal: " + fromCount + "\r\n\tYear: " + year + "\r\n");
+            writer.write("From Cage:\r\n\tCage Number: " + from + "\r\n\tTotal: " + fromCount + "\r\n\tYear: " + fromYear + "\r\n\tSize: " + fromRange + "\r\n");
             for (int i = 0; i < toCages.length; i++)
             {
                 if (cagesAtCapacity[i] != null)

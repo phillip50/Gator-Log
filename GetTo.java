@@ -1,9 +1,3 @@
-/*
-    GUI class to create window interface for entering belly size
-    There are buttons for entering each of the values within the acceptable range
-    Which are from 15 cm to 46 cm
-*/
-
 package test;
 
 import javax.swing.*; 
