@@ -6,6 +6,7 @@ import com.healthmarketscience.jackcess.*;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 public class Test
 {
@@ -41,12 +42,13 @@ public class Test
         String currentDate = dateFormat.format(date);
         String fromYear = "";
         String fromRange = "";
+        ArrayList<Table> tables = new ArrayList<Table>();
         try
         {
             initCages();
             
             File file;
-            Database db;
+            Database db = null;
             Table table = null;
             
             while (!isDone)
@@ -55,62 +57,63 @@ public class Test
             
                 if (s.equals("add"))
                 {
-                    capacityCounter = addEntry(table, toCages, toRanges, capacities, capacityCounter);
+                    capacityCounter = addEntry(tables, toCages, toRanges, capacities, capacityCounter);
                     for (int i = 0; i < toCages.length; i++)
                     {
-                    if (capacities[i] == capacityCounter[i])
-                    {    
-                        cagesAtCapacity[cagesAtCapacityCounter] = toCages[i];
-                        cagesAtCapacityAmount[cagesAtCapacityCounter] = capacities[i];
-                        cagesAtCapacityRange[cagesAtCapacityCounter] = toRanges[i];
-                        cagesAtCapacityCounter++;
-                        toCages[i] = null;
-                        toRanges[i] = null;
-                        rangeStart[i] = 0;
-                        rangeEnd[i] = 0;
-                        capacities[i] = -1;
-                        capacityCounter[i] = 0;
+                        if (capacities[i] == capacityCounter[i])
+                        {    
+                            cagesAtCapacity[cagesAtCapacityCounter] = toCages[i];
+                            cagesAtCapacityAmount[cagesAtCapacityCounter] = capacities[i];
+                            cagesAtCapacityRange[cagesAtCapacityCounter] = toRanges[i];
+                            cagesAtCapacityCounter++;
+                            toCages[i] = null;
+                            toRanges[i] = null;
+                            rangeStart[i] = 0;
+                            rangeEnd[i] = 0;
+                            capacities[i] = -1;
+                            capacityCounter[i] = 0;
+                            tables.remove(i);
 
-                        String[] tempCages = new String[10];
-                        String[] tempRanges = new String[10];
-                        int[] tempStart = new int[10];
-                        int[] tempEnd = new int[10];
-                        int[] tempCapacity = new int[10];
-                        int[] tempCounter = new int[10];
+                            String[] tempCages = new String[10];
+                            String[] tempRanges = new String[10];
+                            int[] tempStart = new int[10];
+                            int[] tempEnd = new int[10];
+                            int[] tempCapacity = new int[10];
+                            int[] tempCounter = new int[10];
                         
-                        int j = 0;
-                        int k = 0;
+                            int j = 0;
+                            int k = 0;
                         
-                        while (j < toCages.length)
-                        {
-                            if (toCages[j] != null)
+                            while (j < toCages.length)
                             {
-                                tempCages[k] = toCages[j];
-                                tempRanges[k] = toRanges[j];
-                                tempStart[k] = rangeStart[j];
-                                tempEnd[k] = rangeEnd[j];
-                                tempCapacity[k] = capacities[j];
-                                tempCounter[k] = capacityCounter[j];
-                                k++;
+                                if (toCages[j] != null)
+                                {
+                                    tempCages[k] = toCages[j];
+                                    tempRanges[k] = toRanges[j];
+                                    tempStart[k] = rangeStart[j];
+                                    tempEnd[k] = rangeEnd[j];
+                                    tempCapacity[k] = capacities[j];
+                                    tempCounter[k] = capacityCounter[j];
+                                    k++;
+                                }
+                                j++;
                             }
-                            j++;
-                        }
                         
-                        toCages = tempCages;
-                        toRanges = tempRanges;
-                        rangeStart = tempStart;
-                        rangeEnd = tempEnd;
-                        capacities = tempCapacity;
-                        capacityCounter = tempCounter;
+                            toCages = tempCages;
+                            toRanges = tempRanges;
+                            rangeStart = tempStart;
+                            rangeEnd = tempEnd;
+                            capacities = tempCapacity;
+                            capacityCounter = tempCounter;
                         
-                        for (int z = 0; z < toCages.length; z++)
-                        {
-                            if (capacities[z] == 0)
+                            for (int z = 0; z < toCages.length; z++)
                             {
-                                capacities[z] = -1;
+                                if (capacities[z] == 0)
+                                {
+                                    capacities[z] = -1;
+                                }
                             }
                         }
-                    }
                     }
                 }
                 else if (s.equals("quit"))
@@ -135,12 +138,12 @@ public class Test
                         String name = "Cage" + from + "_Birth" + fromYear + "_" + currentDate;
                         file = new File(name + ".accdb");
                         db = new DatabaseBuilder(file).setFileFormat(Database.FileFormat.V2000).create();
-                        table = new TableBuilder("Gator Relocation Report")
-                            .addColumn(new ColumnBuilder("ID", DataType.LONG).setAutoNumber(true))
-                            .addColumn(new ColumnBuilder("To", DataType.TEXT))
-                            .addColumn(new ColumnBuilder("Belly", DataType.TEXT))
-                            .toTable(db);
-                        hasDatabase = true;
+                        //table = new TableBuilder("Gator Relocation Report")
+                        //    .addColumn(new ColumnBuilder("ID", DataType.LONG).setAutoNumber(true))
+                        //    .addColumn(new ColumnBuilder("To", DataType.TEXT))
+                        //    .addColumn(new ColumnBuilder("Belly", DataType.TEXT))
+                        //    .toTable(db);
+                        //hasDatabase = true;
                         hasFrom = true;
                     }
                 }
@@ -226,20 +229,29 @@ public class Test
                         
                         if (isRangeValid && isCageValid && isCapacityValid)
                         {
+                            String temp;
                             if (index == 1)
                             {
-                                toCages[toCounter] = "" + to.charAt(0);
+                                temp = "" + to.charAt(0);
                             }
                             else
                             {
-                                toCages[toCounter] = to.substring(0, index);
+                                temp = to.substring(0, index);
                             }
+                            toCages[toCounter] = temp;
                             toRanges[toCounter] = to.substring(index+1, index2);
                             index = toRanges[toCounter].indexOf('-');
                             rangeStart[toCounter] = Integer.parseInt(toRanges[toCounter].substring(0,index));
                             rangeEnd[toCounter] = Integer.parseInt(toRanges[toCounter].substring(index+1));
                             capacities[toCounter] = Integer.parseInt(to.substring(index2+1));
                             toCounter++;
+                            
+                            table = new TableBuilder("To pen: " + temp)
+                                .addColumn(new ColumnBuilder("ID", DataType.LONG).setAutoNumber(true))
+                                .addColumn(new ColumnBuilder("Belly", DataType.TEXT))
+                                .toTable(db);
+                            hasDatabase = true;
+                            tables.add(table);
                         }
                         else
                         {
@@ -259,6 +271,7 @@ public class Test
                         rangeEnd[i] = 0;
                         capacities[i] = -1;
                         capacityCounter[i] = 0;
+                        tables.remove(i);
 
                         String[] tempCages = new String[10];
                         String[] tempRanges = new String[10];
@@ -331,7 +344,7 @@ public class Test
         
     }
 
-    public static int[] addEntry(Table table, String[] toCages, String[] toRanges, int[] capacities, int[] capacityCounter)
+    public static int[] addEntry(ArrayList<Table> tables, String[] toCages, String[] toRanges, int[] capacities, int[] capacityCounter)
     {   
         String to = "";
         String belly;
@@ -358,10 +371,12 @@ public class Test
             else
             {
                 to = "";
+                int index = 0;
                 for (int i = 0; i < toCages.length; i++)
                 {
                     if (rangeStart[i] <= Integer.parseInt(belly) && Integer.parseInt(belly) <= rangeEnd[i])
                     {   
+                        index = i;
                         to = toCages[i];
                         capacityCounter[i]++;
                         i = toCages.length;
@@ -369,7 +384,7 @@ public class Test
                 }
                 try
                 {
-                    table.addRow(0, to, belly);
+                    tables.get(index).addRow(0, belly);
                     fromCount++;
                 }
                 catch (IOException e)
