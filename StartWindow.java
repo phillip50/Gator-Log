@@ -3,7 +3,8 @@ package test;
 import javax.swing.*; 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.Toolkit;
+import java.awt.*;
+
 
 public class StartWindow extends JPanel implements ActionListener
 {
@@ -17,36 +18,50 @@ public class StartWindow extends JPanel implements ActionListener
  
     public StartWindow(boolean hasDatabase, boolean hasFrom)
     {
-        button = new JButton("Add Entry");
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double width = screenSize.getWidth();
+        double height = screenSize.getHeight();
+        
+        Dimension buttonSize = new Dimension((int)(width/6), (int)(height/4));
+        
+        JPanel container = new JPanel();
+        
+        JButton button = new JButton("Start");
         button.addActionListener(this);
         button.setActionCommand("add");
-        
+        button.setPreferredSize(buttonSize);
+        container.add(button);
+
         if (!hasDatabase || !hasFrom)
         {
             button.setEnabled(false);
         }
         
-        button2 = new JButton("Set Up Database");
+        JButton button2 = new JButton("Set Up Database");
         button2.addActionListener(this);
         button2.setActionCommand("new");
+        button2.setPreferredSize(buttonSize);
+        container.add(button2);
         
-        button3 = new JButton("Add To Cage");
+        JButton button3 = new JButton("Add To Cage");
         button3.addActionListener(this);
         button3.setActionCommand("to");
+        button3.setPreferredSize(buttonSize);
+        container.add(button3);
         
-        button4 = new JButton("Remove To Cage");
+        JButton button4 = new JButton("Remove To Cage");
         button4.addActionListener(this);
         button4.setActionCommand("modify");
+        button4.setPreferredSize(buttonSize);
+        container.add(button4);
  
-        button5 = new JButton("Quit");
+        JButton button5 = new JButton("Quit");
         button5.addActionListener(this);
         button5.setActionCommand("quit");
-        
-        add(button);
-        add(button2);
-        add(button3);
-        add(button4);
-        add(button5);
+        button5.setPreferredSize(buttonSize);
+        container.add(button5);
+
+        add(container);
         
         isDone = false;
     }
@@ -66,7 +81,7 @@ public class StartWindow extends JPanel implements ActionListener
         newContentPane.setOpaque(true);
         frame.setContentPane(newContentPane);
         
-        //frame.getContentPane().setPreferredSize( Toolkit.getDefaultToolkit().getScreenSize());
+        frame.getContentPane().setPreferredSize( Toolkit.getDefaultToolkit().getScreenSize());
         
         ImageIcon img = new ImageIcon("Logo1.jpg");
         frame.setIconImage(img.getImage());

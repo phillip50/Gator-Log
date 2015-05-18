@@ -89,6 +89,13 @@ public class GetTo extends JPanel implements ActionListener
             cages[i + 99 + 16] = "" + j + "B";
         }
         
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double width = screenSize.getWidth();
+        double height = screenSize.getHeight();
+        
+        Dimension size = new Dimension((int)(width/8), (int)(height/10));
+        Dimension buttonSize = new Dimension((int)(width/17), (int)(height/10));
+        
         Panel panelQuery1 = new Panel(new FlowLayout());
         label = new JLabel("Select Belly Range");
         panelQuery1.add(label);
@@ -96,130 +103,162 @@ public class GetTo extends JPanel implements ActionListener
         button1 = new JButton("15");
         button1.addActionListener(this);
         button1.setActionCommand("15");
+        button1.setPreferredSize(size);
         
         button2 = new JButton("16");
         button2.addActionListener(this);
         button2.setActionCommand("16");
+        button2.setPreferredSize(size);
         
         button3 = new JButton("17");
         button3.addActionListener(this);
         button3.setActionCommand("17");
+        button3.setPreferredSize(size);
         
         button4 = new JButton("18");
         button4.addActionListener(this);
         button4.setActionCommand("18");
+        button4.setPreferredSize(size);
         
         button5 = new JButton("19");
         button5.addActionListener(this);
         button5.setActionCommand("19");
+        button5.setPreferredSize(size);
         
         button6 = new JButton("20");
         button6.addActionListener(this);
         button6.setActionCommand("20");
+        button6.setPreferredSize(size);
         
         button7 = new JButton("21");
         button7.addActionListener(this);
         button7.setActionCommand("21");
+        button7.setPreferredSize(size);
         
         button8 = new JButton("22");
         button8.addActionListener(this);
         button8.setActionCommand("22");
+        button8.setPreferredSize(size);
         
         button9 = new JButton("23");
         button9.addActionListener(this);
         button9.setActionCommand("23");
+        button9.setPreferredSize(size);
         
         button10 = new JButton("24");
         button10.addActionListener(this);
         button10.setActionCommand("24");
+        button10.setPreferredSize(size);
         
         button11 = new JButton("25");
         button11.addActionListener(this);
         button11.setActionCommand("25");
+        button11.setPreferredSize(size);
         
         button12 = new JButton("26");
         button12.addActionListener(this);
         button12.setActionCommand("26");
+        button12.setPreferredSize(size);
         
         button13 = new JButton("27");
         button13.addActionListener(this);
         button13.setActionCommand("27");
+        button13.setPreferredSize(size);
         
         button14 = new JButton("28");
         button14.addActionListener(this);
         button14.setActionCommand("28");
+        button14.setPreferredSize(size);
         
         button15 = new JButton("29");
         button15.addActionListener(this);
         button15.setActionCommand("29");
+        button15.setPreferredSize(size);
         
         button16 = new JButton("30");
         button16.addActionListener(this);
         button16.setActionCommand("30");
+        button16.setPreferredSize(size);
         
         button17 = new JButton("31");
         button17.addActionListener(this);
         button17.setActionCommand("31");
+        button17.setPreferredSize(size);
         
         button18 = new JButton("32");
         button18.addActionListener(this);
         button18.setActionCommand("32");
+        button18.setPreferredSize(size);
         
         button19 = new JButton("33");
         button19.addActionListener(this);
         button19.setActionCommand("33");
+        button19.setPreferredSize(size);
         
         button20 = new JButton("34");
         button20.addActionListener(this);
         button20.setActionCommand("34");
+        button20.setPreferredSize(size);
         
         button21 = new JButton("35");
         button21.addActionListener(this);
         button21.setActionCommand("35");
+        button21.setPreferredSize(size);
         
         button22 = new JButton("36");
         button22.addActionListener(this);
         button22.setActionCommand("36");
+        button22.setPreferredSize(size);
         
         button23 = new JButton("37");
         button23.addActionListener(this);
         button23.setActionCommand("37");
+        button23.setPreferredSize(size);
         
         button24 = new JButton("38");
         button24.addActionListener(this);
         button24.setActionCommand("38");
+        button24.setPreferredSize(size);
         
         button25 = new JButton("39");
         button25.addActionListener(this);
         button25.setActionCommand("39");
+        button25.setPreferredSize(size);
         
         button26 = new JButton("40");
         button26.addActionListener(this);
         button26.setActionCommand("40");
+        button26.setPreferredSize(size);
         
         button27 = new JButton("41");
         button27.addActionListener(this);
         button27.setActionCommand("41");
+        button27.setPreferredSize(size);
         
         button28 = new JButton("42");
         button28.addActionListener(this);
         button28.setActionCommand("42");
+        button28.setPreferredSize(size);
         
         button29 = new JButton("43");
         button29.addActionListener(this);
         button29.setActionCommand("43");
+        button29.setPreferredSize(size);
         
         button30 = new JButton("44");
         button30.addActionListener(this);
         button30.setActionCommand("44");
+        button30.setPreferredSize(size);
         
         button31 = new JButton("45");
         button31.addActionListener(this);
         button31.setActionCommand("45");
+        button31.setPreferredSize(size);
         
         button32 = new JButton("46");
         button32.addActionListener(this);
         button32.setActionCommand("46");
+        button32.setPreferredSize(size);
         
         Panel buttonDisplay1 = new Panel(new FlowLayout());      
         buttonDisplay1.add(button1);
@@ -257,15 +296,18 @@ public class GetTo extends JPanel implements ActionListener
         
         Panel panelQuery2 = new Panel(new FlowLayout());
         label1 = new JLabel("Cage: " + input3 + ", Belly Range: " + input + "-" + input2);
+        label1.setPreferredSize(buttonSize);
         
         button33 = new JButton("Confirm");
         button33.addActionListener(this);
         button33.setActionCommand("done");
         button33.setEnabled(false);
+        button33.setPreferredSize(buttonSize);
         
         button34 = new JButton("Cancel");
         button34.addActionListener(this);
         button34.setActionCommand("quit");
+        button34.setPreferredSize(buttonSize);
         
         panelQuery2.add(label1);
         panelQuery2.add(button33);
@@ -273,22 +315,28 @@ public class GetTo extends JPanel implements ActionListener
         
         Panel panelQuery3 = new Panel(new FlowLayout());
         label2 = new JLabel("Cage:");
+        label2.setPreferredSize(buttonSize);
         //text2 = new JTextField(10);
         scrollDown = new JComboBox(cages);
         scrollDown.setEditable(false);
+        scrollDown.setPreferredSize(buttonSize);
         button35 = new JButton("Enter Cage");
         button35.addActionListener(this);
         button35.setActionCommand("cage");
+        button35.setPreferredSize(buttonSize);
         panelQuery3.add(label2);
         panelQuery3.add(scrollDown);
         panelQuery3.add(button35);
         
         Panel panelQuery4 = new Panel(new FlowLayout());
         label3 = new JLabel("Capacity:");
+        label3.setPreferredSize(buttonSize);
         text3 = new JTextField(10);
+        text3.setPreferredSize(buttonSize);
         button36 = new JButton("Enter Capacity");
         button36.addActionListener(this);
         button36.setActionCommand("capacity");
+        button36.setPreferredSize(buttonSize);
         panelQuery4.add(label3);
         panelQuery4.add(text3);
         panelQuery4.add(button36);
@@ -370,6 +418,7 @@ public class GetTo extends JPanel implements ActionListener
         newContentPane.setOpaque(true);
         frame.setContentPane(newContentPane);
  
+        frame.getContentPane().setPreferredSize( Toolkit.getDefaultToolkit().getScreenSize());
         
         frame.setVisible(true);
         frame.pack();
