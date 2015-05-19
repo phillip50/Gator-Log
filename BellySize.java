@@ -46,140 +46,209 @@ public class BellySize extends JPanel implements ActionListener
  
     public BellySize()
     {       
-        text = new JTextField("Select Belly Size:", 10);
-        text.setEditable(false);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double width = screenSize.getWidth();
+        double height = screenSize.getHeight();
+        
+        Dimension size = new Dimension((int)(width/7), (int)(height/8));
+        Dimension buttonSize = new Dimension((int)(width/17), (int)(height/10));
+        
+        Font font1 = new Font("Arial", Font.PLAIN, 40);
 
         button1 = new JButton("15");
         button1.addActionListener(this);
         button1.setActionCommand("15");
+        button1.setPreferredSize(size);
+        button1.setFont(font1);
         
         button2 = new JButton("16");
         button2.addActionListener(this);
         button2.setActionCommand("16");
+        button2.setPreferredSize(size);
+        button2.setFont(font1);
         
         button3 = new JButton("17");
         button3.addActionListener(this);
         button3.setActionCommand("17");
+        button3.setPreferredSize(size);
+        button3.setFont(font1);
         
         button4 = new JButton("18");
         button4.addActionListener(this);
         button4.setActionCommand("18");
+        button4.setPreferredSize(size);
+        button4.setFont(font1);
         
         button5 = new JButton("19");
         button5.addActionListener(this);
         button5.setActionCommand("19");
+        button5.setPreferredSize(size);
+        button5.setFont(font1);
         
         button6 = new JButton("20");
         button6.addActionListener(this);
         button6.setActionCommand("20");
+        button6.setPreferredSize(size);
+        button6.setFont(font1);
         
         button7 = new JButton("21");
         button7.addActionListener(this);
         button7.setActionCommand("21");
+        button7.setPreferredSize(size);
+        button7.setFont(font1);
         
         button8 = new JButton("22");
         button8.addActionListener(this);
         button8.setActionCommand("22");
+        button8.setPreferredSize(size);
+        button8.setFont(font1);
         
         button9 = new JButton("23");
         button9.addActionListener(this);
         button9.setActionCommand("23");
+        button9.setPreferredSize(size);
+        button9.setFont(font1);
         
         button10 = new JButton("24");
         button10.addActionListener(this);
         button10.setActionCommand("24");
+        button10.setPreferredSize(size);
+        button10.setFont(font1);
         
         button11 = new JButton("25");
         button11.addActionListener(this);
         button11.setActionCommand("25");
+        button11.setPreferredSize(size);
+        button11.setFont(font1);
         
         button12 = new JButton("26");
         button12.addActionListener(this);
         button12.setActionCommand("26");
+        button12.setPreferredSize(size);
+        button12.setFont(font1);
         
         button13 = new JButton("27");
         button13.addActionListener(this);
         button13.setActionCommand("27");
+        button13.setPreferredSize(size);
+        button13.setFont(font1);
         
         button14 = new JButton("28");
         button14.addActionListener(this);
         button14.setActionCommand("28");
+        button14.setPreferredSize(size);
+        button14.setFont(font1);
         
         button15 = new JButton("29");
         button15.addActionListener(this);
         button15.setActionCommand("29");
+        button15.setPreferredSize(size);
+        button15.setFont(font1);
         
         button16 = new JButton("30");
         button16.addActionListener(this);
         button16.setActionCommand("30");
+        button16.setPreferredSize(size);
+        button16.setFont(font1);
         
         button17 = new JButton("31");
         button17.addActionListener(this);
         button17.setActionCommand("31");
+        button17.setPreferredSize(size);
+        button17.setFont(font1);
         
         button18 = new JButton("32");
         button18.addActionListener(this);
         button18.setActionCommand("32");
+        button18.setPreferredSize(size);
+        button18.setFont(font1);
         
         button19 = new JButton("33");
         button19.addActionListener(this);
         button19.setActionCommand("33");
+        button19.setPreferredSize(size);
+        button19.setFont(font1);
         
         button20 = new JButton("34");
         button20.addActionListener(this);
         button20.setActionCommand("34");
+        button20.setPreferredSize(size);
+        button20.setFont(font1);
         
         button21 = new JButton("35");
         button21.addActionListener(this);
         button21.setActionCommand("35");
+        button21.setPreferredSize(size);
+        button21.setFont(font1);
         
         button22 = new JButton("36");
         button22.addActionListener(this);
         button22.setActionCommand("36");
+        button22.setPreferredSize(size);
+        button22.setFont(font1);
         
         button23 = new JButton("37");
         button23.addActionListener(this);
         button23.setActionCommand("37");
+        button23.setPreferredSize(size);
+        button23.setFont(font1);
         
         button24 = new JButton("38");
         button24.addActionListener(this);
         button24.setActionCommand("38");
+        button24.setPreferredSize(size);
+        button24.setFont(font1);
         
         button25 = new JButton("39");
         button25.addActionListener(this);
         button25.setActionCommand("39");
+        button25.setPreferredSize(size);
+        button25.setFont(font1);
         
         button26 = new JButton("40");
         button26.addActionListener(this);
         button26.setActionCommand("40");
+        button26.setPreferredSize(size);
+        button26.setFont(font1);
         
         button27 = new JButton("41");
         button27.addActionListener(this);
         button27.setActionCommand("41");
+        button27.setPreferredSize(size);
+        button27.setFont(font1);
         
         button28 = new JButton("42");
         button28.addActionListener(this);
         button28.setActionCommand("42");
+        button28.setPreferredSize(size);
+        button28.setFont(font1);
         
         button29 = new JButton("43");
         button29.addActionListener(this);
         button29.setActionCommand("43");
+        button29.setPreferredSize(size);
+        button29.setFont(font1);
         
         button30 = new JButton("44");
         button30.addActionListener(this);
         button30.setActionCommand("44");
+        button30.setPreferredSize(size);
+        button30.setFont(font1);
         
         button31 = new JButton("45");
         button31.addActionListener(this);
         button31.setActionCommand("45");
+        button31.setPreferredSize(size);
+        button31.setFont(font1);
         
         button32 = new JButton("46");
         button32.addActionListener(this);
         button32.setActionCommand("46");
+        button32.setPreferredSize(size);
+        button32.setFont(font1);
         
         Panel buttonDisplay1 = new Panel(new FlowLayout());
         
-        buttonDisplay1.add(text);
         buttonDisplay1.add(button1);
         buttonDisplay1.add(button2);
         buttonDisplay1.add(button3);
@@ -213,16 +282,18 @@ public class BellySize extends JPanel implements ActionListener
         buttonDisplay1.add(button31);
         buttonDisplay1.add(button32);
         
-        button33 = new JButton("done");
+        button33 = new JButton("Done");
         button33.addActionListener(this);
         button33.setActionCommand("done");
+        button33.setPreferredSize(size);
+        button33.setFont(font1);
         
         Panel buttonDisplay2 = new Panel(new FlowLayout());
         buttonDisplay2.add(button33);
         
         setLayout(new BorderLayout());
-        add(buttonDisplay1, BorderLayout.NORTH);
-        add(buttonDisplay2, BorderLayout.CENTER);
+        add(buttonDisplay1, BorderLayout.CENTER);
+        add(buttonDisplay2, BorderLayout.SOUTH);
         
         isDone = false;
     }
@@ -242,6 +313,7 @@ public class BellySize extends JPanel implements ActionListener
         newContentPane.setOpaque(true);
         frame.setContentPane(newContentPane);
  
+        frame.getContentPane().setPreferredSize( Toolkit.getDefaultToolkit().getScreenSize());
         
         frame.setVisible(true);
         frame.pack();

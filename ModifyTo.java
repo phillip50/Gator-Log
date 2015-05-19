@@ -22,6 +22,15 @@ public class ModifyTo extends JPanel implements ActionListener
         buttons = new ArrayList<JButton>();
         labels = new ArrayList<JLabel>();
         
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double width = screenSize.getWidth();
+        double height = screenSize.getHeight();
+        
+        Dimension size = new Dimension((int)(width/8), (int)(height/10));
+        Dimension labelSize = new Dimension((int)(width/3), (int)(height/10));
+        
+        Font font1 = new Font("Arial", Font.PLAIN, 40);
+        
         Box box = Box.createVerticalBox();
         
         Panel panel;
@@ -34,12 +43,16 @@ public class ModifyTo extends JPanel implements ActionListener
                 panel = new Panel(new FlowLayout());
                 
                 label = new JLabel("Cage " + toCages[i] + ": " + toRanges[i] + ", Capacity: " + capacities[i]);
+                label.setPreferredSize(labelSize);
+                label.setFont(font1);
                 panel.add(label);
                 labels.add(label);
                 
                 button = new JButton("Remove");
                 button.addActionListener(this);
                 button.setActionCommand("" + i);
+                button.setPreferredSize(size);
+                button.setFont(font1);
                 panel.add(button);
                 buttons.add(button);
                 
@@ -50,11 +63,13 @@ public class ModifyTo extends JPanel implements ActionListener
         button2 = new JButton("Cancel");
         button2.addActionListener(this);
         button2.setActionCommand("cancel");
+        button2.setPreferredSize(size);
+        button2.setFont(font1);
         
         bottomPanel.add(button2);
         
         setLayout(new BorderLayout());
-        add(box, BorderLayout.NORTH);
+        add(box, BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.SOUTH);
         
         
@@ -83,6 +98,7 @@ public class ModifyTo extends JPanel implements ActionListener
         newContentPane.setOpaque(true);
         frame.setContentPane(newContentPane);
  
+        frame.getContentPane().setPreferredSize( Toolkit.getDefaultToolkit().getScreenSize());
         
         frame.setVisible(true);
         frame.pack();

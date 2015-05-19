@@ -166,7 +166,7 @@ public class Test
                 else if (s.equals("to"))
                 {
                     to = GetTo.createAndShowGUI();
-                    if (to.equals(":-"))
+                    if (to.equals(":-:"))
                     {                       
                     }
                     else

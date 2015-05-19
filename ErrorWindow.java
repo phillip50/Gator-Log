@@ -13,13 +13,29 @@ public class ErrorWindow extends JPanel implements ActionListener
  
     public ErrorWindow(String message)
     {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double width = screenSize.getWidth();
+        double height = screenSize.getHeight();
+        
+        Dimension size = new Dimension((int)(width/8), (int)(height/10));
+        Dimension labelSize = new Dimension((int)(width/3), (int)(height/10));
+        
+        Font font1 = new Font("Arial", Font.PLAIN, 40);
+        
+        Panel panel = new Panel(new FlowLayout());
+        
         label = new JLabel("Warning! " + message);
+        label.setPreferredSize(labelSize);
+        label.setFont(font1);
+        panel.add(label);
         
         button = new JButton("Back");
         button.addActionListener(this);
+        button.setPreferredSize(size);
+        button.setFont(font1);
         
         setLayout(new BorderLayout());
-        add(label, BorderLayout.NORTH);
+        add(panel, BorderLayout.CENTER);
         add(button, BorderLayout.SOUTH);
         
         isDone = false;
