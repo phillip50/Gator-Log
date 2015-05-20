@@ -5,4 +5,4 @@ Starts with a single source cage, with up to 10 destination cages
 
 Resulting database in contained within a single Access file, with separate tables for each destination cage
 
-@Phillip Dingler
+@Phillip Dingler <phil50@ufl.edu>
