@@ -326,6 +326,15 @@ public class Test
                         }
                     }
                 }
+                
+                if (toCounter == 0)
+                {
+                    hasDatabase = false;
+                }
+                else
+                {
+                    hasDatabase = true;
+                }
             }
             
             File log = new File("Cage" + from + "_Birth" + fromYear + "_" + currentDate + "_log.txt");

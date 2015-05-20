@@ -38,19 +38,24 @@ public class StartWindow extends JPanel implements ActionListener
             button.setEnabled(false);
         }
         
-        JButton button2 = new JButton("Set Up Database");
-        button2.addActionListener(this);
-        button2.setActionCommand("new");
-        button2.setPreferredSize(buttonSize);
-        button2.setFont(new Font("Arial", Font.PLAIN, 25));
-        container.add(button2);
-        
         JButton button3 = new JButton("Add To Cage");
         button3.addActionListener(this);
         button3.setActionCommand("to");
         button3.setPreferredSize(buttonSize);
         button3.setFont(new Font("Arial", Font.PLAIN, 25));
         container.add(button3);
+        
+        if (!hasFrom)
+        {
+            button3.setEnabled(false);
+        }
+        
+        JButton button2 = new JButton("Set Up Database");
+        button2.addActionListener(this);
+        button2.setActionCommand("new");
+        button2.setPreferredSize(buttonSize);
+        button2.setFont(new Font("Arial", Font.PLAIN, 25));
+        container.add(button2);
         
         JButton button4 = new JButton("Remove To Cage");
         button4.addActionListener(this);
