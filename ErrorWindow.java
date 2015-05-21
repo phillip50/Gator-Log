@@ -18,7 +18,7 @@ public class ErrorWindow extends JPanel implements ActionListener
         double height = screenSize.getHeight();
         
         Dimension size = new Dimension((int)(width/8), (int)(height/10));
-        Dimension labelSize = new Dimension((int)(width/3), (int)(height/10));
+        Dimension labelSize = new Dimension((int)(width/2), (int)(height/10));
         
         Font font1 = new Font("Arial", Font.PLAIN, 40);
         
