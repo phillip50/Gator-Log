@@ -16,35 +16,37 @@ public class Test
     public static void main(String[] args)
     {
         fromCount = 0;
+        
         boolean isDone = false;
         boolean hasDatabase = false;
         boolean hasFrom = false;
+        
         String from = "";
         String to = "";
         String modify = "";
+        String fromYear = "";
+        String fromRange = "";
+        
         String[] toCages = new String[10];
         String[] toRanges = new String[10];
         int[] rangeStart = new int[10];
         int[] rangeEnd = new int[10];
         int[] capacities = new int[10];
+        int[] capacityCounter = new int[10];
         String[] cagesAtCapacity = new String[10];
         int[] cagesAtCapacityAmount = new int[10];
         String[] cagesAtCapacityRange = new String[10];
         int cagesAtCapacityCounter = 0;
-        for (int i = 0; i < toCages.length; i++)
-        {
-            capacities[i] = -1;
-        }
-        int[] capacityCounter = new int[10];
+        
         int toCounter = 0;
+        
         DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
         Date date = new Date();
         String currentDate = dateFormat.format(date);
-        String fromYear = "";
-        String fromRange = "";
+        
         ArrayList<Table> tables = new ArrayList<Table>();
         ArrayList<String> totalTables = new ArrayList<String>();
-        boolean hasOtherDatabase = false;
+        
         try
         {
             initCages();
@@ -64,7 +66,7 @@ public class Test
                     capacityCounter = addEntry(tables, toCages, toRanges, capacities, capacityCounter, unspecified, otherTable, from);
                     for (int i = 0; i < toCages.length; i++)
                     {
-                        if (capacities[i] == capacityCounter[i])
+                        if (capacities[i] != 0 && capacities[i] == capacityCounter[i])
                         {    
                             cagesAtCapacity[cagesAtCapacityCounter] = toCages[i];
                             cagesAtCapacityAmount[cagesAtCapacityCounter] = capacities[i];
@@ -74,49 +76,18 @@ public class Test
                             toRanges[i] = null;
                             rangeStart[i] = 0;
                             rangeEnd[i] = 0;
-                            capacities[i] = -1;
+                            capacities[i] = 0;
                             capacityCounter[i] = 0;
                             tables.remove(i);
 
-                            String[] tempCages = new String[10];
-                            String[] tempRanges = new String[10];
-                            int[] tempStart = new int[10];
-                            int[] tempEnd = new int[10];
-                            int[] tempCapacity = new int[10];
-                            int[] tempCounter = new int[10];
-                        
-                            int j = 0;
-                            int k = 0;
-                        
-                            while (j < toCages.length)
-                            {
-                                if (toCages[j] != null)
-                                {
-                                    tempCages[k] = toCages[j];
-                                    tempRanges[k] = toRanges[j];
-                                    tempStart[k] = rangeStart[j];
-                                    tempEnd[k] = rangeEnd[j];
-                                    tempCapacity[k] = capacities[j];
-                                    tempCounter[k] = capacityCounter[j];
-                                    k++;
-                                }
-                                j++;
-                            }
-                        
-                            toCages = tempCages;
-                            toRanges = tempRanges;
-                            rangeStart = tempStart;
-                            rangeEnd = tempEnd;
-                            capacities = tempCapacity;
-                            capacityCounter = tempCounter;
-                        
-                            for (int z = 0; z < toCages.length; z++)
-                            {
-                                if (capacities[z] == 0)
-                                {
-                                    capacities[z] = -1;
-                                }
-                            }
+                            toCages = stringShift(toCages);
+                            toRanges = stringShift(toRanges);
+                            rangeStart = intShift(rangeStart);
+                            rangeEnd = intShift(rangeEnd);
+                            capacities = intShift(capacities);
+                            capacityCounter = intShift(capacityCounter);
+                            
+                            toCounter--;
                         }
                     }
                 }
@@ -155,22 +126,6 @@ public class Test
                         hasFrom = true;
                     }
                     
-                }
-                else if (s.equals("from"))
-                {
-                    String temp = InputFrom.createAndShowGUI();
-                    if (!temp.equals(""))
-                    {
-                        for (int i = 1; i < cages.length; i++)
-                        {
-                            if (cages[i].equals(temp))
-                            {
-                                from = temp;
-                                hasFrom = true;
-                            }
-                        }
-                    }
-
                 }
                 else if (s.equals("to"))
                 {
@@ -234,7 +189,7 @@ public class Test
                         }
                         
                         String capacity = to.substring(index2+1);
-                        boolean isCapacityValid = isInteger(capacity);
+                        boolean isCapacityValid = isInteger(capacity) && (Integer.parseInt(capacity) > 0);
                         
                         boolean tableExists = false;
                         for (int i = 0; i < toCages.length; i++)
@@ -264,12 +219,12 @@ public class Test
                             capacities[toCounter] = Integer.parseInt(to.substring(index2+1));
                             toCounter++;
                             
-                                table = new TableBuilder("To pen: " + temp)
-                                    .addColumn(new ColumnBuilder("ID", DataType.LONG).setAutoNumber(true))
-                                    .addColumn(new ColumnBuilder("Belly", DataType.TEXT))
-                                    .toTable(db);
-                                totalTables.add(temp);
+                            table = new TableBuilder("To pen: " + temp)
+                                .addColumn(new ColumnBuilder("ID", DataType.LONG).setAutoNumber(true))
+                                .addColumn(new ColumnBuilder("Belly", DataType.TEXT))
+                                .toTable(db);
                             
+                            totalTables.add(temp);
                             tables.add(table);
                             hasDatabase = true;
                         }
@@ -289,50 +244,18 @@ public class Test
                         toRanges[i] = null;
                         rangeStart[i] = 0;
                         rangeEnd[i] = 0;
-                        capacities[i] = -1;
+                        capacities[i] = 0;
                         capacityCounter[i] = 0;
                         tables.remove(i);
 
-                        String[] tempCages = new String[10];
-                        String[] tempRanges = new String[10];
-                        int[] tempStart = new int[10];
-                        int[] tempEnd = new int[10];
-                        int[] tempCapacity = new int[10];
-                        int[] tempCounter = new int[10];
+                        toCages = stringShift(toCages);
+                        toRanges = stringShift(toRanges);
+                        rangeStart = intShift(rangeStart);
+                        rangeEnd = intShift(rangeEnd);
+                        capacities = intShift(capacities);
+                        capacityCounter = intShift(capacityCounter);
                         
-                        int j = 0;
-                        int k = 0;
-                        
-                        while (j < toCages.length)
-                        {
-                            if (toCages[j] != null)
-                            {
-                                tempCages[k] = toCages[j];
-                                tempRanges[k] = toRanges[j];
-                                tempStart[k] = rangeStart[j];
-                                tempEnd[k] = rangeEnd[j];
-                                tempCapacity[k] = capacities[j];
-                                tempCounter[k] = capacityCounter[j];
-                                k++;
-                            }
-                            j++;
-                        }
-                        
-                        toCages = tempCages;
-                        toRanges = tempRanges;
-                        rangeStart = tempStart;
-                        rangeEnd = tempEnd;
-                        capacities = tempCapacity;
-                        capacityCounter = tempCounter;
                         toCounter--;
-                        
-                        for (int z = 0; z < toCages.length; z++)
-                        {
-                            if (capacities[z] == 0)
-                            {
-                                capacities[z] = -1;
-                            }
-                        }
                     }
                 }
                 
@@ -398,7 +321,6 @@ public class Test
     {   
         String to = "";
         String belly;
-        boolean redo = false;
         int[] rangeStart = new int[10];
         int[] rangeEnd = new int[10];
         for(int i = 0; i < toCages.length; i++)
@@ -453,7 +375,7 @@ public class Test
                 }
                 for (int i = 0; i < toCages.length; i++)
                 {
-                    if (capacityCounter[i] == capacities[i])
+                    if (capacities[i] != 0 && capacityCounter[i] == capacities[i])
                     {
                         belly = "done";
                         ErrorWindow.createAndShowGUI("Reached capacity on Cage " + toCages[i]);
@@ -524,5 +446,41 @@ public class Test
             }
         }
         return isGood;
+    }
+    
+    public static String[] stringShift(String[] input)
+    {
+        int j = 0;
+        int k = 0;
+        String[] temp = new String[10];
+                        
+        while (j < 10)
+        {
+            if (input[j] != null)
+            {
+                temp[k] = input[j];
+                k++;
+                }
+            j++;
+        }
+        return temp;
+    }
+    
+    public static int[] intShift(int[] input)
+    {
+        int j = 0;
+        int k = 0;
+        int[] temp = new int[10];
+                        
+        while (j < 10)
+        {
+            if (input[j] != 0)
+            {
+                temp[k] = input[j];
+                k++;
+            }
+            j++;
+        }
+        return temp;
     }
 }
