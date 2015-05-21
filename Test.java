@@ -44,6 +44,7 @@ public class Test
         String fromRange = "";
         ArrayList<Table> tables = new ArrayList<Table>();
         ArrayList<String> totalTables = new ArrayList<String>();
+        boolean hasOtherDatabase = false;
         try
         {
             initCages();
@@ -52,6 +53,7 @@ public class Test
             Database db = null;
             Table table = null;
             Table unspecified = null;
+            Table otherTable = null;
             
             while (!isDone)
             {
@@ -59,7 +61,7 @@ public class Test
             
                 if (s.equals("add"))
                 {
-                    capacityCounter = addEntry(tables, toCages, toRanges, capacities, capacityCounter, unspecified);
+                    capacityCounter = addEntry(tables, toCages, toRanges, capacities, capacityCounter, unspecified, otherTable, from);
                     for (int i = 0; i < toCages.length; i++)
                     {
                         if (capacities[i] == capacityCounter[i])
@@ -144,8 +146,15 @@ public class Test
                             .addColumn(new ColumnBuilder("ID", DataType.LONG).setAutoNumber(true))
                             .addColumn(new ColumnBuilder("Belly", DataType.TEXT))
                             .toTable(db);
+                        otherTable = new TableBuilder("Database")
+                            .addColumn(new ColumnBuilder("ID", DataType.LONG).setAutoNumber(true))
+                            .addColumn(new ColumnBuilder("From", DataType.TEXT))
+                            .addColumn(new ColumnBuilder("To", DataType.TEXT))
+                            .addColumn(new ColumnBuilder("Belly", DataType.TEXT))
+                            .toTable(db);
                         hasFrom = true;
                     }
+                    
                 }
                 else if (s.equals("from"))
                 {
@@ -339,7 +348,7 @@ public class Test
             
             File log = new File("Cage" + from + "_Birth" + fromYear + "_" + currentDate + "_log.txt");
             BufferedWriter writer = new BufferedWriter(new FileWriter(log));
-            writer.write("From Cage:\r\n\tCage Number: " + from + "\r\n\tTotal: " + fromCount + "\r\n\tYear: " + fromYear + "\r\n\tSize: " + fromRange + "\r\n");
+            writer.write("From Pen: " + from + "\r\n\tTotal: " + fromCount + "\r\n\tYear: " + fromYear + "\r\n\tSize: " + fromRange + "\r\n");
             for (int i = 0; i < toCages.length; i++)
             {
                 if (cagesAtCapacity[i] != null)
@@ -385,7 +394,7 @@ public class Test
         
     }
 
-    public static int[] addEntry(ArrayList<Table> tables, String[] toCages, String[] toRanges, int[] capacities, int[] capacityCounter, Table unspecified)
+    public static int[] addEntry(ArrayList<Table> tables, String[] toCages, String[] toRanges, int[] capacities, int[] capacityCounter, Table unspecified, Table otherTable, String from)
     {   
         String to = "";
         String belly;
@@ -435,6 +444,7 @@ public class Test
                     {
                         unspecified.addRow(0, belly);
                     }
+                    otherTable.addRow(0, from, to, belly);
                     fromCount++;
                 }
                 catch (IOException e)
