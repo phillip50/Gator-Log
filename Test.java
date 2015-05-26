@@ -1,3 +1,5 @@
+//deprecated, use Application.java
+
 package test;
 
 import com.healthmarketscience.jackcess.DatabaseBuilder;
@@ -63,7 +65,7 @@ public class Test
             
                 if (s.equals("add"))
                 {
-                    capacityCounter = addEntry(tables, toCages, toRanges, capacities, capacityCounter, unspecified, otherTable, from);
+                    capacityCounter = addEntry(tables, toCages, toRanges, capacities, capacityCounter, unspecified, otherTable, from, currentDate);
                     for (int i = 0; i < toCages.length; i++)
                     {
                         if (capacities[i] != 0 && capacities[i] == capacityCounter[i])
@@ -122,6 +124,7 @@ public class Test
                             .addColumn(new ColumnBuilder("From", DataType.TEXT))
                             .addColumn(new ColumnBuilder("To", DataType.TEXT))
                             .addColumn(new ColumnBuilder("Belly", DataType.TEXT))
+                            .addColumn(new ColumnBuilder("Date", DataType.TEXT))
                             .toTable(db);
                         hasFrom = true;
                     }
@@ -317,7 +320,7 @@ public class Test
         
     }
 
-    public static int[] addEntry(ArrayList<Table> tables, String[] toCages, String[] toRanges, int[] capacities, int[] capacityCounter, Table unspecified, Table otherTable, String from)
+    public static int[] addEntry(ArrayList<Table> tables, String[] toCages, String[] toRanges, int[] capacities, int[] capacityCounter, Table unspecified, Table otherTable, String from, String currentDate)
     {   
         String to = "";
         String belly;
@@ -366,7 +369,7 @@ public class Test
                     {
                         unspecified.addRow(0, belly);
                     }
-                    otherTable.addRow(0, from, to, belly);
+                    otherTable.addRow(0, from, to, belly, currentDate);
                     fromCount++;
                 }
                 catch (IOException e)
