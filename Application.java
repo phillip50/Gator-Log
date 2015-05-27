@@ -24,6 +24,9 @@ public class Application extends JFrame
     private JComboBox cageList;
     private JTextField input;
     private String[] cages;
+    private JLabel label1;
+    private JLabel label2;
+    private JLabel label3;
     private boolean start;
     private boolean setUp;
     private boolean addTo;
@@ -57,6 +60,9 @@ public class Application extends JFrame
     private Database db;
     private Table table;
     private String currentDate;
+    private Dimension screenSize;
+    private double width;
+    private double height;
     
     public Application()
     {
@@ -95,6 +101,9 @@ public class Application extends JFrame
         DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
         Date date = new Date();
         currentDate = dateFormat.format(date);     
+        screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        width = screenSize.getWidth();
+        height = screenSize.getHeight();
         
         cages = new String[148];
         for (int i = 0; i < 99; i++)
@@ -112,6 +121,10 @@ public class Application extends JFrame
             int j = i + 1;
             cages[i + 99 + 16] = "" + j + "B";
         }
+        
+        label1 = new JLabel("");
+        label2 = new JLabel("");
+        label3 = new JLabel("");
         
         contentPane = getContentPane();
         bellyButtons = new JButton[32];
@@ -146,6 +159,7 @@ public class Application extends JFrame
                             tempFromUpperBound = 0;
                             cageValid = false;
                         }
+                        label1.setText(tempFromLowerBound + "-" + tempFromUpperBound);
                     }
                     else if (addTo)
                     {
@@ -178,7 +192,7 @@ public class Application extends JFrame
                                         cageValid = true;
                                     }
                                 }
-                            }
+                            }                           
                         }
                         else
                         {
@@ -187,6 +201,7 @@ public class Application extends JFrame
                             tempToUpperBound = 0;
                             cageValid = false;
                         }
+                        label1.setText(tempToLowerBound + "-" + tempToUpperBound);
                     }
                     else // add
                     {
@@ -229,9 +244,12 @@ public class Application extends JFrame
                             capacityCounters = intShift(capacityCounters);
                             
                             toCounter--;
+                            if (toCounter == 0)
+                            {
+                                hasToCage = false;
+                            }
                         }
                     }
-                    addComponents();
                 }
             });
             bellyButtons[i - 15] = button;
@@ -375,6 +393,7 @@ public class Application extends JFrame
                         toCages[toCounter] = cageList.getSelectedItem().toString();
                         capacities[toCounter] = Integer.parseInt(input.getText());
                         capacityCounters[toCounter] = 0;
+                        hasToCage = true;
                         toCounter++;
                     }   
                 }
@@ -439,59 +458,98 @@ public class Application extends JFrame
         if (start)
         {
             panel.setLayout(new FlowLayout());
-            panel.add(setUpDatabase);
-            panel.add(addToCage);
-            panel.add(removeToCage);
+            
+            addToCage.setEnabled(hasDatabase);
+            addEntry.setEnabled(hasDatabase && hasToCage);
+            
+            Dimension size = new Dimension((int)(width/6), (int)(height/4));
+            
+            setUpDatabase.setPreferredSize(size);
+            addToCage.setPreferredSize(size);
+            removeToCage.setPreferredSize(size);
+            addEntry.setPreferredSize(size);
+            quitButton.setPreferredSize(size);
+            
             panel.add(addEntry);
+            panel.add(addToCage);
+            panel.add(setUpDatabase);
+            panel.add(removeToCage);
             panel.add(quitButton);
         }
         else if (setUp)
         {
-            panel.setLayout(new FlowLayout());
+            Dimension size = new Dimension((int)(width/8), (int)(height/10));
+            
+            panel.setLayout(new BorderLayout());
             Panel panel2 = new Panel(new BorderLayout());
             Panel panel3 = new Panel(new FlowLayout());
             Panel panel4 = new Panel(new FlowLayout());
             Panel panel5 = new Panel(new FlowLayout());
+            Panel panel6 = new Panel(new FlowLayout());
             for (int i = 0; i < 32; i++)
             {
+                bellyButtons[i].setPreferredSize(size);
                 panel3.add(bellyButtons[i]);
             }
-            JLabel label = new JLabel(tempFromLowerBound + "-" + tempFromUpperBound);
-            panel5.add(label);
+            label1.setText(tempFromLowerBound + "-" + tempFromUpperBound);
+            label2.setText("Specify From Range");
+            label3.setText("From Cage?");
+            cageList.setPreferredSize(size);
+            confirm.setPreferredSize(size);
+            cancel.setPreferredSize(size);
+            panel4.add(label1);
+            panel5.add(label3);
             panel5.add(cageList);
             panel4.add(confirm);
             panel4.add(cancel);
-            panel2.add(panel3, BorderLayout.NORTH);
-            panel2.add(panel5, BorderLayout.CENTER);
-            panel2.add(panel4, BorderLayout.SOUTH);
-            panel.add(panel2);
+            panel6.add(label2);
+            panel2.add(panel5, BorderLayout.NORTH);
+            panel2.add(panel4, BorderLayout.CENTER);
+            panel.add(panel6, BorderLayout.NORTH);
+            panel.add(panel3, BorderLayout.CENTER);
+            panel.add(panel2, BorderLayout.SOUTH);
         }
         else if (addTo)
         {
-            panel.setLayout(new FlowLayout());
+            Dimension size = new Dimension((int)(width/8), (int)(height/10));
+            
+            panel.setLayout(new BorderLayout());
             Panel panel2 = new Panel(new BorderLayout());
             Panel panel3 = new Panel(new FlowLayout());
             Panel panel4 = new Panel(new FlowLayout());
             Panel panel5 = new Panel(new FlowLayout());
+            Panel panel6 = new Panel(new FlowLayout());
+            Panel panel7 = new Panel(new FlowLayout());
             for (int i = 0; i < 32; i++)
             {
+                bellyButtons[i].setPreferredSize(size);
                 panel3.add(bellyButtons[i]);
             }
-            JLabel label = new JLabel(tempToLowerBound + "-" + tempToUpperBound);
-            panel4.add(label);
+            label1.setText(tempToLowerBound + "-" + tempToUpperBound);
+            label2.setText("Select Belly Range");
+            cageList.setPreferredSize(size);
+            confirm.setPreferredSize(size);
+            cancel.setPreferredSize(size);
+            panel6.add(label2);
+            panel4.add(label1);
             panel5.add(new JLabel("Cage: "));
             panel5.add(cageList);
-            panel5.add(new JLabel("Capacity: "));
-            panel5.add(input);
+            panel7.add(new JLabel("Capacity: "));
+            input.setPreferredSize(size);
+            panel7.add(input);
             panel4.add(confirm);
             panel4.add(cancel);
-            panel2.add(panel3, BorderLayout.NORTH);
-            panel2.add(panel5, BorderLayout.CENTER);
+            panel2.add(panel5, BorderLayout.NORTH);
+            panel2.add(panel7, BorderLayout.CENTER);
             panel2.add(panel4, BorderLayout.SOUTH);
-            panel.add(panel2);
+            panel.add(panel6, BorderLayout.NORTH);
+            panel.add(panel3, BorderLayout.CENTER);
+            panel.add(panel2, BorderLayout.SOUTH);
         }
         else if(removeTo)
         {
+            Dimension size = new Dimension((int)(width/8), (int)(height/10));
+            
             panel.setLayout(new BorderLayout());
             Box box = Box.createVerticalBox();
             Panel panel2;
@@ -536,9 +594,14 @@ public class Application extends JFrame
                         capacityCounters = intShift(capacityCounters);
                             
                         toCounter--;
+                        if (toCounter == 0)
+                        {
+                            hasToCage = false;
+                        }
                         addComponents();
                     }
                 });
+                button.setPreferredSize(size);
                 panel2.add(button);
                 
                 box.add(panel2);
