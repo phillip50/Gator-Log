@@ -44,6 +44,7 @@ public class Application extends JFrame
     private String fromCage;
     private int bellySize;
     private String fromYear;
+    private int fromCount;
     private int tempFromLowerBound;
     private int tempFromUpperBound;
     private int fromLowerBound;
@@ -67,6 +68,7 @@ public class Application extends JFrame
     private File file;
     private Database db;
     private Table table;
+    private File outputFile;
     private String currentDate;
     private Dimension screenSize;
     private double width;
@@ -87,6 +89,7 @@ public class Application extends JFrame
         quit = false;
         count = 0;
         fromCage = "";
+        fromCount = 0;
         bellySize = 0;
         tempFromLowerBound = 0;
         tempFromUpperBound = 0;
@@ -126,7 +129,6 @@ public class Application extends JFrame
         {
             int number = year - i;
             years[i] = "" + number;
-            System.out.println(number);
         }
         
         cages = new String[148];
@@ -258,6 +260,7 @@ public class Application extends JFrame
                             }
                         }
                         label1.setText("Last Entry: " + bellySize);
+                        fromCount++;
                         try
                         {
                             table.addRow(0, fromCage, toCage, bellySize, currentDate);
@@ -620,14 +623,7 @@ public class Application extends JFrame
         contentPane.removeAll();
         input.setText("");
         cageList.setSelectedIndex(0);
-        yearList.setSelectedIndex(0);
-        
-        System.out.println("From: " + fromCage + " " + fromLowerBound + "-" + fromUpperBound);
-        for (int i = 0; i < toCounter; i++)
-        {
-            System.out.println("To: " + toCages[i] + " " + toLowerBounds[i] + "-" + toUpperBounds[i]);
-        }
-        System.out.println();
+        yearList.setSelectedIndex(0);      
         
         JPanel panel = new JPanel();
         
@@ -857,6 +853,56 @@ public class Application extends JFrame
         }
         else if (quit)
         {
+            System.out.println("stuff");
+            
+            System.out.println("Done");
+            try
+            {
+                outputFile = new File("Cage" + fromCage + "_Birth" + fromYear + "_" + currentDate + "_log.txt");
+                BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
+                writer.write("From Pen: " + fromCage + "\r\n\tTotal: " + fromCount + "\r\n\tYear: " + fromYear + "\r\n\tSize: " + fromLowerBound + "-" + fromUpperBound + "\r\n");
+                for (int i = 0; i < toCages.length; i++)
+                {
+                    if (cagesAtCapacity[i] != null)
+                    {
+                        writer.write("\r\n\r\nTo Pen: " + cagesAtCapacity[i] + "\r\n\tTransferred: " + cagesAtCapacityAmount[i] + "\r\n\tCurrent Size: " + cagesAtCapacityRange[i]);
+                    }
+                }
+                for (int i = 0; i < toCages.length; i++)
+                {
+                    if (toCages[i] != null)
+                    {
+                        writer.write("\r\n\r\nTo Pen: " + toCages[i] + "\r\n\tTransferred: " + capacityCounters[i] + "\r\n\tCurrent Size: " + toLowerBounds[i] + "-" + toUpperBounds[i]);
+                    }
+                }
+            
+                int totalCount = 0;
+                for (int i = 0; i < toCages.length; i++)
+                {
+                    if (toCages[i] != null)
+                    {
+                        totalCount = totalCount + capacityCounters[i];
+                    }
+                }
+                for (int i = 0; i < toCages.length; i++)
+                {
+                    if (cagesAtCapacity[i] != null)
+                    {
+                        totalCount = totalCount + cagesAtCapacityAmount[i];
+                    }
+                }
+                if (fromCount - totalCount != 0)
+                {
+                    writer.write("\r\n\r\nUnspecified: " + (fromCount - totalCount));
+                }
+            
+                writer.close();
+            }
+            catch (IOException e)
+            {
+                
+            }
+            
             frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
         }
         else
