@@ -10,6 +10,9 @@ import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.swing.*;
+import javax.swing.text.*;
+import javax.swing.event.*;
 
 public class Application extends JFrame
 {
@@ -24,6 +27,8 @@ public class Application extends JFrame
     private JComboBox cageList;
     private JTextField input;
     private String[] cages;
+    private JComboBox yearList;
+    private String[] years;
     private JLabel label1;
     private JLabel label2;
     private JLabel label3;
@@ -37,6 +42,8 @@ public class Application extends JFrame
     private JButton cancel;
     private int count; //0, 1, 2
     private String fromCage;
+    private int bellySize;
+    private String fromYear;
     private int tempFromLowerBound;
     private int tempFromUpperBound;
     private int fromLowerBound;
@@ -56,6 +63,7 @@ public class Application extends JFrame
     private boolean cageValid;
     private boolean hasDatabase;
     private boolean hasToCage;
+    private boolean cageTaken;
     private File file;
     private Database db;
     private Table table;
@@ -63,6 +71,9 @@ public class Application extends JFrame
     private Dimension screenSize;
     private double width;
     private double height;
+    private Font font1;
+    private Font font2;
+    private String errorMessage;
     
     public Application()
     {
@@ -76,6 +87,7 @@ public class Application extends JFrame
         quit = false;
         count = 0;
         fromCage = "";
+        bellySize = 0;
         tempFromLowerBound = 0;
         tempFromUpperBound = 0;
         fromLowerBound = 0;
@@ -93,6 +105,7 @@ public class Application extends JFrame
         cagesAtCapacityRange = new String[10];
         cagesAtCapacityCounter = 0;
         cageValid = false;
+        cageTaken = false;
         hasDatabase = false;
         hasToCage = false;
         file = null;
@@ -104,6 +117,17 @@ public class Application extends JFrame
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         width = screenSize.getWidth();
         height = screenSize.getHeight();
+        font1 = new Font("Arial", Font.PLAIN, 40);
+        font2 = new Font("Arial", Font.PLAIN, 25); 
+        years = new String[4];
+        
+        int year = Integer.parseInt(currentDate.substring(6));
+        for (int i = 0; i < 4; i++)
+        {
+            int number = year - i;
+            years[i] = "" + number;
+            System.out.println(number);
+        }
         
         cages = new String[148];
         for (int i = 0; i < 99; i++)
@@ -136,21 +160,27 @@ public class Application extends JFrame
                 public void actionPerformed(ActionEvent e)
                 {
                     int number = Integer.parseInt(((JButton) e.getSource()).getText());
+                    for (int i = 15; i <= 46; i++)
+                    {
+                        bellyButtons[i - 15].setEnabled(true);
+                    }
                     if (setUp)
                     {
                         if (count == 0)
                         {
                             tempFromLowerBound = number;
+                            for (int i = 15; i < number; i++)
+                            {
+                                bellyButtons[i - 15].setEnabled(false);
+                            }
                             count++;
                         }
                         else if (count == 1)
                         {
                             tempFromUpperBound = number;
                             count++;
-                            if (tempFromUpperBound > tempFromLowerBound)
-                            {
-                                cageValid = true;
-                            }
+                            cageValid = true;
+
                         }
                         else
                         {
@@ -159,7 +189,8 @@ public class Application extends JFrame
                             tempFromUpperBound = 0;
                             cageValid = false;
                         }
-                        label1.setText(tempFromLowerBound + "-" + tempFromUpperBound);
+                        label1.setText("Cage: " + cageList.getSelectedItem().toString() + ", Year: " + yearList.getSelectedItem().toString() + ", Belly Range: " + tempFromLowerBound + "-" + tempFromUpperBound);
+                        confirm.setEnabled(cageValid);
                     }
                     else if (addTo)
                     {
@@ -167,32 +198,30 @@ public class Application extends JFrame
                         {
                             tempToLowerBound = number;
                             count++;
+                            for (int i = 15; i < number; i++)
+                            {
+                                bellyButtons[i - 15].setEnabled(false);
+                            }
                         }
                         else if (count == 1)
                         {
                             tempToUpperBound = number;
                             count++;
-                            if (tempToUpperBound > tempToLowerBound)
+                            cageValid = true;
+                            for (int i = 0; i < toCounter; i++)
                             {
-                                cageValid = true;
-                            }
-                            if (cageValid)
-                            {
-                                for (int i = 0; i < toCounter; i++)
+                                for (int j = tempToLowerBound; j <= tempToUpperBound; j++)
                                 {
-                                    for (int j = tempToLowerBound; j <= tempToUpperBound; j++)
+                                    if (j == toLowerBounds[i] || j == toUpperBounds[i])
                                     {
-                                        if (j == toLowerBounds[i] || j == toUpperBounds[i])
-                                        {
-                                            cageValid = false;
-                                        }
-                                    }
-                                    if (toLowerBounds[i] == tempToLowerBound && toUpperBounds[i] == tempToUpperBound)
-                                    {
-                                        cageValid = true;
+                                        cageValid = false;
                                     }
                                 }
-                            }                           
+                                if (toLowerBounds[i] == tempToLowerBound && toUpperBounds[i] == tempToUpperBound)
+                                {
+                                    cageValid = true;
+                                }
+                            }   
                         }
                         else
                         {
@@ -201,10 +230,21 @@ public class Application extends JFrame
                             tempToUpperBound = 0;
                             cageValid = false;
                         }
-                        label1.setText(tempToLowerBound + "-" + tempToUpperBound);
+                        cageTaken = false;
+                        for (int i = 0; i < toCounter; i++)
+                        {
+                            if (cageList.getSelectedItem().toString().equals(toCages[i]))
+                            {
+                                cageTaken = true;
+                                i = toCounter;
+                            }
+                        }
+                        confirm.setEnabled(cageValid && isInteger(input.getText()) && Integer.parseInt(input.getText()) > 0 && !cageTaken);
+                        label1.setText("Cage: " + cageList.getSelectedItem().toString() + ", Belly Range: " + tempToLowerBound + "-" + tempToUpperBound + ", Capacity: " + input.getText());
                     }
                     else // add
                     {
+                        bellySize = number;
                         String toCage = "";
                         int index = 0;
                         for (int i = 0; i < toCounter; i++)
@@ -217,9 +257,10 @@ public class Application extends JFrame
                                 i = toCounter;
                             }
                         }
+                        label1.setText("Last Entry: " + bellySize);
                         try
                         {
-                            table.addRow(0, fromCage, toCage, number, currentDate);
+                            table.addRow(0, fromCage, toCage, bellySize, currentDate);
                         }
                         catch (IOException e1)
                         {
@@ -248,6 +289,15 @@ public class Application extends JFrame
                             {
                                 hasToCage = false;
                             }
+                            
+                            errorMessage = "Capacity reached on Cage " + toCage;
+                            start = false;
+                            setUp = false;
+                            addTo = false;
+                            removeTo = false;
+                            add = false;
+                            quit = false;
+                            addComponents();
                         }
                     }
                 }
@@ -356,6 +406,8 @@ public class Application extends JFrame
         {
             public void actionPerformed(ActionEvent e)
             {
+                errorMessage = "";
+                
                 if (setUp)
                 {
                     if (cageValid)
@@ -363,10 +415,11 @@ public class Application extends JFrame
                         fromLowerBound = tempFromLowerBound;
                         fromUpperBound = tempFromUpperBound;
                         fromCage = cageList.getSelectedItem().toString();
+                        fromYear = yearList.getSelectedItem().toString();
                         
                         try
                         {
-                            String name = "Cage" + fromCage + "_" + currentDate;
+                            String name = "Cage" + fromCage + "_Birth" + fromYear + "_" + currentDate;
                             file = new File(name + ".accdb");
                             db = new DatabaseBuilder(file).setFileFormat(Database.FileFormat.V2000).create();
                             table = new TableBuilder("Database")
@@ -383,10 +436,39 @@ public class Application extends JFrame
                             
                         }
                     }
+                    else
+                    {
+                        errorMessage = "Invalid Input";
+                    }
                 }
                 else if (addTo)
                 {
-                    if (cageValid)
+                    cageTaken = false;
+                    for (int i = 0; i < toCounter; i++)
+                    {
+                        if (cageList.getSelectedItem().toString().equals(toCages[i]))
+                        {
+                            cageTaken = true;
+                            i = toCounter;
+                        }
+                    }
+                    if (cageTaken)
+                    {
+                        errorMessage = "Cage taken";
+                    }
+                    else if (!cageValid)
+                    {
+                        errorMessage = "Invalid Input";
+                    }
+                    else if (!isInteger(input.getText()))
+                    {
+                        errorMessage = "Capacity must be a number";
+                    }
+                    else if (Integer.parseInt(input.getText()) <= 0)
+                    {
+                        errorMessage = "Capacity must be a number greater than 0";
+                    }
+                    else
                     {
                         toUpperBounds[toCounter] = tempToUpperBound;
                         toLowerBounds[toCounter] = tempToLowerBound;
@@ -397,8 +479,14 @@ public class Application extends JFrame
                         toCounter++;
                     }   
                 }
-                    
-                start = true;
+                if (!errorMessage.equals(""))
+                {
+                    start = false;
+                }
+                else
+                {
+                    start = true;
+                }
                 setUp = false;
                 addTo = false;
                 removeTo = false;
@@ -408,9 +496,11 @@ public class Application extends JFrame
             }
         });
         
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double w = screenSize.getWidth();
+        
         cageList = new JComboBox(cages);
         cageList.setEditable(false);
-        /*
         cageList.addPopupMenuListener(new PopupMenuListener()
         {
             public void popupMenuWillBecomeVisible(PopupMenuEvent e)
@@ -422,29 +512,115 @@ public class Application extends JFrame
                 {
                     JScrollPane scrollpane = (JScrollPane) c;
                     JScrollBar scrollBar = scrollpane.getVerticalScrollBar();
-                    Dimension scrollBarDim = new Dimension((int)(width / 48), scrollBar.getPreferredSize().height);
+                    Dimension scrollBarDim = new Dimension((int)(w / 48), scrollBar.getPreferredSize().height);
                     scrollBar.setPreferredSize(scrollBarDim);
                 }
             }
             
             public void popupMenuCanceled(PopupMenuEvent e)
             {
-                
+                if (setUp)
+                {
+                    label1.setText("Cage: " + cageList.getSelectedItem().toString() + ", Year: " + yearList.getSelectedItem().toString() + ", BellyRange: " + tempFromLowerBound + "-" + tempFromUpperBound);
+                }
+                else
+                {
+                    label1.setText("Cage: " + cageList.getSelectedItem().toString() + ", Belly Range: " + tempToLowerBound + "-" + tempToUpperBound + ", Capacity: " + input.getText());
+                    cageTaken = false;
+                    for (int i = 0; i < toCounter; i++)
+                    {
+                        if (cageList.getSelectedItem().toString().equals(toCages[i]))
+                        {
+                            cageTaken = true;
+                            i = toCounter;
+                        }
+                    }
+                    confirm.setEnabled(cageValid && isInteger(input.getText()) && Integer.parseInt(input.getText()) > 0 && !cageTaken);
+                }
             }
             
             public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
             {
-                
+                if (setUp)
+                {
+                    label1.setText("Cage: " + cageList.getSelectedItem().toString() + ", Year: " + yearList.getSelectedItem().toString() + ", Belly Range: " + tempFromLowerBound + "-" + tempFromUpperBound);
+                }
+                else
+                {
+                    label1.setText("Cage: " + cageList.getSelectedItem().toString() + ", Belly Range: " + tempToLowerBound + "-" + tempToUpperBound + ", Capacity: " + input.getText());
+                    cageTaken = false;
+                    for (int i = 0; i < toCounter; i++)
+                    {
+                        if (cageList.getSelectedItem().toString().equals(toCages[i]))
+                        {
+                            cageTaken = true;
+                            i = toCounter;
+                        }
+                    }
+                    confirm.setEnabled(cageValid && isInteger(input.getText()) && Integer.parseInt(input.getText()) > 0 && !cageTaken);
+                }
             }
         });
-        */
         
-        input = new JTextField(20);
+        yearList = new JComboBox(years);
+        yearList.setEditable(false);
+        yearList.addPopupMenuListener(new PopupMenuListener()
+        {
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e)
+            {
+                JComboBox comboBox = (JComboBox) e.getSource();
+                Object popup = comboBox.getUI().getAccessibleChild(comboBox, 0);
+                Component c = ((Container) popup).getComponent(0);
+                if (c instanceof JScrollPane)
+                {
+                    JScrollPane scrollpane = (JScrollPane) c;
+                    JScrollBar scrollBar = scrollpane.getVerticalScrollBar();
+                    Dimension scrollBarDim = new Dimension((int)(w / 48), scrollBar.getPreferredSize().height);
+                    scrollBar.setPreferredSize(scrollBarDim);
+                }
+            }
+            
+            public void popupMenuCanceled(PopupMenuEvent e)
+            {
+                label1.setText("Cage: " + cageList.getSelectedItem().toString() + ", Year: " + yearList.getSelectedItem().toString() + ", Belly Range: " + tempFromLowerBound + "-" + tempFromUpperBound);
+            }
+            
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
+            {
+                label1.setText("Cage: " + cageList.getSelectedItem().toString() + ", Year: " + yearList.getSelectedItem().toString() + ", Belly Range: " + tempFromLowerBound + "-" + tempFromUpperBound);
+            }
+        });
+        
+        input = new JTextField(10);
+        input.getDocument().addDocumentListener(new DocumentListener()
+        {
+            public void changedUpdate(DocumentEvent e)
+            {
+                warn();
+            }
+            public void removeUpdate(DocumentEvent e)
+            {
+                warn();
+            }
+            public void insertUpdate(DocumentEvent e)
+            {
+                warn();
+            }
+
+            public void warn()
+            {
+                label1.setText("Cage: " + cageList.getSelectedItem().toString() + ", Belly Range: " + tempToLowerBound + "-" + tempToUpperBound + ", Capacity: " + input.getText());
+                confirm.setEnabled(cageValid && isInteger(input.getText()) && Integer.parseInt(input.getText()) > 0);
+            }
+        });
     }
     
     public void addComponents()
     {  
         contentPane.removeAll();
+        input.setText("");
+        cageList.setSelectedIndex(0);
+        yearList.setSelectedIndex(0);
         
         System.out.println("From: " + fromCage + " " + fromLowerBound + "-" + fromUpperBound);
         for (int i = 0; i < toCounter; i++)
@@ -461,6 +637,11 @@ public class Application extends JFrame
             
             addToCage.setEnabled(hasDatabase);
             addEntry.setEnabled(hasDatabase && hasToCage);
+            setUpDatabase.setFont(font2);
+            addToCage.setFont(font2);
+            removeToCage.setFont(font2);
+            addEntry.setFont(font2);
+            quitButton.setFont(font2);
             
             Dimension size = new Dimension((int)(width/6), (int)(height/4));
             
@@ -489,19 +670,35 @@ public class Application extends JFrame
             for (int i = 0; i < 32; i++)
             {
                 bellyButtons[i].setPreferredSize(size);
+                bellyButtons[i].setFont(font1);
                 panel3.add(bellyButtons[i]);
             }
-            label1.setText(tempFromLowerBound + "-" + tempFromUpperBound);
+            label1.setText("Cage: " + cageList.getSelectedItem().toString() + ", Year: " + yearList.getSelectedItem().toString() + ", Belly Range: " + tempFromLowerBound + "-" + tempFromUpperBound);
+            label1.setFont(font1);
             label2.setText("Specify From Range");
+            label2.setFont(font2);
             label3.setText("From Cage?");
+            label3.setFont(font1);
+            JLabel label4 = new JLabel("Birth Year");
+            label4.setFont(font1);
             cageList.setPreferredSize(size);
+            cageList.setFont(font1);
+            yearList.setPreferredSize(size);
+            yearList.setFont(font1);
             confirm.setPreferredSize(size);
+            confirm.setFont(font1);
+            
+            confirm.setEnabled(cageValid && !cageTaken);
+            
             cancel.setPreferredSize(size);
+            cancel.setFont(font1);
             panel4.add(label1);
             panel5.add(label3);
             panel5.add(cageList);
-            panel4.add(confirm);
+            panel5.add(label4);
+            panel5.add(yearList);
             panel4.add(cancel);
+            panel4.add(confirm);
             panel6.add(label2);
             panel2.add(panel5, BorderLayout.NORTH);
             panel2.add(panel4, BorderLayout.CENTER);
@@ -523,22 +720,34 @@ public class Application extends JFrame
             for (int i = 0; i < 32; i++)
             {
                 bellyButtons[i].setPreferredSize(size);
+                bellyButtons[i].setFont(font1);
                 panel3.add(bellyButtons[i]);
             }
-            label1.setText(tempToLowerBound + "-" + tempToUpperBound);
+            label1.setText("Cage: " + cageList.getSelectedItem().toString() + ", Belly Range: " + tempToLowerBound + "-" + tempToUpperBound + ", Capacity: " + input.getText());
+            label1.setFont(font1);
             label2.setText("Select Belly Range");
+            label2.setFont(font2);
             cageList.setPreferredSize(size);
+            cageList.setFont(font1);
             confirm.setPreferredSize(size);
+            confirm.setFont(font1);
+            confirm.setEnabled(false);
             cancel.setPreferredSize(size);
+            cancel.setFont(font1);
             panel6.add(label2);
             panel4.add(label1);
-            panel5.add(new JLabel("Cage: "));
+            JLabel label4 = new JLabel("Cage: ");
+            label4.setFont(font1);
+            panel5.add(label4);
             panel5.add(cageList);
-            panel7.add(new JLabel("Capacity: "));
+            JLabel label5 = new JLabel("Capacity: ");
+            label5.setFont(font1);
+            panel7.add(label5);
             input.setPreferredSize(size);
+            input.setFont(font1);
             panel7.add(input);
-            panel4.add(confirm);
             panel4.add(cancel);
+            panel4.add(confirm);
             panel2.add(panel5, BorderLayout.NORTH);
             panel2.add(panel7, BorderLayout.CENTER);
             panel2.add(panel4, BorderLayout.SOUTH);
@@ -561,6 +770,7 @@ public class Application extends JFrame
                 panel2 = new Panel(new FlowLayout());
                 
                 JLabel label = new JLabel("Cage " + toCages[i] + ": " + toLowerBounds[i] + "-" + toUpperBounds[i] + ", Capacity: " + capacities[i]);
+                label.setFont(font1);
                 panel2.add(label);
                 
                 button = new JButton("Remove Cage " + toCages[i]);
@@ -602,11 +812,14 @@ public class Application extends JFrame
                     }
                 });
                 button.setPreferredSize(size);
+                button.setFont(font2);
                 panel2.add(button);
                 
                 box.add(panel2);
             }
             
+            cancel.setPreferredSize(size);
+            cancel.setFont(font1);
             bottomPanel.add(cancel);
             
             panel.add(box, BorderLayout.CENTER);
@@ -614,32 +827,93 @@ public class Application extends JFrame
         }
         else if (add)
         {
-            panel.setLayout(new FlowLayout());
-            Panel panel2 = new Panel(new BorderLayout());
+            Dimension size = new Dimension((int)(width/7), (int)(height/9));
+            
+            panel.setLayout(new BorderLayout());
+            Panel panel2 = new Panel(new FlowLayout());
+            JLabel label = new JLabel("Select Belly Size");
+            label.setFont(font2);
+            panel2.add(label);
             Panel panel3 = new Panel(new FlowLayout());
             for (int i = 0; i < 32; i++)
             {
+                bellyButtons[i].setPreferredSize(size);
+                bellyButtons[i].setFont(font1);
                 panel3.add(bellyButtons[i]);
             }
-            panel2.add(panel3, BorderLayout.NORTH);
-            panel2.add(cancel, BorderLayout.SOUTH);
-            panel.add(panel2);
+            label1.setText("Last Entry: " + bellySize);
+            label1.setFont(font1);
+            Panel panel4 = new Panel(new BorderLayout());
+            Panel panel5 = new Panel(new FlowLayout());
+            Panel panel6 = new Panel(new FlowLayout());
+            panel5.add(label1);
+            panel6.add(cancel);
+            panel4.add(panel5, BorderLayout.NORTH);
+            panel4.add(panel6, BorderLayout.SOUTH);
+            panel.add(panel2, BorderLayout.NORTH);
+            panel.add(panel3, BorderLayout.CENTER);
+            panel.add(panel4, BorderLayout.SOUTH);
+
         }
-        else //quit
+        else if (quit)
         {
             frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
         }
+        else
+        {
+            Dimension size = new Dimension((int)(width/8), (int)(height/10));
+            JFrame frame2 = new JFrame();
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            Panel tempPanel = new Panel(new FlowLayout());
+            Panel tempPanel2 = new Panel(new FlowLayout());
+            Panel tempPanel3 = new Panel(new BorderLayout());
+            JLabel tempLabel = new JLabel("Warning! " + errorMessage);
+            tempLabel.setFont(font1);
+            JButton tempButton = new JButton("Back");
+            tempButton.setPreferredSize(size);
+            tempButton.setFont(font1);
+            tempButton.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent e)
+                {
+                    start = true;
+                    setUp = false;
+                    addTo = false;
+                    removeTo = false;
+                    add = false;
+                    quit = false;
+                    addComponents();
+                    frame2.dispose();
+                }
+            });
+            
+            tempPanel.add(tempLabel);
+            tempPanel2.add(tempButton);
+            tempPanel3.add(tempPanel, BorderLayout.NORTH);
+            tempPanel3.add(tempPanel2, BorderLayout.SOUTH);
+            frame2.add(tempPanel3);
+            frame2.pack();
+            frame2.setLocationRelativeTo(null);
+            frame2.setVisible(true);   
+        }
         
-        contentPane.add(panel);
-        validate();
-        setVisible(true);
+        if (start || setUp || addTo || removeTo || add || quit)
+        {
+            contentPane.add(panel);
+            validate();
+            setVisible(true);
+        }
     }
     
     public static void createAndShowGUI()
     {
         frame = new Application();           
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().setPreferredSize( Toolkit.getDefaultToolkit().getScreenSize());
+        Rectangle rect = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+        double length = rect.getHeight();
+        double width = rect.getWidth();
+        Dimension screenSize = new Dimension((int)width, (int)length - 50);
+        frame.getContentPane().setPreferredSize(screenSize);
         frame.addComponents();
         frame.pack();
         frame.setLocationRelativeTo(null);
@@ -685,5 +959,36 @@ public class Application extends JFrame
             j++;
         }
         return temp;
+    }
+    
+    public static boolean isInteger(String str)
+    {
+	if (str == null)
+        {
+		return false;
+	}
+	int length = str.length();
+	if (length == 0)
+        {
+		return false;
+	}
+	int i = 0;
+	if (str.charAt(0) == '-')
+        {
+		if (length == 1)
+                {
+			return false;
+		}
+		i = 1;
+	}
+	for (; i < length; i++)
+        {
+		char c = str.charAt(i);
+		if (c <= '/' || c >= ':')
+                {
+			return false;
+		}
+	}
+	return true;
     }
 }

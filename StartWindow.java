@@ -91,8 +91,14 @@ public class StartWindow extends JPanel implements ActionListener
         newContentPane.setOpaque(true);
         frame.setContentPane(newContentPane);
         
-        frame.getContentPane().setPreferredSize( Toolkit.getDefaultToolkit().getScreenSize());
+        //eliminate taskbar
+        Rectangle rect = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+        double length = rect.getHeight();
+        double width = rect.getWidth();
+        Dimension screenSize = new Dimension((int)width, (int)length - 50);
         
+        frame.getContentPane().setPreferredSize(screenSize);
+
         ImageIcon img = new ImageIcon("Logo1.jpg");
         frame.setIconImage(img.getImage());
         
