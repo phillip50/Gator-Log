@@ -10,8 +10,7 @@ import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import javax.swing.*;
-import javax.swing.text.*;
+import java.util.Collections;
 import javax.swing.event.*;
 
 public class Application extends JFrame
@@ -62,7 +61,7 @@ public class Application extends JFrame
     private String[] cagesAtCapacityRange;
     private int cagesAtCapacityCounter;
     private boolean cageValid;
-    private boolean hasDatabase;
+    private boolean hasFrom;
     private boolean hasToCage;
     private boolean cageTaken;
     private File file;
@@ -109,7 +108,7 @@ public class Application extends JFrame
         cagesAtCapacityCounter = 0;
         cageValid = false;
         cageTaken = false;
-        hasDatabase = false;
+        hasFrom = false;
         hasToCage = false;
         file = null;
         db = null;
@@ -422,17 +421,23 @@ public class Application extends JFrame
                         
                         try
                         {
-                            String name = "Cage" + fromCage + "_Birth" + fromYear + "_" + currentDate;
-                            file = new File(name + ".accdb");
-                            db = new DatabaseBuilder(file).setFileFormat(Database.FileFormat.V2000).create();
-                            table = new TableBuilder("Database")
-                                .addColumn(new ColumnBuilder("ID", DataType.LONG).setAutoNumber(true))
-                                .addColumn(new ColumnBuilder("From", DataType.TEXT))
-                                .addColumn(new ColumnBuilder("To", DataType.TEXT))
-                                .addColumn(new ColumnBuilder("Belly", DataType.TEXT))
-                                .addColumn(new ColumnBuilder("Date", DataType.TEXT))
-                                .toTable(db);
-                            hasDatabase = true;
+                            file = new File("AnimalDatabase.accdb");
+                            if (!file.exists())
+                            {
+                                db = new DatabaseBuilder(file).setFileFormat(Database.FileFormat.V2000).create();
+                                table = new TableBuilder("Database")
+                                    .addColumn(new ColumnBuilder("ID", DataType.LONG).setAutoNumber(true))
+                                    .addColumn(new ColumnBuilder("From", DataType.TEXT))
+                                    .addColumn(new ColumnBuilder("To", DataType.TEXT))
+                                    .addColumn(new ColumnBuilder("Belly", DataType.TEXT))
+                                    .addColumn(new ColumnBuilder("Date", DataType.TEXT))
+                                    .toTable(db);
+                            }
+                            else
+                            {
+                                table = DatabaseBuilder.open(file).getTable("Database");
+                            }
+                            hasFrom = true;
                         }
                         catch (IOException e1)
                         {
@@ -631,8 +636,8 @@ public class Application extends JFrame
         {
             panel.setLayout(new FlowLayout());
             
-            addToCage.setEnabled(hasDatabase);
-            addEntry.setEnabled(hasDatabase && hasToCage);
+            addToCage.setEnabled(hasFrom);
+            addEntry.setEnabled(hasFrom && hasToCage);
             setUpDatabase.setFont(font2);
             addToCage.setFont(font2);
             removeToCage.setFont(font2);
@@ -853,22 +858,19 @@ public class Application extends JFrame
         }
         else if (quit)
         {
-            System.out.println("stuff");
-            
-            System.out.println("Done");
             try
             {
                 outputFile = new File("Cage" + fromCage + "_Birth" + fromYear + "_" + currentDate + "_log.txt");
                 BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
                 writer.write("From Pen: " + fromCage + "\r\n\tTotal: " + fromCount + "\r\n\tYear: " + fromYear + "\r\n\tSize: " + fromLowerBound + "-" + fromUpperBound + "\r\n");
-                for (int i = 0; i < toCages.length; i++)
+                for (int i = 0; i < toCounter; i++)
                 {
                     if (cagesAtCapacity[i] != null)
                     {
                         writer.write("\r\n\r\nTo Pen: " + cagesAtCapacity[i] + "\r\n\tTransferred: " + cagesAtCapacityAmount[i] + "\r\n\tCurrent Size: " + cagesAtCapacityRange[i]);
                     }
                 }
-                for (int i = 0; i < toCages.length; i++)
+                for (int i = 0; i < toCounter; i++)
                 {
                     if (toCages[i] != null)
                     {
@@ -877,14 +879,14 @@ public class Application extends JFrame
                 }
             
                 int totalCount = 0;
-                for (int i = 0; i < toCages.length; i++)
+                for (int i = 0; i < toCounter; i++)
                 {
                     if (toCages[i] != null)
                     {
                         totalCount = totalCount + capacityCounters[i];
                     }
                 }
-                for (int i = 0; i < toCages.length; i++)
+                for (int i = 0; i < toCounter; i++)
                 {
                     if (cagesAtCapacity[i] != null)
                     {
@@ -897,6 +899,23 @@ public class Application extends JFrame
                 }
             
                 writer.close();
+                
+                File file2 = new File("CageDatabase.accdb");
+                Table table2 = DatabaseBuilder.open(file2).getTable("Database");
+                Row fromRow = CursorBuilder.findRow(table2, Collections.singletonMap("Pen Number", fromCage));
+                table2.addRow(0, fromRow.get("Pen Type"), fromRow.get("Square Footage"), currentDate, fromCage, Integer.parseInt(fromRow.get("Gator Count").toString()) - fromCount);
+            
+                for (int i = 0; i < toCounter; i++)
+                {
+                    Row toRow = CursorBuilder.findRow(table2, Collections.singletonMap("Pen Number", toCages[i]));
+                    table2.addRow(0, toRow.get("Pen Type"), toRow.get("Square Footage"), currentDate, toCages[i], Integer.parseInt(toRow.get("Gator Count").toString()) + capacityCounters[i]);
+                }
+                
+                for (int i = 0; i < cagesAtCapacityCounter; i++)
+                {
+                    Row toRow = CursorBuilder.findRow(table2, Collections.singletonMap("Pen Number", cagesAtCapacity[i]));
+                    table2.addRow(0, toRow.get("Pen Type"), toRow.get("Square Footage"), currentDate, cagesAtCapacity[i], Integer.parseInt(toRow.get("Gator Count").toString()) + cagesAtCapacityAmount[i]);
+                }
             }
             catch (IOException e)
             {
