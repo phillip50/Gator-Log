@@ -64,9 +64,12 @@ public class Application extends JFrame
     private boolean hasFrom;
     private boolean hasToCage;
     private boolean cageTaken;
-    private File file;
-    private Database db;
-    private Table table;
+    private File gatorFile;
+    private Database gatordb;
+    private Table gatorTable;
+    private File cageFile;
+    private Database cagedb;
+    private Table cageTable;
     private File outputFile;
     private String currentDate;
     private Dimension screenSize;
@@ -110,9 +113,12 @@ public class Application extends JFrame
         cageTaken = false;
         hasFrom = false;
         hasToCage = false;
-        file = null;
-        db = null;
-        table = null;
+        gatorFile = null;
+        gatordb = null;
+        gatorTable = null;
+        cageFile = null;
+        cagedb = null;
+        cageTable = null;
         DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
         Date date = new Date();
         currentDate = dateFormat.format(date);     
@@ -145,6 +151,60 @@ public class Application extends JFrame
         {
             int j = i + 1;
             cages[i + 99 + 16] = "" + j + "B";
+        }
+        
+        try
+        {
+            gatorFile = new File("AnimalDatabase.accdb");
+            if (!gatorFile.exists())
+            {
+                gatordb = new DatabaseBuilder(gatorFile).setFileFormat(Database.FileFormat.V2000).create();
+                gatorTable = new TableBuilder("Database")
+                    .addColumn(new ColumnBuilder("ID", DataType.LONG).setAutoNumber(true))
+                    .addColumn(new ColumnBuilder("From", DataType.TEXT))
+                    .addColumn(new ColumnBuilder("To", DataType.TEXT))
+                    .addColumn(new ColumnBuilder("Belly", DataType.TEXT))
+                    .addColumn(new ColumnBuilder("Date", DataType.TEXT))
+                    .toTable(gatordb);
+            }
+            else
+            {
+                gatorTable = DatabaseBuilder.open(gatorFile).getTable("Database");
+            }
+        }
+        catch (IOException e1)
+        {
+                            
+        }
+        
+        try
+        {
+            cageFile = new File("CageDatabase.accdb");
+            if (!cageFile.exists())
+            {
+                cagedb = new DatabaseBuilder(cageFile).setFileFormat(Database.FileFormat.V2000).create();
+                cageTable = new TableBuilder("Database")
+                    .addColumn(new ColumnBuilder("ID", DataType.LONG).setAutoNumber(true))
+                    .addIndex(new IndexBuilder(IndexBuilder.PRIMARY_KEY_NAME).addColumns("ID").setPrimaryKey())
+                    .addColumn(new ColumnBuilder("Pen Number", DataType.TEXT))
+                    .addIndex(new IndexBuilder("PenNumberIndex").addColumns("Pen Number"))
+                    .addColumn(new ColumnBuilder("Pen Type", DataType.TEXT))
+                    .addColumn(new ColumnBuilder("Square Footage", DataType.TEXT))
+                    .addColumn(new ColumnBuilder("Gator Count", DataType.TEXT))
+                    .addIndex(new IndexBuilder("GatorCountIndex").addColumns("Gator Count"))
+                    .addColumn(new ColumnBuilder("Current Date", DataType.TEXT))
+                    .addIndex(new IndexBuilder("DateIndex").addColumns("Current Date"))
+                    .toTable(cagedb);
+                initCageDatabase();
+            }
+            else
+            {
+                cageTable = DatabaseBuilder.open(cageFile).getTable("Database");
+            }
+        }
+        catch (IOException e1)
+        {
+                            
         }
         
         label1 = new JLabel("");
@@ -262,7 +322,7 @@ public class Application extends JFrame
                         fromCount++;
                         try
                         {
-                            table.addRow(0, fromCage, toCage, bellySize, currentDate);
+                            gatorTable.addRow(0, fromCage, toCage, bellySize, currentDate);
                         }
                         catch (IOException e1)
                         {
@@ -418,31 +478,7 @@ public class Application extends JFrame
                         fromUpperBound = tempFromUpperBound;
                         fromCage = cageList.getSelectedItem().toString();
                         fromYear = yearList.getSelectedItem().toString();
-                        
-                        try
-                        {
-                            file = new File("AnimalDatabase.accdb");
-                            if (!file.exists())
-                            {
-                                db = new DatabaseBuilder(file).setFileFormat(Database.FileFormat.V2000).create();
-                                table = new TableBuilder("Database")
-                                    .addColumn(new ColumnBuilder("ID", DataType.LONG).setAutoNumber(true))
-                                    .addColumn(new ColumnBuilder("From", DataType.TEXT))
-                                    .addColumn(new ColumnBuilder("To", DataType.TEXT))
-                                    .addColumn(new ColumnBuilder("Belly", DataType.TEXT))
-                                    .addColumn(new ColumnBuilder("Date", DataType.TEXT))
-                                    .toTable(db);
-                            }
-                            else
-                            {
-                                table = DatabaseBuilder.open(file).getTable("Database");
-                            }
-                            hasFrom = true;
-                        }
-                        catch (IOException e1)
-                        {
-                            
-                        }
+                        hasFrom = true;
                     }
                     else
                     {
@@ -863,7 +899,7 @@ public class Application extends JFrame
                 outputFile = new File("Cage" + fromCage + "_Birth" + fromYear + "_" + currentDate + "_log.txt");
                 BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
                 writer.write("From Pen: " + fromCage + "\r\n\tTotal: " + fromCount + "\r\n\tYear: " + fromYear + "\r\n\tSize: " + fromLowerBound + "-" + fromUpperBound + "\r\n");
-                for (int i = 0; i < toCounter; i++)
+                for (int i = 0; i < cagesAtCapacityCounter; i++)
                 {
                     if (cagesAtCapacity[i] != null)
                     {
@@ -886,7 +922,7 @@ public class Application extends JFrame
                         totalCount = totalCount + capacityCounters[i];
                     }
                 }
-                for (int i = 0; i < toCounter; i++)
+                for (int i = 0; i < cagesAtCapacityCounter; i++)
                 {
                     if (cagesAtCapacity[i] != null)
                     {
@@ -900,21 +936,53 @@ public class Application extends JFrame
             
                 writer.close();
                 
-                File file2 = new File("CageDatabase.accdb");
-                Table table2 = DatabaseBuilder.open(file2).getTable("Database");
-                Row fromRow = CursorBuilder.findRow(table2, Collections.singletonMap("Pen Number", fromCage));
-                table2.addRow(0, fromRow.get("Pen Type"), fromRow.get("Square Footage"), currentDate, fromCage, Integer.parseInt(fromRow.get("Gator Count").toString()) - fromCount);
-            
+                IndexCursor cursor = CursorBuilder.createCursor(cageTable.getIndex("PenNumberIndex"));                            
+                cursor.beforeFirst();
+                
+                cursor.findFirstRow(Collections.singletonMap("Pen Number", fromCage));
+                Row fromRow = cursor.getCurrentRow();
+                while (cursor.findNextRow(Collections.singletonMap("Pen Number", fromCage)))
+                {
+                    Row row = cursor.getCurrentRow();
+                    if (row != null)
+                    {
+                        fromRow = row;
+                    }
+                }
+                cageTable.addRow(0, fromCage, fromRow.get("Pen Type"), fromRow.get("Square Footage"), Integer.parseInt(fromRow.get("Gator Count").toString()) - fromCount, currentDate);
+                                           
+                cursor.beforeFirst();
+                
                 for (int i = 0; i < toCounter; i++)
                 {
-                    Row toRow = CursorBuilder.findRow(table2, Collections.singletonMap("Pen Number", toCages[i]));
-                    table2.addRow(0, toRow.get("Pen Type"), toRow.get("Square Footage"), currentDate, toCages[i], Integer.parseInt(toRow.get("Gator Count").toString()) + capacityCounters[i]);
+                    cursor.findFirstRow(Collections.singletonMap("Pen Number", toCages[i]));
+                    Row toRow = cursor.getCurrentRow();
+                    while (cursor.findNextRow(Collections.singletonMap("Pen Number", toCages[i])))
+                    {
+                        Row row = cursor.getCurrentRow();
+                        if (row != null)
+                        {
+                            toRow = row;
+                        }
+                    }
+                    cageTable.addRow(0, toCages[i], toRow.get("Pen Type"), toRow.get("Square Footage"), Integer.parseInt(toRow.get("Gator Count").toString()) + capacityCounters[i], currentDate);                         
+                    cursor.beforeFirst();
                 }
                 
                 for (int i = 0; i < cagesAtCapacityCounter; i++)
                 {
-                    Row toRow = CursorBuilder.findRow(table2, Collections.singletonMap("Pen Number", cagesAtCapacity[i]));
-                    table2.addRow(0, toRow.get("Pen Type"), toRow.get("Square Footage"), currentDate, cagesAtCapacity[i], Integer.parseInt(toRow.get("Gator Count").toString()) + cagesAtCapacityAmount[i]);
+                    cursor.findFirstRow(Collections.singletonMap("Pen Number", cagesAtCapacity[i]));
+                    Row toRow = cursor.getCurrentRow();
+                    while (cursor.findNextRow(Collections.singletonMap("Pen Number", cagesAtCapacity[i])))
+                    {
+                        Row row = cursor.getCurrentRow();
+                        if (row != null)
+                        {
+                            toRow = row;
+                        }
+                    }                      
+                    cageTable.addRow(0, cagesAtCapacity[i], toRow.get("Pen Type"), toRow.get("Square Footage"), Integer.parseInt(toRow.get("Gator Count").toString()) + cagesAtCapacityAmount[i], currentDate);
+                    cursor.beforeFirst();
                 }
             }
             catch (IOException e)
@@ -1055,5 +1123,80 @@ public class Application extends JFrame
 		}
 	}
 	return true;
+    }
+    
+    public void initCageDatabase()
+    {
+        try
+        {
+            for (int i = 1; i < 170; i++)
+            {
+                if (1 <= i && i <= 8)
+                {
+                    cageTable.addRow(0, i, "Small", 200, 100, "05-20-2015");
+                }
+                else if (9 <= i && i <= 12)
+                {
+                    cageTable.addRow(0, "9-" + (i-8), "Quartered", 150, 50, "05-20-2015");
+                }
+                else if (13 <= i && i <= 16)
+                {
+                    cageTable.addRow(0, "10-" + (i-12), "Quartered", 150, 50, "05-20-2015");
+                }
+                else if (i == 17)
+                {
+                    cageTable.addRow(0, "11", "Small", 200, 100, "05-20-2015");
+                }
+                else if (18 <= i && i <= 21)
+                {
+                    cageTable.addRow(0, "12-" + (i-17), "Quartered", 150, 50, "05-20-2015");
+                }
+                else if (22 <= i && i <= 25)
+                {
+                    cageTable.addRow(0, "13-" + (i-21), "Quartered", 150, 50, "05-20-2015");
+                }
+                else if (i == 26)
+                {
+                    cageTable.addRow(0, "14", "Small", 200, 100, "05-20-2015");
+                }
+                else if (27 <= i && i <= 30)
+                {
+                    cageTable.addRow(0, "15-" + (i-26), "Quartered", 150, 50, "05-20-2015");
+                }
+                else if (31 <= i && i <= 32)
+                {
+                    cageTable.addRow(0, "" + (i-15), "Large", 600, 300, "05-20-2015");
+                }
+                else if (33 <= i && i <= 36)
+                {
+                    cageTable.addRow(0, "18-" + (i-32), "Quartered", 150, 50, "05-20-2015");
+                }
+                else if (37 <= i && i <= 78)
+                {
+                    cageTable.addRow(0, "" + (i-18), "Large", 600, 300, "05-20-2015");
+                }
+                else if (79 <= i && i <= 82)
+                {
+                    cageTable.addRow(0, "61-" + (i-78), "Quartered", 150, 50, "05-20-2015");
+                }
+                else if (83 <= i && i <= 120)
+                {
+                    cageTable.addRow(0, "" + (i-21), "Large", 600, 300, "05-20-2015");
+                }
+                else if (121 <= i && i <= 136)
+                {
+                    cageTable.addRow(0, "" + (i-120) + "A", "Small", 200, 0, "05-20-2015");
+                }
+                else
+                {
+                    cageTable.addRow(0, "" + (i-136) + "B", "Large", 600, 0, "05-20-2015");
+                }
+            
+            }
+        }
+        catch (IOException e)
+        {
+            
+        }
     }
 }
