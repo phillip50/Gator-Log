@@ -21,7 +21,6 @@ public class CageApplication extends JFrame
     private JButton[] cages;
     private File file;
     private Table table;
-    //private ArrayList<Row> mostRecentCages;
     private Row mostRecentCage;
     
     public CageApplication()
@@ -113,16 +112,19 @@ public class CageApplication extends JFrame
                 {
                     allEntriesFromCage.clear();
                     IndexCursor cursor;
+                    Row latestRow = null;
                     try
                     {
-                        cursor = CursorBuilder.createCursor(table.getIndex("PenNumberIndex"));                            
+                        cursor = CursorBuilder.createCursor(table.getIndex("PenNumberIndex"));
+                        cursor.findFirstRow(Collections.singletonMap("Pen Number", ((JButton) e.getSource()).getText()));
+                        latestRow = cursor.getCurrentRow();                         
                         cursor.beforeFirst();
                         while (cursor.findNextRow(Collections.singletonMap("Pen Number", ((JButton) e.getSource()).getText())))
                         {
                             Row row = cursor.getCurrentRow();
                             if (row != null)
                             {
-                                allEntriesFromCage.add(row);
+                                latestRow = row;
                             }
                         }
                     }
@@ -130,10 +132,7 @@ public class CageApplication extends JFrame
                     {
                         
                     }
-                    for (int i = 0; i < allEntriesFromCage.size(); i++)
-                    {
-                        System.out.println(allEntriesFromCage.get(i).get("Pen Number") + " " + allEntriesFromCage.get(i).get("Gator Count") + " " + allEntriesFromCage.get(i).get("Current Date"));
-                    }
+                    System.out.println(latestRow.get("Pen Number") + " " + latestRow.get("Gator Count") + " " + latestRow.get("Current Date"));
                     System.out.println();
                 }
             });
