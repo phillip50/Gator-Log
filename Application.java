@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Collections;
 import javax.swing.event.*;
+import java.util.ArrayList;
 
 public class Application extends JFrame
 {
@@ -25,7 +26,7 @@ public class Application extends JFrame
     private JButton quitButton;
     private JComboBox cageList;
     private JTextField input;
-    private String[] cages;
+    private ArrayList<String> cages;
     private JComboBox yearList;
     private String[] years;
     private JLabel label1;
@@ -65,12 +66,10 @@ public class Application extends JFrame
     private boolean hasToCage;
     private boolean cageTaken;
     private File gatorFile;
-    private Database gatordb;
     private Table gatorTable;
-    private File cageFile;
-    private Database cagedb;
-    private Table cageTable;
     private File outputFile;
+    private File cageFile;
+    private Table cageTable;
     private String currentDate;
     private Dimension screenSize;
     private double width;
@@ -114,10 +113,8 @@ public class Application extends JFrame
         hasFrom = false;
         hasToCage = false;
         gatorFile = null;
-        gatordb = null;
         gatorTable = null;
         cageFile = null;
-        cagedb = null;
         cageTable = null;
         DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
         Date date = new Date();
@@ -136,71 +133,58 @@ public class Application extends JFrame
             years[i] = "" + number;
         }
         
-        cages = new String[148];
-        for (int i = 0; i < 99; i++)
+        cages = new ArrayList<String>();
+        for (int i = 101; i <= 127; i++)
         {
-            int j = i + 1;
-            cages[i] = "" + j;
+            cages.add("" + i);
         }
-        for (int i = 0; i < 16; i++)
+        for (int i = 201; i <= 232; i++)
         {
-            int j = i + 1;
-            cages[i + 99] = "" + j + "A";
+            if (i == 227 || i == 232)
+            {
+                for (int j = 1; j <= 4; j++)
+                {
+                    cages.add("" + i + "." + j);
+                }
+            }
+            else
+            {
+                cages.add("" + i);
+            }
         }
-        for (int i = 0; i < 33; i++)
+        for (int i = 301; i <= 326; i++)
         {
-            int j = i + 1;
-            cages[i + 99 + 16] = "" + j + "B";
+            cages.add("" + i);
+        }
+        for (int i = 401; i <= 437; i++)
+        {
+            if (i == 410 || i == 411 || i == 420 || i == 421)
+            {
+                for (int j = 1; j <= 4; j++)
+                {
+                    cages.add("" + i + "." + j);
+                }
+            }
+            else
+            {
+                cages.add("" + i);
+            }
+        }
+        for (int i = 801; i <= 816; i++)
+        {
+            cages.add("" + i);
+        }
+        for (int i = 901; i <= 910; i++)
+        {
+            cages.add("" + i);
         }
         
         try
         {
             gatorFile = new File("AnimalDatabase.accdb");
-            if (!gatorFile.exists())
-            {
-                gatordb = new DatabaseBuilder(gatorFile).setFileFormat(Database.FileFormat.V2000).create();
-                gatorTable = new TableBuilder("Database")
-                    .addColumn(new ColumnBuilder("ID", DataType.LONG).setAutoNumber(true))
-                    .addColumn(new ColumnBuilder("From", DataType.TEXT))
-                    .addColumn(new ColumnBuilder("To", DataType.TEXT))
-                    .addColumn(new ColumnBuilder("Belly", DataType.TEXT))
-                    .addColumn(new ColumnBuilder("Date", DataType.TEXT))
-                    .toTable(gatordb);
-            }
-            else
-            {
-                gatorTable = DatabaseBuilder.open(gatorFile).getTable("Database");
-            }
-        }
-        catch (IOException e1)
-        {
-                            
-        }
-        
-        try
-        {
+            gatorTable = DatabaseBuilder.open(gatorFile).getTable("Database");
             cageFile = new File("CageDatabase.accdb");
-            if (!cageFile.exists())
-            {
-                cagedb = new DatabaseBuilder(cageFile).setFileFormat(Database.FileFormat.V2000).create();
-                cageTable = new TableBuilder("Database")
-                    .addColumn(new ColumnBuilder("ID", DataType.LONG).setAutoNumber(true))
-                    .addIndex(new IndexBuilder(IndexBuilder.PRIMARY_KEY_NAME).addColumns("ID").setPrimaryKey())
-                    .addColumn(new ColumnBuilder("Pen Number", DataType.TEXT))
-                    .addIndex(new IndexBuilder("PenNumberIndex").addColumns("Pen Number"))
-                    .addColumn(new ColumnBuilder("Pen Type", DataType.TEXT))
-                    .addColumn(new ColumnBuilder("Square Footage", DataType.TEXT))
-                    .addColumn(new ColumnBuilder("Gator Count", DataType.TEXT))
-                    .addIndex(new IndexBuilder("GatorCountIndex").addColumns("Gator Count"))
-                    .addColumn(new ColumnBuilder("Current Date", DataType.TEXT))
-                    .addIndex(new IndexBuilder("DateIndex").addColumns("Current Date"))
-                    .toTable(cagedb);
-                initCageDatabase();
-            }
-            else
-            {
-                cageTable = DatabaseBuilder.open(cageFile).getTable("Database");
-            }
+            cageTable = DatabaseBuilder.open(cageFile).getTable("Database");
         }
         catch (IOException e1)
         {
@@ -543,7 +527,11 @@ public class Application extends JFrame
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double w = screenSize.getWidth();
         
-        cageList = new JComboBox(cages);
+        cageList = new JComboBox();
+        for (int i = 0; i < cages.size(); i++)
+        {
+            cageList.addItem(cages.get(i));
+        }
         cageList.setEditable(false);
         cageList.addPopupMenuListener(new PopupMenuListener()
         {
@@ -949,7 +937,7 @@ public class Application extends JFrame
                         fromRow = row;
                     }
                 }
-                cageTable.addRow(0, fromCage, fromRow.get("Pen Type"), fromRow.get("Square Footage"), Integer.parseInt(fromRow.get("Gator Count").toString()) - fromCount, currentDate);
+                cageTable.addRow(0, fromCage, Integer.parseInt(fromRow.get("Gator Count").toString()) - fromCount, currentDate);
                                            
                 cursor.beforeFirst();
                 
@@ -965,7 +953,7 @@ public class Application extends JFrame
                             toRow = row;
                         }
                     }
-                    cageTable.addRow(0, toCages[i], toRow.get("Pen Type"), toRow.get("Square Footage"), Integer.parseInt(toRow.get("Gator Count").toString()) + capacityCounters[i], currentDate);                         
+                    cageTable.addRow(0, toCages[i], Integer.parseInt(toRow.get("Gator Count").toString()) + capacityCounters[i], currentDate);                         
                     cursor.beforeFirst();
                 }
                 
@@ -981,7 +969,7 @@ public class Application extends JFrame
                             toRow = row;
                         }
                     }                      
-                    cageTable.addRow(0, cagesAtCapacity[i], toRow.get("Pen Type"), toRow.get("Square Footage"), Integer.parseInt(toRow.get("Gator Count").toString()) + cagesAtCapacityAmount[i], currentDate);
+                    cageTable.addRow(0, cagesAtCapacity[i], Integer.parseInt(toRow.get("Gator Count").toString()) + cagesAtCapacityAmount[i], currentDate);
                     cursor.beforeFirst();
                 }
             }
@@ -1116,87 +1104,12 @@ public class Application extends JFrame
 	}
 	for (; i < length; i++)
         {
-		char c = str.charAt(i);
-		if (c <= '/' || c >= ':')
-                {
-			return false;
-		}
+            char c = str.charAt(i);
+            if (c <= '/' || c >= ':')
+            {
+                return false;
+            }
 	}
 	return true;
-    }
-    
-    public void initCageDatabase()
-    {
-        try
-        {
-            for (int i = 1; i < 170; i++)
-            {
-                if (1 <= i && i <= 8)
-                {
-                    cageTable.addRow(0, i, "Small", 200, 100, "05-20-2015");
-                }
-                else if (9 <= i && i <= 12)
-                {
-                    cageTable.addRow(0, "9-" + (i-8), "Quartered", 150, 50, "05-20-2015");
-                }
-                else if (13 <= i && i <= 16)
-                {
-                    cageTable.addRow(0, "10-" + (i-12), "Quartered", 150, 50, "05-20-2015");
-                }
-                else if (i == 17)
-                {
-                    cageTable.addRow(0, "11", "Small", 200, 100, "05-20-2015");
-                }
-                else if (18 <= i && i <= 21)
-                {
-                    cageTable.addRow(0, "12-" + (i-17), "Quartered", 150, 50, "05-20-2015");
-                }
-                else if (22 <= i && i <= 25)
-                {
-                    cageTable.addRow(0, "13-" + (i-21), "Quartered", 150, 50, "05-20-2015");
-                }
-                else if (i == 26)
-                {
-                    cageTable.addRow(0, "14", "Small", 200, 100, "05-20-2015");
-                }
-                else if (27 <= i && i <= 30)
-                {
-                    cageTable.addRow(0, "15-" + (i-26), "Quartered", 150, 50, "05-20-2015");
-                }
-                else if (31 <= i && i <= 32)
-                {
-                    cageTable.addRow(0, "" + (i-15), "Large", 600, 300, "05-20-2015");
-                }
-                else if (33 <= i && i <= 36)
-                {
-                    cageTable.addRow(0, "18-" + (i-32), "Quartered", 150, 50, "05-20-2015");
-                }
-                else if (37 <= i && i <= 78)
-                {
-                    cageTable.addRow(0, "" + (i-18), "Large", 600, 300, "05-20-2015");
-                }
-                else if (79 <= i && i <= 82)
-                {
-                    cageTable.addRow(0, "61-" + (i-78), "Quartered", 150, 50, "05-20-2015");
-                }
-                else if (83 <= i && i <= 120)
-                {
-                    cageTable.addRow(0, "" + (i-21), "Large", 600, 300, "05-20-2015");
-                }
-                else if (121 <= i && i <= 136)
-                {
-                    cageTable.addRow(0, "" + (i-120) + "A", "Small", 200, 0, "05-20-2015");
-                }
-                else
-                {
-                    cageTable.addRow(0, "" + (i-136) + "B", "Large", 600, 0, "05-20-2015");
-                }
-            
-            }
-        }
-        catch (IOException e)
-        {
-            
-        }
     }
 }
