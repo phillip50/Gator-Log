@@ -234,7 +234,7 @@ public class Application extends JFrame
                             tempFromUpperBound = 0;
                             cageValid = false;
                         }
-                        label1.setText("Cage: " + cageList.getSelectedItem().toString() + ", Year: " + yearList.getSelectedItem().toString() + ", Belly Range: " + tempFromLowerBound + "-" + tempFromUpperBound);
+                        label1.setText("Pen: " + cageList.getSelectedItem().toString() + ", Year: " + yearList.getSelectedItem().toString() + ", Belly Range: " + tempFromLowerBound + "-" + tempFromUpperBound);
                         confirm.setEnabled(cageValid);
                     }
                     else if (addTo)
@@ -285,7 +285,7 @@ public class Application extends JFrame
                             }
                         }
                         confirm.setEnabled(cageValid && isInteger(input.getText()) && Integer.parseInt(input.getText()) > 0 && !cageTaken);
-                        label1.setText("Cage: " + cageList.getSelectedItem().toString() + ", Belly Range: " + tempToLowerBound + "-" + tempToUpperBound + ", Capacity: " + input.getText());
+                        label1.setText("Pen: " + cageList.getSelectedItem().toString() + ", Belly Range: " + tempToLowerBound + "-" + tempToUpperBound + ", Capacity: " + input.getText());
                     }
                     else // add
                     {
@@ -336,7 +336,7 @@ public class Application extends JFrame
                                 hasToCage = false;
                             }
                             
-                            errorMessage = "Capacity reached on Cage " + toCage;
+                            errorMessage = "Capacity reached on Pen " + toCage;
                             start = false;
                             setUp = false;
                             addTo = false;
@@ -369,7 +369,7 @@ public class Application extends JFrame
             }
         });
         
-        addToCage = new JButton("Add To Cage");
+        addToCage = new JButton("Add To Pen");
         addToCage.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
@@ -387,7 +387,7 @@ public class Application extends JFrame
             }
         });
         
-        removeToCage = new JButton("Remove To Cage");
+        removeToCage = new JButton("Remove To Pen");
         removeToCage.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
@@ -482,7 +482,7 @@ public class Application extends JFrame
                     }
                     if (cageTaken)
                     {
-                        errorMessage = "Cage taken";
+                        errorMessage = "Pen taken";
                     }
                     else if (!cageValid)
                     {
@@ -553,11 +553,11 @@ public class Application extends JFrame
             {
                 if (setUp)
                 {
-                    label1.setText("Cage: " + cageList.getSelectedItem().toString() + ", Year: " + yearList.getSelectedItem().toString() + ", BellyRange: " + tempFromLowerBound + "-" + tempFromUpperBound);
+                    label1.setText("Pen: " + cageList.getSelectedItem().toString() + ", Year: " + yearList.getSelectedItem().toString() + ", BellyRange: " + tempFromLowerBound + "-" + tempFromUpperBound);
                 }
                 else
                 {
-                    label1.setText("Cage: " + cageList.getSelectedItem().toString() + ", Belly Range: " + tempToLowerBound + "-" + tempToUpperBound + ", Capacity: " + input.getText());
+                    label1.setText("Pen: " + cageList.getSelectedItem().toString() + ", Belly Range: " + tempToLowerBound + "-" + tempToUpperBound + ", Capacity: " + input.getText());
                     cageTaken = false;
                     for (int i = 0; i < toCounter; i++)
                     {
@@ -575,11 +575,11 @@ public class Application extends JFrame
             {
                 if (setUp)
                 {
-                    label1.setText("Cage: " + cageList.getSelectedItem().toString() + ", Year: " + yearList.getSelectedItem().toString() + ", Belly Range: " + tempFromLowerBound + "-" + tempFromUpperBound);
+                    label1.setText("Pen: " + cageList.getSelectedItem().toString() + ", Year: " + yearList.getSelectedItem().toString() + ", Belly Range: " + tempFromLowerBound + "-" + tempFromUpperBound);
                 }
                 else
                 {
-                    label1.setText("Cage: " + cageList.getSelectedItem().toString() + ", Belly Range: " + tempToLowerBound + "-" + tempToUpperBound + ", Capacity: " + input.getText());
+                    label1.setText("Pen: " + cageList.getSelectedItem().toString() + ", Belly Range: " + tempToLowerBound + "-" + tempToUpperBound + ", Capacity: " + input.getText());
                     cageTaken = false;
                     for (int i = 0; i < toCounter; i++)
                     {
@@ -614,12 +614,12 @@ public class Application extends JFrame
             
             public void popupMenuCanceled(PopupMenuEvent e)
             {
-                label1.setText("Cage: " + cageList.getSelectedItem().toString() + ", Year: " + yearList.getSelectedItem().toString() + ", Belly Range: " + tempFromLowerBound + "-" + tempFromUpperBound);
+                label1.setText("Pen: " + cageList.getSelectedItem().toString() + ", Year: " + yearList.getSelectedItem().toString() + ", Belly Range: " + tempFromLowerBound + "-" + tempFromUpperBound);
             }
             
             public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
             {
-                label1.setText("Cage: " + cageList.getSelectedItem().toString() + ", Year: " + yearList.getSelectedItem().toString() + ", Belly Range: " + tempFromLowerBound + "-" + tempFromUpperBound);
+                label1.setText("Pen: " + cageList.getSelectedItem().toString() + ", Year: " + yearList.getSelectedItem().toString() + ", Belly Range: " + tempFromLowerBound + "-" + tempFromUpperBound);
             }
         });
         
@@ -641,7 +641,7 @@ public class Application extends JFrame
 
             public void warn()
             {
-                label1.setText("Cage: " + cageList.getSelectedItem().toString() + ", Belly Range: " + tempToLowerBound + "-" + tempToUpperBound + ", Capacity: " + input.getText());
+                label1.setText("Pen: " + cageList.getSelectedItem().toString() + ", Belly Range: " + tempToLowerBound + "-" + tempToUpperBound + ", Capacity: " + input.getText());
                 confirm.setEnabled(cageValid && isInteger(input.getText()) && Integer.parseInt(input.getText()) > 0);
             }
         });
@@ -698,11 +698,11 @@ public class Application extends JFrame
                 bellyButtons[i].setFont(font1);
                 panel3.add(bellyButtons[i]);
             }
-            label1.setText("Cage: " + cageList.getSelectedItem().toString() + ", Year: " + yearList.getSelectedItem().toString() + ", Belly Range: " + tempFromLowerBound + "-" + tempFromUpperBound);
+            label1.setText("Pen: " + cageList.getSelectedItem().toString() + ", Year: " + yearList.getSelectedItem().toString() + ", Belly Range: " + tempFromLowerBound + "-" + tempFromUpperBound);
             label1.setFont(font1);
             label2.setText("Specify From Range");
             label2.setFont(font2);
-            label3.setText("From Cage?");
+            label3.setText("From Pen?");
             label3.setFont(font1);
             JLabel label4 = new JLabel("Birth Year");
             label4.setFont(font1);
@@ -748,7 +748,7 @@ public class Application extends JFrame
                 bellyButtons[i].setFont(font1);
                 panel3.add(bellyButtons[i]);
             }
-            label1.setText("Cage: " + cageList.getSelectedItem().toString() + ", Belly Range: " + tempToLowerBound + "-" + tempToUpperBound + ", Capacity: " + input.getText());
+            label1.setText("Pen: " + cageList.getSelectedItem().toString() + ", Belly Range: " + tempToLowerBound + "-" + tempToUpperBound + ", Capacity: " + input.getText());
             label1.setFont(font1);
             label2.setText("Select Belly Range");
             label2.setFont(font2);
@@ -761,7 +761,7 @@ public class Application extends JFrame
             cancel.setFont(font1);
             panel6.add(label2);
             panel4.add(label1);
-            JLabel label4 = new JLabel("Cage: ");
+            JLabel label4 = new JLabel("Pen: ");
             label4.setFont(font1);
             panel5.add(label4);
             panel5.add(cageList);
@@ -794,11 +794,11 @@ public class Application extends JFrame
             {
                 panel2 = new Panel(new FlowLayout());
                 
-                JLabel label = new JLabel("Cage " + toCages[i] + ": " + toLowerBounds[i] + "-" + toUpperBounds[i] + ", Capacity: " + capacities[i]);
+                JLabel label = new JLabel("Pen " + toCages[i] + ": " + toLowerBounds[i] + "-" + toUpperBounds[i] + ", Capacity: " + capacities[i]);
                 label.setFont(font1);
                 panel2.add(label);
                 
-                button = new JButton("Remove Cage " + toCages[i]);
+                button = new JButton("Remove Pen " + toCages[i]);
                 button.addActionListener(new ActionListener()
                 {
                     public void actionPerformed(ActionEvent e)
@@ -884,7 +884,7 @@ public class Application extends JFrame
         {
             try
             {
-                outputFile = new File("Cage" + fromCage + "_Birth" + fromYear + "_" + currentDate + "_log.txt");
+                outputFile = new File("Pen" + fromCage + "_Birth" + fromYear + "_" + currentDate + "_log.txt");
                 BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
                 writer.write("From Pen: " + fromCage + "\r\n\tTotal: " + fromCount + "\r\n\tYear: " + fromYear + "\r\n\tSize: " + fromLowerBound + "-" + fromUpperBound + "\r\n");
                 for (int i = 0; i < cagesAtCapacityCounter; i++)
@@ -926,21 +926,21 @@ public class Application extends JFrame
                 
                 IndexCursor cursor = CursorBuilder.createCursor(cageTable.getIndex("PenNumberIndex"));                            
                 cursor.beforeFirst();
-                
-                cursor.findFirstRow(Collections.singletonMap("Pen Number", fromCage));
-                Row fromRow = cursor.getCurrentRow();
-                while (cursor.findNextRow(Collections.singletonMap("Pen Number", fromCage)))
+                if (hasFrom)
                 {
-                    Row row = cursor.getCurrentRow();
-                    if (row != null)
+                    cursor.findFirstRow(Collections.singletonMap("Pen Number", fromCage));
+                    Row fromRow = cursor.getCurrentRow();
+                    while (cursor.findNextRow(Collections.singletonMap("Pen Number", fromCage)))
                     {
-                        fromRow = row;
+                        Row row = cursor.getCurrentRow();
+                        if (row != null)
+                        {
+                            fromRow = row;
+                        }
                     }
-                }
-                cageTable.addRow(0, fromCage, Integer.parseInt(fromRow.get("Gator Count").toString()) - fromCount, currentDate);
-                                           
+                    cageTable.addRow(0, fromCage, fromRow.get("Pen Type"), fromRow.get("Square Footage"), Integer.parseInt(fromRow.get("Gator Count").toString()) - fromCount, fromRow.get("Water Date Change"), fromRow.get("Water Temperature"), fromRow.get("Feed Type"), fromRow.get("Feed Amount"), fromRow.get("Size Class"), "Transferred Gators");
+                }                          
                 cursor.beforeFirst();
-                
                 for (int i = 0; i < toCounter; i++)
                 {
                     cursor.findFirstRow(Collections.singletonMap("Pen Number", toCages[i]));
@@ -953,7 +953,7 @@ public class Application extends JFrame
                             toRow = row;
                         }
                     }
-                    cageTable.addRow(0, toCages[i], Integer.parseInt(toRow.get("Gator Count").toString()) + capacityCounters[i], currentDate);                         
+                    cageTable.addRow(0, toCages[i], toRow.get("Pen Type"), toRow.get("Square Footage"), Integer.parseInt(toRow.get("Gator Count").toString()) + capacityCounters[i], toRow.get("Water Date Change"), toRow.get("Water Temperature"), toRow.get("Feed Type"), toRow.get("Feed Amount"), toRow.get("Size Class"), "Transferred Gators");                         
                     cursor.beforeFirst();
                 }
                 
@@ -969,7 +969,7 @@ public class Application extends JFrame
                             toRow = row;
                         }
                     }                      
-                    cageTable.addRow(0, cagesAtCapacity[i], Integer.parseInt(toRow.get("Gator Count").toString()) + cagesAtCapacityAmount[i], currentDate);
+                    cageTable.addRow(0, cagesAtCapacity[i], toRow.get("Pen Type"), toRow.get("Square Footage"), Integer.parseInt(toRow.get("Gator Count").toString()) + cagesAtCapacity[i], toRow.get("Water Date Change"), toRow.get("Water Temperature"), toRow.get("Feed Type"), toRow.get("Feed Amount"), toRow.get("Size Class"), "Transferred Gators");
                     cursor.beforeFirst();
                 }
             }

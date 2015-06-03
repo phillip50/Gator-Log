@@ -3,36 +3,22 @@ package test;
 import javax.swing.*; 
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 import com.healthmarketscience.jackcess.*;
 import java.io.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Collections;
-import javax.swing.event.*;
-import java.util.ArrayList;
 import java.awt.Graphics;
-import java.awt.*;
-import java.awt.image.*;
-import javax.*;
-import javax.imageio.*;
 
 public class CageApplication extends JFrame
 {
     private static CageApplication frame;
-    private Container contentPane;
     private JButton[] cages;
     private File file;
     private Table table;
-    private Row mostRecentCage;
     Image image;
     
     public CageApplication()
     {
         super("Application");
-        contentPane = getContentPane();
         
         try
         {
@@ -1268,9 +1254,8 @@ public class CageApplication extends JFrame
                                         latestRow = row;
                                     }
                                 }
-                                System.out.println(latestRow.get("Pen Number") + " " + latestRow.get("Gator Count"));
+                                System.out.println("Pen: " + latestRow.get("Pen Number") + ", Gator Count: " + latestRow.get("Gator Count"));
                             }
-                            System.out.println();
                         }
                         else
                         {
@@ -1284,15 +1269,14 @@ public class CageApplication extends JFrame
                                     latestRow = row;
                                 }
                             }
-                            System.out.println(latestRow.get("Pen Number") + " " + latestRow.get("Gator Count"));
-                            System.out.println();
+                            System.out.println("Pen: " + latestRow.get("Pen Number") + ", Gator Count: " + latestRow.get("Gator Count"));
                         }
                     }
                     catch (IOException e1)
                     {
                         
                     }
-                    
+                    System.out.println();
                 }
             });
             cages[i-1] = button;
