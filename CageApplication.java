@@ -1227,6 +1227,10 @@ public class CageApplication extends JFrame
             button.setContentAreaFilled(false);
             button.setBorderPainted(false);
             button.setForeground(new Color(0, 0, 0, 0));
+            button.setToolTipText("<html>"
+                              + "<center>Pen: " + cageNumber +"</center><br>"
+                              + "Click for expanded information and to modify pen"
+                         + "</html>");
             
             button.addActionListener(new ActionListener()
             {
@@ -1276,12 +1280,28 @@ public class CageApplication extends JFrame
                     {
                         
                     }
-                    System.out.println();
+                    modifyWindow(latestRow);
                 }
             });
             cages[i-1] = button;
         }
                 
+    }
+    
+    public void modifyWindow(Row row)
+    {
+        ModifyWindow modifyFrame = new ModifyWindow(row);
+        modifyFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Rectangle rect = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+        double length = rect.getHeight();
+        double width = rect.getWidth();
+        Dimension screenSize = new Dimension((int)width, (int)length - 50);
+        modifyFrame.getContentPane().setPreferredSize(screenSize);
+        modifyFrame.addComponents();
+        modifyFrame.pack();
+        modifyFrame.setLocationRelativeTo(null);
+        modifyFrame.setVisible(true);
+        
     }
     
     public void addComponents()
