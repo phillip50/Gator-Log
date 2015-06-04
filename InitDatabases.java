@@ -38,7 +38,6 @@ public class InitDatabases
                     .addColumn(new ColumnBuilder("Pen Type", DataType.TEXT))
                     .addColumn(new ColumnBuilder("Square Footage", DataType.TEXT))
                     .addColumn(new ColumnBuilder("Gator Count", DataType.TEXT))
-                    .addIndex(new IndexBuilder("CountIndex").addColumns("Gator Count"))
                     .addColumn(new ColumnBuilder("Water Change Date", DataType.TEXT))
                     .addColumn(new ColumnBuilder("Water Temperature", DataType.TEXT))
                     .addColumn(new ColumnBuilder("Feed Type", DataType.TEXT))
@@ -113,11 +112,11 @@ public class InitDatabases
             }
             for (int i = 801; i <= 816; i++)
             {
-                cageTable.addRow(0, i, "Small", 200, 100, "06-01-2015", "88", "H", "50", "Hatchling", "");
+                cageTable.addRow(0, i, "Small", 200, 100, "06-01-2015", "88", "H", "50", "Family", "");
             }
             for (int i = 901; i <= 910; i++)
             {
-                cageTable.addRow(0, i, "Small", 200, 100, "06-01-2015", "88", "H", "50", "Hatchling", "");
+                cageTable.addRow(0, i, "Small", 200, 100, "06-01-2015", "88", "H", "50", "Empty", "");
             }
         }
         catch (IOException e)
