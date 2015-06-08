@@ -190,8 +190,7 @@ public class Application extends JFrame
             cageTable = DatabaseBuilder.open(cageFile).getTable("Database");
         }
         catch (IOException e1)
-        {
-                            
+        {                   
         }
         
         label1 = new JLabel("");
@@ -218,8 +217,7 @@ public class Application extends JFrame
                     String entry = ((JButton) e.getSource()).getText();
                     int number = -1;
                     if (entry.equals("Hatchling"))
-                    {
-                        
+                    {  
                     }
                     else
                     {
@@ -251,8 +249,7 @@ public class Application extends JFrame
                             classSize = latestRow.get("Size Class").toString();
                         }
                         catch (IOException e1)
-                        {
-                                    
+                        {     
                         }
                         
                         if (classSize.equals("Family") || (number >= toLowerBounds[i] && number <= toUpperBounds[i]) || (entry.equals("Hatchling") && classSize.equals("Hatchling")))
@@ -270,8 +267,7 @@ public class Application extends JFrame
                         gatorTable.addRow(0, fromCage, toCage, entry, currentDate);
                     }
                     catch (IOException e1)
-                    {
-                            
+                    {    
                     }
                     if(capacities[index] == capacityCounters[index])
                     {
@@ -433,8 +429,7 @@ public class Application extends JFrame
                         classSize = latestRow.get("Size Class").toString();
                     }
                     catch (IOException e1)
-                    {
-                                    
+                    {      
                     }
                         
                     fromClass = classSize;
@@ -460,7 +455,6 @@ public class Application extends JFrame
                         String pen = cageList.getSelectedItem().toString();
                         String classSize = "";
                         
-                        
                         try
                         {
                             IndexCursor cursor = CursorBuilder.createCursor(cageTable.getIndex("PenNumberIndex"));                            
@@ -478,8 +472,7 @@ public class Application extends JFrame
                             classSize = latestRow.get("Size Class").toString();
                         }
                         catch (IOException e1)
-                        {
-                                    
+                        {      
                         }
                         if (classSize.equals("Empty"))
                         {
@@ -567,7 +560,6 @@ public class Application extends JFrame
             {
                 if (setUp)
                 {
-                    
                 }
                 else
                 {
@@ -620,7 +612,6 @@ public class Application extends JFrame
             {
                 warn();
             }
-
             public void warn()
             {
                 confirm.setEnabled(!cageTaken && isInteger(input.getText()) && Integer.parseInt(input.getText()) > 0);
@@ -732,8 +723,6 @@ public class Application extends JFrame
             panel2.add(panel5, BorderLayout.NORTH);
             panel2.add(panel7, BorderLayout.CENTER);
             panel2.add(panel4, BorderLayout.SOUTH);
-            //panel.add(panel6, BorderLayout.NORTH);
-            //panel.add(panel3, BorderLayout.CENTER);
             panel.add(panel2, BorderLayout.SOUTH);
         }
         else if(removeTo)
@@ -836,7 +825,6 @@ public class Application extends JFrame
             panel.add(panel2, BorderLayout.NORTH);
             panel.add(panel3, BorderLayout.CENTER);
             panel.add(panel4, BorderLayout.SOUTH);
-
         }
         else if (quit)
         {

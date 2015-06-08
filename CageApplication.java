@@ -26,8 +26,7 @@ public class CageApplication extends JFrame
             table = DatabaseBuilder.open(file).getTable("Database");
         }
         catch (IOException e)
-        {
-                    
+        {      
         }
         
         cages = new JButton[169];
@@ -1276,14 +1275,12 @@ public class CageApplication extends JFrame
                     }
                     catch (IOException e1)
                     {
-                        
                     }
                     modifyWindow(latestRow);
                 }
             });
             cages[i-1] = button;
-        }
-                
+        }        
     }
     
     public void modifyWindow(Row row)
@@ -1299,8 +1296,7 @@ public class CageApplication extends JFrame
         modifyFrame.addComponents();
         modifyFrame.pack();
         modifyFrame.setLocationRelativeTo(null);
-        modifyFrame.setVisible(true);
-        
+        modifyFrame.setVisible(true);   
     }
     
     public void addComponents()
@@ -1309,7 +1305,6 @@ public class CageApplication extends JFrame
         {
             frame.add(cages[i]);
         }
-                
         validate();
         setVisible(true);
     }
@@ -1334,7 +1329,5 @@ public class CageApplication extends JFrame
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);   
-    }
-    
-    
+    }    
 }

@@ -55,7 +55,6 @@ public class ModifyWindow extends JFrame
         contentPane = getContentPane();
         tabbedPanel = new JTabbedPane();
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        double w = screenSize.getWidth();
         feedAmountValid = true;
         
         width = screenSize.getWidth();
@@ -73,19 +72,19 @@ public class ModifyWindow extends JFrame
                             
         }
         
-        label1 = new JLabel("Pen: " + row.getString("Pen Number"));
+        label1 = new JLabel("Pen: " + row.get("Pen Number"));
         label1.setFont(font);
         label2 = new JLabel("Gator Count: " + row.get("Gator Count"));
         label2.setFont(font);
-        label3 = new JLabel("Water Change Date: " + row.get("Water Change Date"));
+        label3 = new JLabel("Water Change Date: ");
         label3.setFont(font);
-        label4 = new JLabel("Water Temperature: " + row.get("Water Temperature"));
+        label4 = new JLabel("Water Temperature: ");
         label4.setFont(font);
-        label5 = new JLabel("Feed Type: " + row.get("Feed Type"));
+        label5 = new JLabel("Feed Type: ");
         label5.setFont(font);
-        label6 = new JLabel("Feed Amount: " + row.get("Feed Amount"));
+        label6 = new JLabel("Feed Amount (in lbs.): ");
         label6.setFont(font);
-        label7 = new JLabel("Size Class: " + row.get("Size Class"));
+        label7 = new JLabel("Size Class: ");
         label7.setFont(font);
         label8 = new JLabel("Any additional comments: ");
         label8.setFont(font);
@@ -127,7 +126,7 @@ public class ModifyWindow extends JFrame
         }
         temperatures = new JComboBox(temperatureList);
         temperatures.setEditable(false);
-        temperatures.setPrototypeDisplayValue("text here");
+        temperatures.setPrototypeDisplayValue("Any Additional Commen");
         temperatures.setFont(font);
         temperatures.setSelectedItem(row.get("Water Temperature"));
         temperatures.addPopupMenuListener(new PopupMenuListener()
@@ -141,7 +140,7 @@ public class ModifyWindow extends JFrame
                 {
                     JScrollPane scrollpane = (JScrollPane) c;
                     JScrollBar scrollBar = scrollpane.getVerticalScrollBar();
-                    Dimension scrollBarDim = new Dimension((int)(w / 48), scrollBar.getPreferredSize().height);
+                    Dimension scrollBarDim = new Dimension((int)(width / 60), scrollBar.getPreferredSize().height);
                     scrollBar.setPreferredSize(scrollBarDim);
                 }
             }
@@ -160,6 +159,7 @@ public class ModifyWindow extends JFrame
         String[] feedList = {"(R) - Regular", "(H) - Hatchling", "(I) - Intermediate"};
         feeds = new JComboBox(feedList);
         feeds.setEditable(false);
+        feeds.setPrototypeDisplayValue("Any Additional Commen");
         feeds.setPreferredSize(size);
         feeds.setFont(font);
         if (row.get("Feed Type").toString().equals("R"))
@@ -203,7 +203,7 @@ public class ModifyWindow extends JFrame
         String[] classList = {"Empty", "Hatchling", "Family", "15-18", "19-23", "24-28", "29-33", "34-36", "37-38", "39+"};
         classes = new JComboBox(classList);
         classes.setEditable(false);
-        classes.setPrototypeDisplayValue("Hatchling111");
+        classes.setPrototypeDisplayValue("Any Additional Commen");
         classes.setFont(font);
         classes.setSelectedItem(row.get("Size Class"));
         classes.addPopupMenuListener(new PopupMenuListener()
@@ -217,7 +217,7 @@ public class ModifyWindow extends JFrame
                 {
                     JScrollPane scrollpane = (JScrollPane) c;
                     JScrollBar scrollBar = scrollpane.getVerticalScrollBar();
-                    Dimension scrollBarDim = new Dimension((int)(w / 48), scrollBar.getPreferredSize().height);
+                    Dimension scrollBarDim = new Dimension((int)(width / 60), scrollBar.getPreferredSize().height);
                     scrollBar.setPreferredSize(scrollBarDim);
                 }
             }
@@ -275,80 +275,78 @@ public class ModifyWindow extends JFrame
         modifyPanel.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(10, 30, 10, 30);
-        c.anchor = GridBagConstraints.LINE_START;
+        c.anchor = GridBagConstraints.LINE_END;
         
         c.gridx = 0;
         c.gridy = 0;
         modifyPanel.add(label1, c);
+        
+        c.anchor = GridBagConstraints.LINE_START;
         c.gridx = 1;
         c.gridy = 0;
         modifyPanel.add(label2, c);
-        c.gridx = 2;
-        c.gridy = 0;
-        modifyPanel.add(new JLabel(""), c);
+        
+        c.insets = new Insets(50, 30, 10, 30);
+        
         c.gridx = 0;
-        c.gridy = 1;
+        c.gridy = 3;
         modifyPanel.add(label3, c);
         c.gridx = 1;
-        c.gridy = 1;
+        c.gridy = 3;
         modifyPanel.add(doNotChange, c);
-        c.gridx = 2;
-        c.gridy = 1;
+        c.anchor = GridBagConstraints.CENTER;
         modifyPanel.add(doChange, c);
+        
+        c.insets = new Insets(10, 30, 10, 30);
+        
+        c.anchor = GridBagConstraints.LINE_START;
         c.gridx = 0;
-        c.gridy = 2;
+        c.gridy = 4;
         modifyPanel.add(label4, c);
         c.gridx = 1;
-        c.gridy = 2;
+        c.gridy = 4;
         modifyPanel.add(temperatures, c);
-        c.gridx = 2;
-        c.gridy = 2;
-        modifyPanel.add(new JLabel(""), c);
+        
         c.gridx = 0;
-        c.gridy = 3;
+        c.gridy = 5;
         modifyPanel.add(label5, c);
         c.gridx = 1;
-        c.gridy = 3;
+        c.gridy = 5;
         modifyPanel.add(feeds, c);
-        c.gridx = 2;
-        c.gridy = 3;
-        modifyPanel.add(new JLabel(""), c);
+        
         c.gridx = 0;
-        c.gridy = 4;
+        c.gridy = 6;
         modifyPanel.add(label6, c);
         c.gridx = 1;
-        c.gridy = 4;
+        c.gridy = 6;
         c.fill = GridBagConstraints.HORIZONTAL;
         modifyPanel.add(amount, c);
+        
         c.fill = GridBagConstraints.NONE;
-        c.gridx = 2;
-        c.gridy = 4;
-        modifyPanel.add(new JLabel("lbs"), c);
         c.gridx = 0;
-        c.gridy = 5;
+        c.gridy = 7;
         modifyPanel.add(label7, c);
         c.gridx = 1;
-        c.gridy = 5;
+        c.gridy = 7;
         modifyPanel.add(classes, c);
-        c.gridx = 2;
-        c.gridy = 5;
-        modifyPanel.add(new JLabel(""), c);
+        
         c.gridx = 0;
-        c.gridy = 6;
+        c.gridy = 8;
         modifyPanel.add(label8, c);
         c.gridx = 1;
-        c.gridy = 6;
+        c.gridy = 8;
         c.fill = GridBagConstraints.BOTH;
         modifyPanel.add(comments, c);
+        
+        c.insets = new Insets(50, 30, 10, 30);
         c.fill = GridBagConstraints.NONE;
-        c.gridx = 2;
-        c.gridy = 6;
-        modifyPanel.add(new JLabel(""), c);
+        c.anchor = GridBagConstraints.LINE_END;
         c.gridx = 0;
-        c.gridy = 7;
+        c.gridy = 9;
         modifyPanel.add(confirm, c);
+        c.anchor = GridBagConstraints.LINE_START;
         c.gridx = 1;
-        c.gridy = 7;
+        c.gridy = 9;
         modifyPanel.add(cancel, c);
         
         JComponent viewPanel = new JPanel();
