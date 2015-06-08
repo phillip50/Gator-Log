@@ -10,6 +10,10 @@ import java.awt.Graphics;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 public class ModifyWindow extends JFrame
 {
@@ -27,6 +31,8 @@ public class ModifyWindow extends JFrame
     private JTextField amount;
     private JComboBox classes;
     private JTextField comments;
+    private JButton confirm;
+    private JButton cancel;
     private JLabel label1;
     private JLabel label2;
     private JLabel label3;
@@ -34,6 +40,13 @@ public class ModifyWindow extends JFrame
     private JLabel label5;
     private JLabel label6;
     private JLabel label7;
+    private JLabel label8;
+    private Dimension screenSize;
+    private boolean feedAmountValid;
+    private Dimension size;
+    private double width;
+    private double height;
+    private Font font;
     
     public ModifyWindow(Row inputRow)
     {
@@ -41,8 +54,14 @@ public class ModifyWindow extends JFrame
         row = inputRow;
         contentPane = getContentPane();
         tabbedPanel = new JTabbedPane();
-        waterChangeDate = row.get("Water Change Date").toString();
-          
+        screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double w = screenSize.getWidth();
+        feedAmountValid = true;
+        
+        width = screenSize.getWidth();
+        height = screenSize.getHeight();
+        font = new Font("Arial", Font.PLAIN, 25); 
+        size = new Dimension((int)(width/6), (int)(height/4));
         
         try
         {
@@ -54,16 +73,27 @@ public class ModifyWindow extends JFrame
                             
         }
         
-        label1 = new JLabel("Gator Count: " + row.get("Gator Count"));
-        label2 = new JLabel("Water Change Date: " + row.get("Water Change Date"));
-        label3 = new JLabel("Water Temperature: " + row.get("Water Temperature"));
-        label4 = new JLabel("Feed Type: " + row.get("Feed Type"));
-        label5 = new JLabel("Feed Amount: " + row.get("Feed Amount"));
-        label6 = new JLabel("Size Class: " + row.get("Size Class"));
-        label7 = new JLabel("Any additional comments: ");
+        label1 = new JLabel("Pen: " + row.getString("Pen Number"));
+        label1.setFont(font);
+        label2 = new JLabel("Gator Count: " + row.get("Gator Count"));
+        label2.setFont(font);
+        label3 = new JLabel("Water Change Date: " + row.get("Water Change Date"));
+        label3.setFont(font);
+        label4 = new JLabel("Water Temperature: " + row.get("Water Temperature"));
+        label4.setFont(font);
+        label5 = new JLabel("Feed Type: " + row.get("Feed Type"));
+        label5.setFont(font);
+        label6 = new JLabel("Feed Amount: " + row.get("Feed Amount"));
+        label6.setFont(font);
+        label7 = new JLabel("Size Class: " + row.get("Size Class"));
+        label7.setFont(font);
+        label8 = new JLabel("Any additional comments: ");
+        label8.setFont(font);
         
         doChange = new JButton("Yes");
         doChange.setEnabled(true);
+        doChange.setPreferredSize(size);
+        doChange.setFont(font);
         doChange.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
@@ -78,6 +108,8 @@ public class ModifyWindow extends JFrame
         
         doNotChange = new JButton("No");
         doNotChange.setEnabled(false);
+        doNotChange.setPreferredSize(size);
+        doNotChange.setFont(font);
         doNotChange.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
@@ -95,33 +127,146 @@ public class ModifyWindow extends JFrame
         }
         temperatures = new JComboBox(temperatureList);
         temperatures.setEditable(false);
+        temperatures.setPrototypeDisplayValue("text here");
+        temperatures.setFont(font);
         temperatures.setSelectedItem(row.get("Water Temperature"));
+        temperatures.addPopupMenuListener(new PopupMenuListener()
+        {
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e)
+            {
+                JComboBox comboBox = (JComboBox) e.getSource();
+                Object popup = comboBox.getUI().getAccessibleChild(comboBox, 0);
+                Component c = ((Container) popup).getComponent(0);
+                if (c instanceof JScrollPane)
+                {
+                    JScrollPane scrollpane = (JScrollPane) c;
+                    JScrollBar scrollBar = scrollpane.getVerticalScrollBar();
+                    Dimension scrollBarDim = new Dimension((int)(w / 48), scrollBar.getPreferredSize().height);
+                    scrollBar.setPreferredSize(scrollBarDim);
+                }
+            }
+            
+            public void popupMenuCanceled(PopupMenuEvent e)
+            {
+                
+            }
+            
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
+            {
+                
+            }
+        });
         
-        String[] feedList = {"Regular", "Hatchling", "Intermediate"};
+        String[] feedList = {"(R) - Regular", "(H) - Hatchling", "(I) - Intermediate"};
         feeds = new JComboBox(feedList);
         feeds.setEditable(false);
+        feeds.setPreferredSize(size);
+        feeds.setFont(font);
         if (row.get("Feed Type").toString().equals("R"))
         {
-            feeds.setSelectedItem("Regular");
+            feeds.setSelectedItem("(R) - Regular");
         }
         else if (row.get("Feed Type").toString().equals("H"))
         {
-            feeds.setSelectedItem("Hatchling");
+            feeds.setSelectedItem("(H) - Hatchling");
         }
         else
         {
-            feeds.setSelectedItem("Intermediate");
+            feeds.setSelectedItem("(I) - Intermediate");
         }
         
         amount = new JTextField(10);
+        amount.setFont(font);
         amount.setText(row.get("Feed Amount").toString());
+        amount.getDocument().addDocumentListener(new DocumentListener()
+        {
+            public void changedUpdate(DocumentEvent e)
+            {
+                warn();
+            }
+            public void removeUpdate(DocumentEvent e)
+            {
+                warn();
+            }
+            public void insertUpdate(DocumentEvent e)
+            {
+                warn();
+            }
+
+            public void warn()
+            {
+                feedAmountValid = isInteger(amount.getText()) && Integer.parseInt(amount.getText()) >= 0;
+                confirm.setEnabled(feedAmountValid);
+            }
+        });
         
         String[] classList = {"Empty", "Hatchling", "Family", "15-18", "19-23", "24-28", "29-33", "34-36", "37-38", "39+"};
         classes = new JComboBox(classList);
         classes.setEditable(false);
+        classes.setPrototypeDisplayValue("Hatchling111");
+        classes.setFont(font);
         classes.setSelectedItem(row.get("Size Class"));
+        classes.addPopupMenuListener(new PopupMenuListener()
+        {
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e)
+            {
+                JComboBox comboBox = (JComboBox) e.getSource();
+                Object popup = comboBox.getUI().getAccessibleChild(comboBox, 0);
+                Component c = ((Container) popup).getComponent(0);
+                if (c instanceof JScrollPane)
+                {
+                    JScrollPane scrollpane = (JScrollPane) c;
+                    JScrollBar scrollBar = scrollpane.getVerticalScrollBar();
+                    Dimension scrollBarDim = new Dimension((int)(w / 48), scrollBar.getPreferredSize().height);
+                    scrollBar.setPreferredSize(scrollBarDim);
+                }
+            }
+            
+            public void popupMenuCanceled(PopupMenuEvent e)
+            {
+                
+            }
+            
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
+            {
+                
+            }
+        });
         
         comments = new JTextField(10);
+        comments.setFont(font);
+
+        confirm = new JButton("Confirm");
+        confirm.setEnabled(true);
+        confirm.setPreferredSize(size);
+        confirm.setFont(font);
+        confirm.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {                
+                try
+                {
+                    cageTable.addRow(0, row.get("Pen Number"), row.get("Pen Type"), row.get("Square Footage"), row.get("Gator Count"), waterChangeDate, temperatures.getSelectedItem().toString(), feeds.getSelectedItem().toString(), amount.getText(), classes.getSelectedItem().toString(), comments.getText());
+                }
+                catch (IOException e1)
+                {
+                    
+                }
+                frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+            }
+        });
+        
+        cancel = new JButton("Cancel");
+        cancel.setEnabled(true);
+        cancel.setPreferredSize(size);
+        cancel.setFont(font);
+        cancel.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+            }
+        });
     }
     
     public void addComponents()
@@ -129,20 +274,21 @@ public class ModifyWindow extends JFrame
         JComponent modifyPanel = new JPanel();
         modifyPanel.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
-        c.insets = new Insets(10, 10, 10, 10);
+        c.insets = new Insets(10, 30, 10, 30);
+        c.anchor = GridBagConstraints.LINE_START;
         
         c.gridx = 0;
         c.gridy = 0;
         modifyPanel.add(label1, c);
         c.gridx = 1;
         c.gridy = 0;
-        modifyPanel.add(new JLabel(""), c);
+        modifyPanel.add(label2, c);
         c.gridx = 2;
         c.gridy = 0;
         modifyPanel.add(new JLabel(""), c);
         c.gridx = 0;
         c.gridy = 1;
-        modifyPanel.add(label2, c);
+        modifyPanel.add(label3, c);
         c.gridx = 1;
         c.gridy = 1;
         modifyPanel.add(doNotChange, c);
@@ -151,7 +297,7 @@ public class ModifyWindow extends JFrame
         modifyPanel.add(doChange, c);
         c.gridx = 0;
         c.gridy = 2;
-        modifyPanel.add(label3, c);
+        modifyPanel.add(label4, c);
         c.gridx = 1;
         c.gridy = 2;
         modifyPanel.add(temperatures, c);
@@ -160,7 +306,7 @@ public class ModifyWindow extends JFrame
         modifyPanel.add(new JLabel(""), c);
         c.gridx = 0;
         c.gridy = 3;
-        modifyPanel.add(label4, c);
+        modifyPanel.add(label5, c);
         c.gridx = 1;
         c.gridy = 3;
         modifyPanel.add(feeds, c);
@@ -169,16 +315,18 @@ public class ModifyWindow extends JFrame
         modifyPanel.add(new JLabel(""), c);
         c.gridx = 0;
         c.gridy = 4;
-        modifyPanel.add(label5, c);
+        modifyPanel.add(label6, c);
         c.gridx = 1;
         c.gridy = 4;
+        c.fill = GridBagConstraints.HORIZONTAL;
         modifyPanel.add(amount, c);
+        c.fill = GridBagConstraints.NONE;
         c.gridx = 2;
         c.gridy = 4;
         modifyPanel.add(new JLabel("lbs"), c);
         c.gridx = 0;
         c.gridy = 5;
-        modifyPanel.add(label6, c);
+        modifyPanel.add(label7, c);
         c.gridx = 1;
         c.gridy = 5;
         modifyPanel.add(classes, c);
@@ -187,20 +335,64 @@ public class ModifyWindow extends JFrame
         modifyPanel.add(new JLabel(""), c);
         c.gridx = 0;
         c.gridy = 6;
-        modifyPanel.add(label7, c);
+        modifyPanel.add(label8, c);
         c.gridx = 1;
         c.gridy = 6;
+        c.fill = GridBagConstraints.BOTH;
         modifyPanel.add(comments, c);
+        c.fill = GridBagConstraints.NONE;
         c.gridx = 2;
         c.gridy = 6;
         modifyPanel.add(new JLabel(""), c);
+        c.gridx = 0;
+        c.gridy = 7;
+        modifyPanel.add(confirm, c);
+        c.gridx = 1;
+        c.gridy = 7;
+        modifyPanel.add(cancel, c);
         
         JComponent viewPanel = new JPanel();
 
         
-        tabbedPanel.addTab("<html><body leftmargin=15 topmargin=8 marginwidth=15 marginheight=5>Modify</body></html>", modifyPanel);
+        tabbedPanel.addTab("<html><body leftmargin=15 topmargin=8 marginwidth=15 marginheight=5>Modify Pen</body></html>", modifyPanel);
         tabbedPanel.addTab("<html><body leftmargin=15 topmargin=8 marginwidth=15 marginheight=5>View Gators</body></html>", viewPanel);
         
         add(tabbedPanel);
+    }
+    
+    public void setFrame(ModifyWindow f)
+    {
+        frame = f;
+    }
+    
+    public static boolean isInteger(String str)
+    {
+	if (str == null)
+        {
+		return false;
+	}
+	int length = str.length();
+	if (length == 0)
+        {
+		return false;
+	}
+	int i = 0;
+	if (str.charAt(0) == '-')
+        {
+		if (length == 1)
+                {
+			return false;
+		}
+		i = 1;
+	}
+	for (; i < length; i++)
+        {
+            char c = str.charAt(i);
+            if (c <= '/' || c >= ':')
+            {
+                return false;
+            }
+	}
+	return true;
     }
 }

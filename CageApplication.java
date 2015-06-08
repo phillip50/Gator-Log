@@ -1258,7 +1258,6 @@ public class CageApplication extends JFrame
                                         latestRow = row;
                                     }
                                 }
-                                System.out.println("Pen: " + latestRow.get("Pen Number") + ", Gator Count: " + latestRow.get("Gator Count"));
                             }
                         }
                         else
@@ -1273,7 +1272,6 @@ public class CageApplication extends JFrame
                                     latestRow = row;
                                 }
                             }
-                            System.out.println("Pen: " + latestRow.get("Pen Number") + ", Gator Count: " + latestRow.get("Gator Count"));
                         }
                     }
                     catch (IOException e1)
@@ -1291,7 +1289,8 @@ public class CageApplication extends JFrame
     public void modifyWindow(Row row)
     {
         ModifyWindow modifyFrame = new ModifyWindow(row);
-        modifyFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        modifyFrame.setFrame(modifyFrame);
+        modifyFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         Rectangle rect = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
         double length = rect.getHeight();
         double width = rect.getWidth();
