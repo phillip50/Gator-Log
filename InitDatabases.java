@@ -20,6 +20,8 @@ public class InitDatabases
             gatordb = new DatabaseBuilder(gatorFile).setFileFormat(Database.FileFormat.V2000).create();
             gatorTable = new TableBuilder("Database")
                 .addColumn(new ColumnBuilder("ID", DataType.LONG).setAutoNumber(true))
+                .addColumn(new ColumnBuilder("Tag Number", DataType.TEXT))
+                .addIndex(new IndexBuilder("TagIndex").addColumns("Tag Number"))
                 .addColumn(new ColumnBuilder("From", DataType.TEXT))
                 .addIndex(new IndexBuilder("FromIndex").addColumns("From"))
                 .addColumn(new ColumnBuilder("To", DataType.TEXT))

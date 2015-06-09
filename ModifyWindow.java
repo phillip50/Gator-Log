@@ -56,6 +56,7 @@ public class ModifyWindow extends JFrame
         tabbedPanel = new JTabbedPane();
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         feedAmountValid = true;
+        waterChangeDate = row.get("Water Change Date").toString();
         
         width = screenSize.getWidth();
         height = screenSize.getHeight();
@@ -243,10 +244,10 @@ public class ModifyWindow extends JFrame
         confirm.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
-            {                
+            {     
                 try
                 {
-                    cageTable.addRow(0, row.get("Pen Number"), row.get("Pen Type"), row.get("Square Footage"), row.get("Gator Count"), waterChangeDate, temperatures.getSelectedItem().toString(), feeds.getSelectedItem().toString(), amount.getText(), classes.getSelectedItem().toString(), comments.getText());
+                    cageTable.addRow(0, row.get("Pen Number"), row.get("Pen Type"), row.get("Square Footage"), row.get("Gator Count"), waterChangeDate, temperatures.getSelectedItem().toString(), feeds.getSelectedItem().toString().charAt(1), amount.getText(), classes.getSelectedItem().toString(), comments.getText());
                 }
                 catch (IOException e1)
                 {

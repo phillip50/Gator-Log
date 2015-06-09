@@ -6,6 +6,11 @@ import java.awt.event.*;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import com.healthmarketscience.jackcess.*;
+import gnu.io.CommPortIdentifier;
+import gnu.io.NoSuchPortException;
+import gnu.io.SerialPort;
+import gnu.io.SerialPortEvent;
+import gnu.io.SerialPortEventListener;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -14,7 +19,7 @@ import java.util.Collections;
 import javax.swing.event.*;
 import java.util.ArrayList;
 
-public class Application extends JFrame
+public class Application extends JFrame implements SerialPortEventListener
 {
     private static Application frame;
     private Container contentPane;
@@ -27,7 +32,6 @@ public class Application extends JFrame
     private JComboBox cageList;
     private JTextField input;
     private ArrayList<String> cages;
-    private JComboBox yearList;
     private String[] years;
     private JLabel label1;
     private JLabel label2;
@@ -36,22 +40,16 @@ public class Application extends JFrame
     private boolean setUp;
     private boolean addTo;
     private boolean removeTo;
-    private boolean add;
+    private boolean addPage1;
+    private boolean addPage2;
     private boolean quit;
     private JButton confirm;
     private JButton cancel;
-    private int count; //0, 1, 2
     private String fromCage;
     private int bellySize;
     private String fromYear;
     private int fromCount;
     private String fromClass;
-    private int tempFromLowerBound;
-    private int tempFromUpperBound;
-    private int fromLowerBound;
-    private int fromUpperBound;
-    private int tempToLowerBound;
-    private int tempToUpperBound;
     private String[] toCages;
     private int[] toUpperBounds;
     private int[] toLowerBounds;
@@ -63,7 +61,6 @@ public class Application extends JFrame
     private int[] cagesAtCapacityAmount;
     private String[] cagesAtCapacityRange;
     private int cagesAtCapacityCounter;
-    private boolean cageValid;
     private boolean hasFrom;
     private boolean hasToCage;
     private boolean cageTaken;
@@ -79,6 +76,10 @@ public class Application extends JFrame
     private Font font1;
     private Font font2;
     private String errorMessage;
+    private SerialPort serialPort;
+    private BufferedReader serialInput;
+    private OutputStream serialOutput;
+    private String tag;
     
     public Application()
     {
@@ -88,18 +89,12 @@ public class Application extends JFrame
         setUp = false;
         addTo = false;
         removeTo = false;
-        add = false;
+        addPage1 = false;
+        addPage2 = false;
         quit = false;
-        count = 0;
         fromCage = "";
         fromCount = 0;
         bellySize = 0;
-        tempFromLowerBound = 0;
-        tempFromUpperBound = 0;
-        fromLowerBound = 0;
-        fromUpperBound = 0;
-        tempToLowerBound = 0;
-        tempToUpperBound = 0;
         toCages = new String[10];
         toUpperBounds = new int[10];
         toLowerBounds = new int[10];
@@ -111,7 +106,6 @@ public class Application extends JFrame
         cagesAtCapacityAmount = new int[10];
         cagesAtCapacityRange = new String[10];
         cagesAtCapacityCounter = 0;
-        cageValid = false;
         cageTaken = false;
         hasFrom = false;
         hasToCage = false;
@@ -128,6 +122,7 @@ public class Application extends JFrame
         font1 = new Font("Arial", Font.PLAIN, 40);
         font2 = new Font("Arial", Font.PLAIN, 25); 
         years = new String[4];
+        tag = "";
         
         int year = Integer.parseInt(currentDate.substring(6));
         for (int i = 0; i < 4; i++)
@@ -264,7 +259,7 @@ public class Application extends JFrame
                     fromCount++;
                     try
                     {
-                        gatorTable.addRow(0, fromCage, toCage, entry, currentDate);
+                        gatorTable.addRow(0, tag, fromCage, toCage, entry, currentDate);
                     }
                     catch (IOException e1)
                     {    
@@ -300,10 +295,15 @@ public class Application extends JFrame
                         setUp = false;
                         addTo = false;
                         removeTo = false;
-                        add = false;
+                        addPage1 = false;
+                        addPage2 = false;
                         quit = false;
                         addComponents();
                     }
+                    
+                    addPage2 = false;
+                    addPage1 = true;
+                    addComponents();
                 }
             });
             bellyButtons[i - 14] = button;
@@ -318,7 +318,8 @@ public class Application extends JFrame
                 setUp = true;
                 addTo = false;
                 removeTo = false;
-                add = false;
+                addPage1 = false;
+                addPage2 = false;
                 quit = false;
                 addComponents();
             }
@@ -333,7 +334,8 @@ public class Application extends JFrame
                 setUp = false;
                 addTo = true;
                 removeTo = false;
-                add = false;
+                addPage1 = false;
+                addPage2 = false;
                 quit = false;
                 addComponents();
             }
@@ -348,7 +350,8 @@ public class Application extends JFrame
                 setUp = false;
                 addTo = false;
                 removeTo = true;
-                add = false;
+                addPage1 = false;
+                addPage2 = false;
                 quit = false;
                 addComponents();
             }
@@ -363,7 +366,8 @@ public class Application extends JFrame
                 setUp = false;
                 addTo = false;
                 removeTo = false;
-                add = true;
+                addPage1 = true;
+                addPage2 = false;
                 quit = false;
                 addComponents();
             }
@@ -378,7 +382,8 @@ public class Application extends JFrame
                 setUp = false;
                 addTo = false;
                 removeTo = false;
-                add = false;
+                addPage1 = false;
+                addPage2 = false;
                 quit = true;
                 addComponents();
             }
@@ -393,7 +398,8 @@ public class Application extends JFrame
                 setUp = false;
                 addTo = false;
                 removeTo = false;
-                add = false;
+                addPage1 = false;
+                addPage2 = false;
                 quit = false;
                 addComponents();
             }
@@ -525,7 +531,8 @@ public class Application extends JFrame
                 setUp = false;
                 addTo = false;
                 removeTo = false;
-                add = false;
+                addPage1 = false;
+                addPage2 = false;
                 quit = false;
                 addComponents();
             }
@@ -797,7 +804,7 @@ public class Application extends JFrame
             panel.add(box, BorderLayout.CENTER);
             panel.add(bottomPanel, BorderLayout.SOUTH);
         }
-        else if (add)
+        else if (addPage2)
         {
             Dimension size = new Dimension((int)(width/7), (int)(height/9));
             
@@ -825,6 +832,18 @@ public class Application extends JFrame
             panel.add(panel2, BorderLayout.NORTH);
             panel.add(panel3, BorderLayout.CENTER);
             panel.add(panel4, BorderLayout.SOUTH);
+        }
+        else if (addPage1)
+        {
+            panel.setLayout(new BorderLayout());
+            Panel panel2 = new Panel();
+            Panel panel3 = new Panel();
+            JLabel tempLabel = new JLabel("Scan Microchip");
+            tempLabel.setFont(font1);
+            panel2.add(tempLabel);
+            panel3.add(cancel);
+            panel.add(panel2, BorderLayout.NORTH);
+            panel.add(panel3, BorderLayout.SOUTH);
         }
         else if (quit)
         {
@@ -947,7 +966,8 @@ public class Application extends JFrame
                     setUp = false;
                     addTo = false;
                     removeTo = false;
-                    add = false;
+                    addPage1 = false;
+                    addPage2 = false;
                     quit = false;
                     addComponents();
                     frame2.dispose();
@@ -964,7 +984,7 @@ public class Application extends JFrame
             frame2.setVisible(true);   
         }
         
-        if (start || setUp || addTo || removeTo || add || quit)
+        if (start || setUp || addTo || removeTo || addPage1 || addPage2 || quit)
         {
             contentPane.add(panel);
             validate();
@@ -974,7 +994,8 @@ public class Application extends JFrame
     
     public static void createAndShowGUI()
     {
-        frame = new Application();           
+        frame = new Application();     
+        frame.initialize();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Rectangle rect = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
         double length = rect.getHeight();
@@ -1057,5 +1078,87 @@ public class Application extends JFrame
             }
 	}
 	return true;
+    }
+    
+    public void initialize()
+    {  
+	CommPortIdentifier portId = null;
+        try
+        {
+
+            portId = CommPortIdentifier.getPortIdentifier("COM3");
+        }
+        catch (NoSuchPortException e)
+        {
+        }
+
+        System.out.println(portId);
+	if (portId == null)
+        {
+            System.out.println("Could not find COM port.");
+	    return;
+	}
+
+	try
+        {
+            serialPort = (SerialPort) portId.open(this.getClass().getName(), 2000);
+
+            serialPort.setSerialPortParams(9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
+
+            serialInput = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
+            serialOutput = serialPort.getOutputStream();
+
+            serialPort.addEventListener(this);
+            serialPort.notifyOnDataAvailable(true);
+        }
+        catch (Exception e)
+        {
+            System.err.println(e.toString());
+        }
+    }
+    
+    public synchronized void close()
+    {
+	if (serialPort != null)
+        {
+            serialPort.removeEventListener();
+            serialPort.close();
+        }
+    }
+    
+    public synchronized void serialEvent(SerialPortEvent oEvent)
+    {
+        System.out.println(addPage1);
+        String temp = "";
+	if (addPage1 && oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE)
+        {
+            try
+            {
+                temp = serialInput.readLine();
+                System.out.println(temp);
+                int index = temp.indexOf('.');
+                int index2 = temp.indexOf('.', index + 1);
+                tag = temp.substring(0, index2);
+                addPage1 = false;
+                addPage2 = true;
+                addComponents();
+            }
+            catch (Exception e)
+            {
+                System.err.println(e.toString());
+            }
+        }
+        else if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE)
+        {
+            try
+            {
+                temp = serialInput.readLine();
+            }
+            catch (Exception e)
+            {
+                
+            }
+        }
+        System.out.println(tag);
     }
 }
