@@ -1085,7 +1085,6 @@ public class Application extends JFrame implements SerialPortEventListener
 	CommPortIdentifier portId = null;
         try
         {
-
             portId = CommPortIdentifier.getPortIdentifier("COM3");
         }
         catch (NoSuchPortException e)
@@ -1130,35 +1129,26 @@ public class Application extends JFrame implements SerialPortEventListener
     {
         System.out.println(addPage1);
         String temp = "";
-	if (addPage1 && oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE)
+	if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE)
         {
             try
             {
                 temp = serialInput.readLine();
-                System.out.println(temp);
-                int index = temp.indexOf('.');
-                int index2 = temp.indexOf('.', index + 1);
-                tag = temp.substring(0, index2);
-                addPage1 = false;
-                addPage2 = true;
-                addComponents();
+                if (addPage1)
+                {
+                    System.out.println(temp);
+                    int index = temp.indexOf('.');
+                    tag = temp.substring(0, index);
+                    System.out.println(tag);
+                    addPage1 = false;
+                    addPage2 = true;
+                    addComponents();
+                }
             }
             catch (Exception e)
             {
                 System.err.println(e.toString());
             }
         }
-        else if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE)
-        {
-            try
-            {
-                temp = serialInput.readLine();
-            }
-            catch (Exception e)
-            {
-                
-            }
-        }
-        System.out.println(tag);
     }
 }
