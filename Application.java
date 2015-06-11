@@ -28,6 +28,10 @@ public class Application extends JFrame implements SerialPortEventListener
     private JButton addToCage;
     private JButton removeToCage;
     private JButton addEntry;
+    private JButton back;
+    private JButton addNewGator;
+    private JButton transferGator;
+    private JButton killGator;
     private JButton quitButton;
     private JComboBox cageList;
     private JTextField input;
@@ -36,7 +40,11 @@ public class Application extends JFrame implements SerialPortEventListener
     private JLabel label1;
     private JLabel label2;
     private JLabel label3;
+    private JLabel killLabel;
     private boolean start;
+    private boolean newGator;
+    private boolean kill;
+    private boolean transferStart;
     private boolean setUp;
     private boolean addTo;
     private boolean removeTo;
@@ -86,6 +94,9 @@ public class Application extends JFrame implements SerialPortEventListener
         super("Application");
         
         start = true;
+        newGator = false;
+        transferStart = false;
+        kill = false;
         setUp = false;
         addTo = false;
         removeTo = false;
@@ -191,6 +202,7 @@ public class Application extends JFrame implements SerialPortEventListener
         label1 = new JLabel("");
         label2 = new JLabel("");
         label3 = new JLabel("");
+        killLabel = new JLabel("");
         
         contentPane = getContentPane();
         bellyButtons = new JButton[33];
@@ -291,7 +303,7 @@ public class Application extends JFrame implements SerialPortEventListener
                         }
                             
                         errorMessage = "Capacity reached on Pen " + toCage;
-                        start = false;
+                        transferStart = false;
                         setUp = false;
                         addTo = false;
                         removeTo = false;
@@ -309,12 +321,92 @@ public class Application extends JFrame implements SerialPortEventListener
             bellyButtons[i - 14] = button;
         }
         
+        addNewGator = new JButton("Add New Gator");
+        addNewGator.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                start = false;
+                newGator = true;
+                kill = false;
+                transferStart = false;
+                setUp = false;
+                addTo = false;
+                removeTo = false;
+                addPage1 = false;
+                addPage2 = false;
+                quit = false;
+                addComponents();
+            }
+        });
+        
+        transferGator = new JButton("Transfer Gator");
+        transferGator.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                start = false;
+                transferStart = true;
+                newGator = false;
+                kill = false;
+                setUp = false;
+                addTo = false;
+                removeTo = false;
+                addPage1 = false;
+                addPage2 = false;
+                quit = false;
+                addComponents();
+            }
+        });
+        
+        killGator = new JButton("Kill Gator");
+        killGator.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                start = false;
+                newGator = false;
+                transferStart = false;
+                kill = true;
+                setUp = false;
+                addTo = false;
+                removeTo = false;
+                addPage1 = false;
+                addPage2 = false;
+                quit = false;
+                killLabel.setText("");
+                addComponents();
+            }
+        });
+        
+        quitButton = new JButton("Quit");
+        quitButton.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                start = false;
+                transferStart = false;
+                newGator = false;
+                kill = false;
+                setUp = false;
+                addTo = false;
+                removeTo = false;
+                addPage1 = false;
+                addPage2 = false;
+                quit = true;
+                addComponents();
+            }
+        });
+        
         setUpDatabase = new JButton("Set Up Database");
         setUpDatabase.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
             {
                 start = false;
+                transferStart = false;
+                newGator = false;
+                kill = false;
                 setUp = true;
                 addTo = false;
                 removeTo = false;
@@ -331,6 +423,9 @@ public class Application extends JFrame implements SerialPortEventListener
             public void actionPerformed(ActionEvent e)
             {
                 start = false;
+                transferStart = false;
+                newGator = false;
+                kill = false;
                 setUp = false;
                 addTo = true;
                 removeTo = false;
@@ -347,6 +442,9 @@ public class Application extends JFrame implements SerialPortEventListener
             public void actionPerformed(ActionEvent e)
             {
                 start = false;
+                transferStart = false;
+                newGator = false;
+                kill = false;
                 setUp = false;
                 addTo = false;
                 removeTo = true;
@@ -363,6 +461,9 @@ public class Application extends JFrame implements SerialPortEventListener
             public void actionPerformed(ActionEvent e)
             {
                 start = false;
+                transferStart = false;
+                newGator = false;
+                kill = false;
                 setUp = false;
                 addTo = false;
                 removeTo = false;
@@ -373,18 +474,21 @@ public class Application extends JFrame implements SerialPortEventListener
             }
         });
         
-        quitButton = new JButton("Quit");
-        quitButton.addActionListener(new ActionListener()
+        back = new JButton("Back");
+        back.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
             {
-                start = false;
+                start = true;
+                transferStart = false;
+                newGator = false;
+                kill = false;
                 setUp = false;
                 addTo = false;
                 removeTo = false;
                 addPage1 = false;
                 addPage2 = false;
-                quit = true;
+                quit = false;
                 addComponents();
             }
         });
@@ -394,7 +498,10 @@ public class Application extends JFrame implements SerialPortEventListener
         {
             public void actionPerformed(ActionEvent e)
             {
-                start = true;
+                start = false;
+                transferStart = true;
+                newGator = false;
+                kill = false;
                 setUp = false;
                 addTo = false;
                 removeTo = false;
@@ -522,12 +629,15 @@ public class Application extends JFrame implements SerialPortEventListener
                 }
                 if (!errorMessage.equals(""))
                 {
-                    start = false;
+                    transferStart = false;
                 }
                 else
                 {
-                    start = true;
+                    transferStart = true;
                 }
+                start = false;
+                newGator = false;
+                kill = false;
                 setUp = false;
                 addTo = false;
                 removeTo = false;
@@ -638,13 +748,62 @@ public class Application extends JFrame implements SerialPortEventListener
         {
             panel.setLayout(new FlowLayout());
             
+            Dimension size = new Dimension((int)(width/6), (int)(height/4));
+            
+            addNewGator.setPreferredSize(size);
+            transferGator.setPreferredSize(size);
+            killGator.setPreferredSize(size);
+            quitButton.setPreferredSize(size);
+            addNewGator.setFont(font2);
+            transferGator.setFont(font2);
+            killGator.setFont(font2);
+            quitButton.setFont(font2);
+            
+            panel.add(addNewGator);
+            panel.add(transferGator);
+            panel.add(killGator);
+            panel.add(quitButton);
+        }
+        else if (newGator)
+        {
+            panel.setLayout(new BorderLayout());
+            Panel panel2 = new Panel(new FlowLayout());
+            panel2.add(back);
+            panel.add(panel2, BorderLayout.SOUTH);
+        }
+        else if (kill)
+        {
+            panel.setLayout(new BorderLayout());
+            
+            Dimension size = new Dimension((int)(width/8), (int)(height/10));
+            
+            
+            Panel panel2 = new Panel(new FlowLayout());
+            Panel panel3 = new Panel(new FlowLayout());
+            Panel panel4 = new Panel(new FlowLayout());
+            JLabel tempLabel = new JLabel("Scan Microchip");
+            tempLabel.setFont(font1);
+            killLabel.setFont(font1);
+            back.setPreferredSize(size);
+            back.setFont(font1);
+            panel2.add(back);
+            panel3.add(tempLabel);
+            panel4.add(killLabel);
+            panel.add(panel3, BorderLayout.NORTH);
+            panel.add(panel4, BorderLayout.CENTER);
+            panel.add(panel2, BorderLayout.SOUTH);
+        }
+        else if (transferStart)
+        {
+            panel.setLayout(new FlowLayout());
+            
             addToCage.setEnabled(hasFrom);
             addEntry.setEnabled(hasFrom && hasToCage);
             setUpDatabase.setFont(font2);
             addToCage.setFont(font2);
             removeToCage.setFont(font2);
             addEntry.setFont(font2);
-            quitButton.setFont(font2);
+            back.setFont(font2);
             
             Dimension size = new Dimension((int)(width/6), (int)(height/4));
             
@@ -652,13 +811,13 @@ public class Application extends JFrame implements SerialPortEventListener
             addToCage.setPreferredSize(size);
             removeToCage.setPreferredSize(size);
             addEntry.setPreferredSize(size);
-            quitButton.setPreferredSize(size);
+            back.setPreferredSize(size);
             
             panel.add(addEntry);
             panel.add(addToCage);
             panel.add(setUpDatabase);
             panel.add(removeToCage);
-            panel.add(quitButton);
+            panel.add(back);
         }
         else if (setUp)
         {
@@ -836,10 +995,14 @@ public class Application extends JFrame implements SerialPortEventListener
         else if (addPage1)
         {
             panel.setLayout(new BorderLayout());
+            
+            Dimension size = new Dimension((int)(width/8), (int)(height/10));
+            
             Panel panel2 = new Panel();
             Panel panel3 = new Panel();
             JLabel tempLabel = new JLabel("Scan Microchip");
             tempLabel.setFont(font1);
+            cancel.setPreferredSize(size);
             panel2.add(tempLabel);
             panel3.add(cancel);
             panel.add(panel2, BorderLayout.NORTH);
@@ -944,6 +1107,7 @@ public class Application extends JFrame implements SerialPortEventListener
             }
             
             frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+            System.exit(0);
         }
         else
         {
@@ -962,7 +1126,10 @@ public class Application extends JFrame implements SerialPortEventListener
             {
                 public void actionPerformed(ActionEvent e)
                 {
-                    start = true;
+                    start = false;
+                    transferStart = true;
+                    newGator = false;
+                    kill = false;
                     setUp = false;
                     addTo = false;
                     removeTo = false;
@@ -984,7 +1151,7 @@ public class Application extends JFrame implements SerialPortEventListener
             frame2.setVisible(true);   
         }
         
-        if (start || setUp || addTo || removeTo || addPage1 || addPage2 || quit)
+        if (start || transferStart || newGator || kill || setUp || addTo || removeTo || addPage1 || addPage2 || quit)
         {
             contentPane.add(panel);
             validate();
@@ -1134,14 +1301,19 @@ public class Application extends JFrame implements SerialPortEventListener
             try
             {
                 temp = serialInput.readLine();
+                System.out.println(temp);
+                int index = temp.indexOf('.');
+                tag = temp.substring(0, index);
+                System.out.println(tag);
                 if (addPage1)
                 {
-                    System.out.println(temp);
-                    int index = temp.indexOf('.');
-                    tag = temp.substring(0, index);
-                    System.out.println(tag);
                     addPage1 = false;
                     addPage2 = true;
+                    addComponents();
+                }
+                else if (kill)
+                {
+                    killLabel.setText("Last killed: " + tag);
                     addComponents();
                 }
             }

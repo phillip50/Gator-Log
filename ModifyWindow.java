@@ -5,8 +5,6 @@ import java.awt.*;
 import java.awt.event.*;
 import com.healthmarketscience.jackcess.*;
 import java.io.*;
-import java.util.Collections;
-import java.awt.Graphics;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,7 +16,6 @@ import javax.swing.event.PopupMenuListener;
 public class ModifyWindow extends JFrame
 {
     private ModifyWindow frame;
-    private Container contentPane;
     private Row row;
     private File cageFile;
     private Table cageTable;
@@ -52,7 +49,6 @@ public class ModifyWindow extends JFrame
     {
         super("View Pen");
         row = inputRow;
-        contentPane = getContentPane();
         tabbedPanel = new JTabbedPane();
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         feedAmountValid = true;
