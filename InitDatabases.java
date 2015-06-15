@@ -20,33 +20,36 @@ public class InitDatabases
             gatordb = new DatabaseBuilder(gatorFile).setFileFormat(Database.FileFormat.V2000).create();
             gatorTable = new TableBuilder("Database")
                 .addColumn(new ColumnBuilder("ID", DataType.LONG).setAutoNumber(true))
+                .addIndex(new IndexBuilder("IDIndex").addColumns("ID"))
                 .addColumn(new ColumnBuilder("Tag Number", DataType.TEXT))
                 .addIndex(new IndexBuilder("TagIndex").addColumns("Tag Number"))
                 .addColumn(new ColumnBuilder("From", DataType.TEXT))
                 .addIndex(new IndexBuilder("FromIndex").addColumns("From"))
                 .addColumn(new ColumnBuilder("To", DataType.TEXT))
                 .addIndex(new IndexBuilder("ToIndex").addColumns("To"))
-                .addColumn(new ColumnBuilder("Belly", DataType.TEXT))
+                .addColumn(new ColumnBuilder("Belly Size", DataType.TEXT))
+                .addColumn(new ColumnBuilder("Length", DataType.TEXT))
+                .addColumn(new ColumnBuilder("Weight", DataType.TEXT))
                 .addColumn(new ColumnBuilder("Date", DataType.TEXT))
                 .toTable(gatordb);
             
             cageFile = new File("CageDatabase.accdb");
             cagedb = new DatabaseBuilder(cageFile).setFileFormat(Database.FileFormat.V2000).create();
             cageTable = new TableBuilder("Database")
-                    .addColumn(new ColumnBuilder("ID", DataType.LONG).setAutoNumber(true))
-                    .addIndex(new IndexBuilder(IndexBuilder.PRIMARY_KEY_NAME).addColumns("ID").setPrimaryKey())
-                    .addColumn(new ColumnBuilder("Pen Number", DataType.TEXT))
-                    .addIndex(new IndexBuilder("PenNumberIndex").addColumns("Pen Number"))
-                    .addColumn(new ColumnBuilder("Pen Type", DataType.TEXT))
-                    .addColumn(new ColumnBuilder("Square Footage", DataType.TEXT))
-                    .addColumn(new ColumnBuilder("Gator Count", DataType.TEXT))
-                    .addColumn(new ColumnBuilder("Water Change Date", DataType.TEXT))
-                    .addColumn(new ColumnBuilder("Water Temperature", DataType.TEXT))
-                    .addColumn(new ColumnBuilder("Feed Type", DataType.TEXT))
-                    .addColumn(new ColumnBuilder("Feed Amount", DataType.TEXT))
-                    .addColumn(new ColumnBuilder("Size Class", DataType.TEXT))
-                    .addColumn(new ColumnBuilder("Comments", DataType.TEXT))
-                    .toTable(cagedb);
+                .addColumn(new ColumnBuilder("ID", DataType.LONG).setAutoNumber(true))
+                .addIndex(new IndexBuilder(IndexBuilder.PRIMARY_KEY_NAME).addColumns("ID").setPrimaryKey())
+                .addColumn(new ColumnBuilder("Pen Number", DataType.TEXT))
+                .addIndex(new IndexBuilder("PenNumberIndex").addColumns("Pen Number"))
+                .addColumn(new ColumnBuilder("Pen Type", DataType.TEXT))
+                .addColumn(new ColumnBuilder("Square Footage", DataType.TEXT))
+                .addColumn(new ColumnBuilder("Gator Count", DataType.TEXT))
+                .addColumn(new ColumnBuilder("Water Change Date", DataType.TEXT))
+                .addColumn(new ColumnBuilder("Water Temperature", DataType.TEXT))
+                .addColumn(new ColumnBuilder("Feed Type", DataType.TEXT))
+                .addColumn(new ColumnBuilder("Feed Amount", DataType.TEXT))
+                .addColumn(new ColumnBuilder("Size Class", DataType.TEXT))
+                .addColumn(new ColumnBuilder("Comments", DataType.TEXT))
+                .toTable(cagedb);
         }
         catch (IOException e)
         {
