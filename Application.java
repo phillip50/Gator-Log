@@ -68,6 +68,7 @@ public class Application extends JFrame implements SerialPortEventListener
     private int length;
     private int weight;
     private boolean hasPreviousEntry;
+    private Row previousRow;
     private int previousBellySize;
     private int previousLength;
     private int previousWeight;
@@ -104,6 +105,15 @@ public class Application extends JFrame implements SerialPortEventListener
     private BufferedReader serialInput;
     private OutputStream serialOutput;
     private String tag;
+    private JButton didVaccinate;
+    private JButton didNotVaccinate;
+    private boolean isVaccinated;
+    private JButton didFormula;
+    private JButton didNotFormula;
+    private boolean isFormula;
+    private JTextField comments;
+    private String vaccinationDate;
+    private String formulaDate;
     
     public Application()
     {
@@ -123,6 +133,7 @@ public class Application extends JFrame implements SerialPortEventListener
         quit = false;
         fromCage = "";
         fromCount = 0;
+        toCage = "";
         bellySize = 0;
         length = 0;
         weight = 0;
@@ -142,7 +153,7 @@ public class Application extends JFrame implements SerialPortEventListener
         cagesAtCapacityRange = new String[10];
         cagesAtCapacityCounter = 0;
         cageTaken = false;
-        hasFrom = false;
+        hasFrom = true;
         hasToCage = false;
         gatorFile = null;
         gatorTable = null;
@@ -158,6 +169,8 @@ public class Application extends JFrame implements SerialPortEventListener
         font2 = new Font("Arial", Font.PLAIN, 25); 
         years = new String[4];
         tag = "";
+        isVaccinated = false;
+        isFormula = false;
         
         int year = Integer.parseInt(currentDate.substring(6));
         for (int i = 0; i < 4; i++)
@@ -522,6 +535,7 @@ public class Application extends JFrame implements SerialPortEventListener
                 
                 if (setUp)
                 {
+                    /*
                     fromCage = cageList.getSelectedItem().toString();
                     
                     String classSize = "";
@@ -546,7 +560,7 @@ public class Application extends JFrame implements SerialPortEventListener
                     {      
                     }
                         
-                    fromClass = classSize;
+                    fromClass = classSize;*/
                     hasFrom = true;
                 }
                 else if (addTo)
@@ -633,7 +647,14 @@ public class Application extends JFrame implements SerialPortEventListener
                     fromCount++;
                     try
                     {
-                        gatorTable.addRow(0, tag, fromCage, toCage, bellySize, length, weight, currentDate);
+                        if (previousRow != null)
+                        {
+                            gatorTable.addRow(0, tag, previousRow.get("Egg Nest Location"), previousRow.get("Egg Nest Condition"), previousRow.get("Egg Collection Date"), previousRow.get("Hatch Year"), previousRow.get("Gender"), previousRow.get("Umbilical"), currentDate, fromCage, toCage, bellySize, length, weight, isFormula, "", isVaccinated, comments.getText());
+                        }
+                        else
+                        {
+                            gatorTable.addRow(0, tag, "", "", "", "", "", "", currentDate, fromCage, toCage, bellySize, length, weight, isFormula, "", isVaccinated, comments.getText());
+                        }
                         for(Map<String,Object> row : CursorBuilder.createCursor(gatorTable.getIndex("IDIndex")))
                         {
  
@@ -873,11 +894,62 @@ public class Application extends JFrame implements SerialPortEventListener
             }
         });
         
+        didVaccinate = new JButton("Yes");
+        didVaccinate.setEnabled(true);
+        didVaccinate.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                isVaccinated = true;
+                didVaccinate.setEnabled(false);
+                didNotVaccinate.setEnabled(true);
+            }
+        });
+        
+        didNotVaccinate = new JButton("No");
+        didNotVaccinate.setEnabled(false);
+        didNotVaccinate.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                isVaccinated = false;
+                didVaccinate.setEnabled(true);
+                didNotVaccinate.setEnabled(false);
+            }
+        });
+        
+        didFormula = new JButton("Yes");
+        didFormula.setEnabled(true);
+        didFormula.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                isFormula = true;
+                didFormula.setEnabled(false);
+                didNotFormula.setEnabled(true);
+            }
+        });
+        
+        didNotFormula = new JButton("No");
+        didNotFormula.setEnabled(false);
+        didNotFormula.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                isFormula = false;
+                didFormula.setEnabled(true);
+                didNotFormula.setEnabled(false);
+            }
+        });
+        
         String[] genderList = {"Female", "Male"};
         gender = new JComboBox(genderList);
         
         String[] umbilicalList = {"Y", "N"};
         umbilical = new JComboBox(umbilicalList);
+        
+        comments = new JTextField(10);
+        comments.setFont(font1);
     }
     
     public void addComponents()
@@ -988,7 +1060,7 @@ public class Application extends JFrame implements SerialPortEventListener
             
             panel.add(addEntry);
             panel.add(addToCage);
-            panel.add(setUpDatabase);
+            //panel.add(setUpDatabase);
             panel.add(removeToCage);
             panel.add(back);
         }
@@ -1136,6 +1208,14 @@ public class Application extends JFrame implements SerialPortEventListener
             
             Dimension size = new Dimension((int)(width/8), (int)(height/10));
             
+            isVaccinated = false;
+            isFormula = false;
+            didVaccinate.setEnabled(true);
+            didNotVaccinate.setEnabled(false);
+            didFormula.setEnabled(true);
+            didNotFormula.setEnabled(false);
+            comments.setText("");
+            
             Panel panel2 = new Panel();
             Panel panel3 = new Panel();
             JLabel tempLabel = new JLabel("Scan Microchip");
@@ -1261,11 +1341,20 @@ public class Application extends JFrame implements SerialPortEventListener
             cRight.insets = new Insets(10, 30, 10, 30);
             cRight.anchor = GridBagConstraints.LINE_END;
             Dimension size = new Dimension((int)(width/7), (int)(height/9));
+            Dimension size2 = new Dimension((int)(width/17), (int)(height/16));
             confirm.setPreferredSize(size);
             confirm.setFont(font1);
             confirm.setEnabled(true);
             cancel.setPreferredSize(size);
             cancel.setFont(font1);
+            didVaccinate.setPreferredSize(size2);
+            didVaccinate.setFont(font1);
+            didNotVaccinate.setPreferredSize(size2);
+            didNotVaccinate.setFont(font1);
+            didFormula.setPreferredSize(size2);
+            didFormula.setFont(font1);
+            didNotFormula.setPreferredSize(size2);
+            didNotFormula.setFont(font1);
             
             JLabel tempLabel1 = new JLabel("Gator ID: ");
             tempLabel1.setFont(font1);
@@ -1338,17 +1427,53 @@ public class Application extends JFrame implements SerialPortEventListener
             cLeft.gridx = 1;
             cLeft.gridy = 5;
             panel.add(tempLabel12, cLeft);
-   
+            
+            JLabel tempLabel13 = new JLabel("Vaccinated? ");
+            tempLabel13.setFont(font1);
             cRight.gridx = 0;
             cRight.gridy = 6;
-            panel.add(cancel, cRight);
+            panel.add(tempLabel13, cRight);
             
             cLeft.gridx = 1;
             cLeft.gridy = 6;
+            panel.add(didNotVaccinate, cLeft);
+            cLeft.anchor = GridBagConstraints.LINE_END;
+            panel.add(didVaccinate, cLeft);
+            cLeft.anchor = GridBagConstraints.LINE_START;
+            
+            JLabel tempLabel14 = new JLabel("Did formula? ");
+            tempLabel14.setFont(font1);
+            cRight.gridx = 0;
+            cRight.gridy = 7;
+            panel.add(tempLabel14, cRight);
+            
+            cLeft.gridx = 1;
+            cLeft.gridy = 7;
+            panel.add(didNotFormula, cLeft);
+            cLeft.anchor = GridBagConstraints.LINE_END;
+            panel.add(didFormula, cLeft);
+            cLeft.anchor = GridBagConstraints.LINE_START;
+   
+            JLabel tempLabel15 = new JLabel("Additional comments: ");
+            tempLabel15.setFont(font1);
+            cRight.gridx = 0;
+            cRight.gridy = 8;
+            panel.add(tempLabel15, cRight);
+            
+            cLeft.gridx = 1;
+            cLeft.gridy = 8;
+            panel.add(comments, cLeft);
+            
+            cRight.gridx = 0;
+            cRight.gridy = 9;
+            panel.add(cancel, cRight);
+            
+            cLeft.gridx = 1;
+            cLeft.gridy = 9;
             panel.add(confirm, cLeft);
         }
         else if (quit)
-        {
+        {            
             try
             {
                 outputFile = new File("Pen" + fromCage + "_Birth" + fromYear + "_" + currentDate + "_log.txt");
@@ -1390,7 +1515,7 @@ public class Application extends JFrame implements SerialPortEventListener
                 }
             
                 writer.close();
-                
+                /*
                 IndexCursor cursor = CursorBuilder.createCursor(cageTable.getIndex("PenNumberIndex"));                            
                 cursor.beforeFirst();
                 if (hasFrom)
@@ -1439,6 +1564,7 @@ public class Application extends JFrame implements SerialPortEventListener
                     cageTable.addRow(0, cagesAtCapacity[i], toRow.get("Pen Type"), toRow.get("Square Footage"), Integer.parseInt(toRow.get("Gator Count").toString()) + cagesAtCapacityAmount[i], toRow.get("Water Change Date"), toRow.get("Water Temperature"), toRow.get("Feed Type"), toRow.get("Feed Amount"), toRow.get("Size Class"), "Transferred Gators");
                     cursor.beforeFirst();
                 }
+                */
             }
             catch (IOException e)
             {
@@ -1660,6 +1786,8 @@ public class Application extends JFrame implements SerialPortEventListener
                         previousBellySize = Integer.parseInt(latestRow.get("Belly Size").toString());
                         previousLength = Integer.parseInt(latestRow.get("Length").toString());
                         previousWeight = Integer.parseInt(latestRow.get("Weight").toString());
+                        previousRow = latestRow;
+                        fromCage = latestRow.get("To").toString();
                         hasPreviousEntry = true;
                     }
                     else

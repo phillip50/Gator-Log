@@ -23,6 +23,13 @@ public class InitDatabases
                 .addIndex(new IndexBuilder("IDIndex").addColumns("ID"))
                 .addColumn(new ColumnBuilder("Tag Number", DataType.TEXT))
                 .addIndex(new IndexBuilder("TagIndex").addColumns("Tag Number"))
+                .addColumn(new ColumnBuilder("Egg Nest Location", DataType.TEXT))
+                .addColumn(new ColumnBuilder("Egg Nest Condition", DataType.TEXT))
+                .addColumn(new ColumnBuilder("Egg Collection Date", DataType.TEXT))
+                .addColumn(new ColumnBuilder("Hatch Year", DataType.TEXT))
+                .addColumn(new ColumnBuilder("Gender", DataType.TEXT))
+                .addColumn(new ColumnBuilder("Umbilical", DataType.TEXT))
+                .addColumn(new ColumnBuilder("Date", DataType.TEXT))
                 .addColumn(new ColumnBuilder("From", DataType.TEXT))
                 .addIndex(new IndexBuilder("FromIndex").addColumns("From"))
                 .addColumn(new ColumnBuilder("To", DataType.TEXT))
@@ -30,7 +37,10 @@ public class InitDatabases
                 .addColumn(new ColumnBuilder("Belly Size", DataType.TEXT))
                 .addColumn(new ColumnBuilder("Length", DataType.TEXT))
                 .addColumn(new ColumnBuilder("Weight", DataType.TEXT))
-                .addColumn(new ColumnBuilder("Date", DataType.TEXT))
+                .addColumn(new ColumnBuilder("Special Recipe", DataType.TEXT))
+                .addColumn(new ColumnBuilder("Experiment Code", DataType.TEXT))
+                .addColumn(new ColumnBuilder("Vaccinated", DataType.TEXT))
+                .addColumn(new ColumnBuilder("Comments", DataType.TEXT))
                 .toTable(gatordb);
             
             cageFile = new File("CageDatabase.accdb");
