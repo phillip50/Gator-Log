@@ -29,7 +29,7 @@ public class Application extends JFrame implements SerialPortEventListener
     private JButton back;
     private JButton addNewGator;
     private JButton transferGator;
-    private JButton killGator;
+    private JButton harvestGator;
     private JButton quitButton;
     private JComboBox cageList;
     private JTextField input;
@@ -43,12 +43,12 @@ public class Application extends JFrame implements SerialPortEventListener
     private JLabel label1;
     private JLabel label2;
     private JLabel label3;
-    private JLabel killLabel;
+    private JLabel harvestLabel;
     private boolean start;
     private boolean newGatorPage1;
     private boolean newGatorPage2;
-    private boolean killPage1;
-    private boolean killPage2;
+    private boolean harvestPage1;
+    private boolean harvestPage2;
     private boolean transferStart;
     private boolean setUp;
     private boolean addTo;
@@ -123,8 +123,8 @@ public class Application extends JFrame implements SerialPortEventListener
         newGatorPage1 = false;
         newGatorPage2 = false;
         transferStart = false;
-        killPage1 = false;
-        killPage2 = false;
+        harvestPage1 = false;
+        harvestPage2 = false;
         setUp = false;
         addTo = false;
         removeTo = false;
@@ -239,7 +239,7 @@ public class Application extends JFrame implements SerialPortEventListener
         label1 = new JLabel("");
         label2 = new JLabel("");
         label3 = new JLabel("");
-        killLabel = new JLabel("");
+        harvestLabel = new JLabel("");
         
         contentPane = getContentPane();
         numbers = new JButton[201];
@@ -320,8 +320,8 @@ public class Application extends JFrame implements SerialPortEventListener
                 start = false;
                 newGatorPage1 = true;
                 newGatorPage2 = false;
-                killPage1 = false;
-                killPage2 = false;
+                harvestPage1 = false;
+                harvestPage2 = false;
                 transferStart = false;
                 setUp = false;
                 addTo = false;
@@ -342,8 +342,8 @@ public class Application extends JFrame implements SerialPortEventListener
                 transferStart = true;
                 newGatorPage1 = false;
                 newGatorPage2 = false;
-                killPage1 = false;
-                killPage2 = false;
+                harvestPage1 = false;
+                harvestPage2 = false;
                 setUp = false;
                 addTo = false;
                 removeTo = false;
@@ -354,8 +354,8 @@ public class Application extends JFrame implements SerialPortEventListener
             }
         });
         
-        killGator = new JButton("Kill Gator");
-        killGator.addActionListener(new ActionListener()
+        harvestGator = new JButton("Harvest Gator");
+        harvestGator.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
             {
@@ -363,15 +363,15 @@ public class Application extends JFrame implements SerialPortEventListener
                 newGatorPage1 = false;
                 newGatorPage2 = false;
                 transferStart = false;
-                killPage1 = true;
-                killPage2 = false;
+                harvestPage1 = true;
+                harvestPage2 = false;
                 setUp = false;
                 addTo = false;
                 removeTo = false;
                 addPage1 = false;
                 addPage2 = false;
                 quit = false;
-                killLabel.setText("");
+                harvestLabel.setText("");
                 addComponents();
             }
         });
@@ -385,8 +385,8 @@ public class Application extends JFrame implements SerialPortEventListener
                 transferStart = false;
                 newGatorPage1 = false;
                 newGatorPage2 = false;
-                killPage1 = false;
-                killPage2 = false;
+                harvestPage1 = false;
+                harvestPage2 = false;
                 setUp = false;
                 addTo = false;
                 removeTo = false;
@@ -406,8 +406,8 @@ public class Application extends JFrame implements SerialPortEventListener
                 transferStart = false;
                 newGatorPage1 = false;
                 newGatorPage2 = false;
-                killPage1 = false;
-                killPage2 = false;
+                harvestPage1 = false;
+                harvestPage2 = false;
                 setUp = true;
                 addTo = false;
                 removeTo = false;
@@ -427,8 +427,8 @@ public class Application extends JFrame implements SerialPortEventListener
                 transferStart = false;
                 newGatorPage1 = false;
                 newGatorPage2 = false;
-                killPage1 = false;
-                killPage2 = false;
+                harvestPage1 = false;
+                harvestPage2 = false;
                 setUp = false;
                 addTo = true;
                 removeTo = false;
@@ -448,8 +448,8 @@ public class Application extends JFrame implements SerialPortEventListener
                 transferStart = false;
                 newGatorPage1 = false;
                 newGatorPage2 = false;
-                killPage1 = false;
-                killPage2 = false;
+                harvestPage1 = false;
+                harvestPage2 = false;
                 setUp = false;
                 addTo = false;
                 removeTo = true;
@@ -469,8 +469,8 @@ public class Application extends JFrame implements SerialPortEventListener
                 transferStart = false;
                 newGatorPage1 = false;
                 newGatorPage2 = false;
-                killPage1 = false;
-                killPage2 = false;
+                harvestPage1 = false;
+                harvestPage2 = false;
                 setUp = false;
                 addTo = false;
                 removeTo = false;
@@ -490,8 +490,8 @@ public class Application extends JFrame implements SerialPortEventListener
                 transferStart = false;
                 newGatorPage1 = false;
                 newGatorPage2 = false;
-                killPage1 = false;
-                killPage2 = false;
+                harvestPage1 = false;
+                harvestPage2 = false;
                 setUp = false;
                 addTo = false;
                 removeTo = false;
@@ -511,8 +511,8 @@ public class Application extends JFrame implements SerialPortEventListener
                 transferStart = true;
                 newGatorPage1 = false;
                 newGatorPage2 = false;
-                killPage1 = false;
-                killPage2 = false;
+                harvestPage1 = false;
+                harvestPage2 = false;
                 setUp = false;
                 addTo = false;
                 removeTo = false;
@@ -695,8 +695,8 @@ public class Application extends JFrame implements SerialPortEventListener
                             
                         errorMessage = "Capacity reached on Pen " + toCage;
                         start = false;
-                        killPage1 = false;
-                        killPage2 = false;
+                        harvestPage1 = false;
+                        harvestPage2 = false;
                         newGatorPage1 = false;
                         newGatorPage2 = false;
                         transferStart = false;
@@ -730,8 +730,8 @@ public class Application extends JFrame implements SerialPortEventListener
                 start = false;
                 newGatorPage1 = false;
                 newGatorPage2 = false;
-                killPage1 = false;
-                killPage2 = false;
+                harvestPage1 = false;
+                harvestPage2 = false;
                 setUp = false;
                 addTo = false;
                 removeTo = false;
@@ -968,16 +968,16 @@ public class Application extends JFrame implements SerialPortEventListener
             
             addNewGator.setPreferredSize(size);
             transferGator.setPreferredSize(size);
-            killGator.setPreferredSize(size);
+            harvestGator.setPreferredSize(size);
             quitButton.setPreferredSize(size);
             addNewGator.setFont(font2);
             transferGator.setFont(font2);
-            killGator.setFont(font2);
+            harvestGator.setFont(font2);
             quitButton.setFont(font2);
             
             panel.add(addNewGator);
             panel.add(transferGator);
-            panel.add(killGator);
+            panel.add(harvestGator);
             panel.add(quitButton);
         }
         else if (newGatorPage1)
@@ -1013,7 +1013,7 @@ public class Application extends JFrame implements SerialPortEventListener
             JLabel umbilicalLabel = new JLabel("Umbilical: ");
             JLabel commentsLabel = new JLabel("Additional Comments: ");
         }
-        else if (killPage1)
+        else if (harvestPage1)
         {
             panel.setLayout(new BorderLayout());
             
@@ -1024,17 +1024,17 @@ public class Application extends JFrame implements SerialPortEventListener
             Panel panel4 = new Panel(new FlowLayout());
             JLabel tempLabel = new JLabel("Scan Microchip");
             tempLabel.setFont(font1);
-            killLabel.setFont(font1);
+            harvestLabel.setFont(font1);
             back.setPreferredSize(size);
             back.setFont(font1);
             panel2.add(back);
             panel3.add(tempLabel);
-            panel4.add(killLabel);
+            panel4.add(harvestLabel);
             panel.add(panel3, BorderLayout.NORTH);
             panel.add(panel4, BorderLayout.CENTER);
             panel.add(panel2, BorderLayout.SOUTH);
         }
-        else if (killPage2)
+        else if (harvestPage2)
         {
             
         }
@@ -1595,8 +1595,8 @@ public class Application extends JFrame implements SerialPortEventListener
                     transferStart = true;
                     newGatorPage1 = false;
                     newGatorPage2 = false;
-                    killPage1 = false;
-                    killPage2 = false;
+                    harvestPage1 = false;
+                    harvestPage2 = false;
                     setUp = false;
                     addTo = false;
                     removeTo = false;
@@ -1618,7 +1618,7 @@ public class Application extends JFrame implements SerialPortEventListener
             frame2.setVisible(true);   
         }
         
-        if (start || transferStart || newGatorPage1 || killPage1 || setUp || addTo || removeTo || addPage1 || addPage2 || addPage3 || addPage4 || addPage5 || quit)
+        if (start || transferStart || newGatorPage1 || harvestPage1 || harvestPage2 || setUp || addTo || removeTo || addPage1 || addPage2 || addPage3 || addPage4 || addPage5 || quit)
         {
             contentPane.add(panel);
             validate();
@@ -1806,9 +1806,9 @@ public class Application extends JFrame implements SerialPortEventListener
                     addPage2 = true;
                     addComponents();
                 }
-                else if (killPage1)
+                else if (harvestPage1)
                 {
-                    killLabel.setText("Last killed: " + tag);
+                    harvestLabel.setText("Last harvested: " + tag);
                     addComponents();
                 }
             }
