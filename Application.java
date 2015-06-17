@@ -69,7 +69,6 @@ public class Application extends JFrame implements SerialPortEventListener
     private int bellySize;
     private String length;
     private String weight;
-    private boolean hasPreviousEntry;
     private Row previousRow;
     private String previousBellySize;
     private String previousLength;
@@ -138,7 +137,6 @@ public class Application extends JFrame implements SerialPortEventListener
         bellySize = 0;
         length = "";
         weight = "";
-        hasPreviousEntry = false;
         previousBellySize = "";
         previousLength = "";
         previousWeight = "";
@@ -1949,11 +1947,9 @@ public class Application extends JFrame implements SerialPortEventListener
                         previousWeight = latestRow.get("Weight").toString();
                         previousRow = latestRow;
                         fromCage = latestRow.get("To").toString();
-                        hasPreviousEntry = true;
                     }
                     else
                     {
-                        hasPreviousEntry = false;
                         previousBellySize = "";
                         previousLength = "";
                         previousWeight = "";
