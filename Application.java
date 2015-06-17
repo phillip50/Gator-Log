@@ -88,7 +88,6 @@ public class Application extends JFrame implements SerialPortEventListener
     private int[] cagesAtCapacityAmount;
     private String[] cagesAtCapacityRange;
     private int cagesAtCapacityCounter;
-    private boolean hasFrom;
     private boolean hasToCage;
     private boolean cageTaken;
     private File gatorFile;
@@ -155,7 +154,6 @@ public class Application extends JFrame implements SerialPortEventListener
         cagesAtCapacityRange = new String[10];
         cagesAtCapacityCounter = 0;
         cageTaken = false;
-        hasFrom = true;
         hasToCage = false;
         gatorFile = null;
         gatorTable = null;
@@ -556,37 +554,7 @@ public class Application extends JFrame implements SerialPortEventListener
             {
                 errorMessage = "";
                 
-                if (setUp)
-                {
-                    /*
-                    fromCage = cageList.getSelectedItem().toString();
-                    
-                    String classSize = "";
-                        
-                    try
-                    {
-                        IndexCursor cursor = CursorBuilder.createCursor(cageTable.getIndex("PenNumberIndex"));                            
-                        cursor.beforeFirst();
-                        cursor.findFirstRow(Collections.singletonMap("Pen Number", fromCage));
-                        Row latestRow = cursor.getCurrentRow();
-                        while (cursor.findNextRow(Collections.singletonMap("Pen Number", fromCage)))
-                        {
-                            Row row = cursor.getCurrentRow();
-                            if (row != null)
-                            {
-                                latestRow = row;
-                            }
-                        }
-                        classSize = latestRow.get("Size Class").toString();
-                    }
-                    catch (IOException e1)
-                    {      
-                    }
-                        
-                    fromClass = classSize;*/
-                    hasFrom = true;
-                }
-                else if (addTo)
+                if (addTo)
                 {
                     cageTaken = false;
                     for (int i = 0; i < toCounter; i++)
@@ -1264,8 +1232,7 @@ public class Application extends JFrame implements SerialPortEventListener
         {
             panel.setLayout(new FlowLayout());
             
-            addToCage.setEnabled(hasFrom);
-            addEntry.setEnabled(hasFrom && hasToCage);
+            addEntry.setEnabled(hasToCage);
             setUpDatabase.setFont(font2);
             addToCage.setFont(font2);
             removeToCage.setFont(font2);
@@ -1759,56 +1726,6 @@ public class Application extends JFrame implements SerialPortEventListener
                 }
             
                 writer.close();
-                /*
-                IndexCursor cursor = CursorBuilder.createCursor(cageTable.getIndex("PenNumberIndex"));                            
-                cursor.beforeFirst();
-                if (hasFrom)
-                {
-                    cursor.findFirstRow(Collections.singletonMap("Pen Number", fromCage));
-                    Row fromRow = cursor.getCurrentRow();
-                    while (cursor.findNextRow(Collections.singletonMap("Pen Number", fromCage)))
-                    {
-                        Row row = cursor.getCurrentRow();
-                        if (row != null)
-                        {
-                            fromRow = row;
-                        }
-                    }
-                    cageTable.addRow(0, fromCage, fromRow.get("Pen Type"), fromRow.get("Square Footage"), Integer.parseInt(fromRow.get("Gator Count").toString()) - fromCount, fromRow.get("Water Change Date"), fromRow.get("Water Temperature"), fromRow.get("Feed Type"), fromRow.get("Feed Amount"), fromRow.get("Size Class"), "Transferred Gators");
-                }                          
-                cursor.beforeFirst();
-                for (int i = 0; i < toCounter; i++)
-                {
-                    cursor.findFirstRow(Collections.singletonMap("Pen Number", toCages[i]));
-                    Row toRow = cursor.getCurrentRow();
-                    while (cursor.findNextRow(Collections.singletonMap("Pen Number", toCages[i])))
-                    {
-                        Row row = cursor.getCurrentRow();
-                        if (row != null)
-                        {
-                            toRow = row;
-                        }
-                    }
-                    cageTable.addRow(0, toCages[i], toRow.get("Pen Type"), toRow.get("Square Footage"), Integer.parseInt(toRow.get("Gator Count").toString()) + capacityCounters[i], toRow.get("Water Change Date"), toRow.get("Water Temperature"), toRow.get("Feed Type"), toRow.get("Feed Amount"), toRow.get("Size Class"), "Transferred Gators");                         
-                    cursor.beforeFirst();
-                }
-                
-                for (int i = 0; i < cagesAtCapacityCounter; i++)
-                {
-                    cursor.findFirstRow(Collections.singletonMap("Pen Number", cagesAtCapacity[i]));
-                    Row toRow = cursor.getCurrentRow();
-                    while (cursor.findNextRow(Collections.singletonMap("Pen Number", cagesAtCapacity[i])))
-                    {
-                        Row row = cursor.getCurrentRow();
-                        if (row != null)
-                        {
-                            toRow = row;
-                        }
-                    }                      
-                    cageTable.addRow(0, cagesAtCapacity[i], toRow.get("Pen Type"), toRow.get("Square Footage"), Integer.parseInt(toRow.get("Gator Count").toString()) + cagesAtCapacityAmount[i], toRow.get("Water Change Date"), toRow.get("Water Temperature"), toRow.get("Feed Type"), toRow.get("Feed Amount"), toRow.get("Size Class"), "Transferred Gators");
-                    cursor.beforeFirst();
-                }
-                */
             }
             catch (IOException e)
             {
