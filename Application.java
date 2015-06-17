@@ -37,6 +37,7 @@ public class Application extends JFrame implements SerialPortEventListener
     private JTextField location;
     private JTextField condition;
     private JTextField collectionDate;
+    private JTextField experimentalCode;
     private JComboBox gender;
     private JComboBox umbilical;
     private ArrayList<String> cages;
@@ -70,7 +71,7 @@ public class Application extends JFrame implements SerialPortEventListener
     private String weight;
     private boolean hasPreviousEntry;
     private Row previousRow;
-    private int previousBellySize;
+    private String previousBellySize;
     private String previousLength;
     private String previousWeight;
     private String fromYear;
@@ -113,7 +114,6 @@ public class Application extends JFrame implements SerialPortEventListener
     private JButton didNotFormula;
     private boolean isFormula;
     private JTextField comments;
-    private String experimentalCode;
     private boolean skipLength;
     private boolean skipWeight;
     
@@ -140,7 +140,7 @@ public class Application extends JFrame implements SerialPortEventListener
         length = "";
         weight = "";
         hasPreviousEntry = false;
-        previousBellySize = 0;
+        previousBellySize = "";
         previousLength = "";
         previousWeight = "";
         toCages = new String[10];
@@ -691,10 +691,6 @@ public class Application extends JFrame implements SerialPortEventListener
                                 weightEntry = previousRow.get("Weight").toString();
                             }
                             
-                            System.out.println("Previous Entry != null");
-                            System.out.println(lengthEntry);
-                            System.out.println(weightEntry);
-                            System.out.println();
                             gatorTable.addRow(0, tag, previousRow.get("Egg Nest Location"), previousRow.get("Egg Nest Condition"), previousRow.get("Egg Collection Date"), previousRow.get("Hatch Year"), previousRow.get("Gender"), previousRow.get("Umbilical"), currentDate, fromCage, toCage, bellySize, lengthEntry, weightEntry, isFormula, "", isVaccinated, comments.getText());
                         }
                         else
@@ -710,13 +706,11 @@ public class Application extends JFrame implements SerialPortEventListener
                                 weightEntry = weightEntry + weight;
                             }
                             
-                            System.out.println("Previous Entry == null");
-                            System.out.println(lengthEntry);
-                            System.out.println(weightEntry);
-                            System.out.println();
-                            gatorTable.addRow(0, tag, "", "", "", "", "", "", currentDate, fromCage, toCage, bellySize, lengthEntry, weightEntry, isFormula, "", isVaccinated, comments.getText());
+                            gatorTable.addRow(0, tag, "", "", "", "", "", "", currentDate, fromCage, toCage, bellySize, lengthEntry, weightEntry, isFormula, experimentalCode.getText(), isVaccinated, comments.getText());
                         }
-                        for(Map<String,Object> row : CursorBuilder.createCursor(gatorTable.getIndex("IDIndex")))
+                        IndexCursor cursor = CursorBuilder.createCursor(gatorTable.getIndex("IDIndex"));
+                        cursor.beforeFirst();
+                        for(Map<String,Object> row : cursor)
                         {
  
                         }
@@ -773,23 +767,48 @@ public class Application extends JFrame implements SerialPortEventListener
                     toCage = "";
                     toCageIndex = -1;
                 }
+                else if (newGatorPage2)
+                {
+                    try
+                    {
+                        gatorTable.addRow(0, tag, location.getText(), condition.getText(), collectionDate.getText(), currentDate.substring(6), gender.getSelectedItem().toString(), umbilical.getSelectedItem().toString(), currentDate, "", cageList.getSelectedItem().toString(), "", "", "", "", "", "", comments.getText());
+                        for(Map<String,Object> row : CursorBuilder.createCursor(gatorTable.getIndex("IDIndex")))
+                        {
+ 
+                        }
+                    }
+                    catch (IOException e1)
+                    {
+                        
+                    }
+                }
+                
+                
                 if (!errorMessage.equals(""))
                 {
                     transferStart = false;
                     addPage1 = false;
+                    newGatorPage1 = false;
                 }
                 else if (addPage5)
                 {
                     transferStart = false;
                     addPage1 = true;
+                    newGatorPage1 = false;
+                }
+                else if (newGatorPage2)
+                {
+                    transferStart = false;
+                    addPage1 = false;
+                    newGatorPage1 = true;
                 }
                 else
                 {
                     transferStart = true;
                     addPage1 = false;
+                    newGatorPage1 = false;
                 }
                 start = false;
-                newGatorPage1 = false;
                 newGatorPage2 = false;
                 harvestPage1 = false;
                 harvestPage2 = false;
@@ -835,7 +854,7 @@ public class Application extends JFrame implements SerialPortEventListener
                 if (setUp)
                 {
                 }
-                else
+                else if (addTo)
                 {
                     cageTaken = false;
                     for (int i = 0; i < toCounter; i++)
@@ -855,7 +874,7 @@ public class Application extends JFrame implements SerialPortEventListener
                 if (setUp)
                 {
                 }
-                else
+                else if (addTo)
                 {
                     cageTaken = false;
                     for (int i = 0; i < toCounter; i++)
@@ -893,6 +912,7 @@ public class Application extends JFrame implements SerialPortEventListener
         });
         
         location = new JTextField(10);
+        location.setFont(font1);
         location.getDocument().addDocumentListener(new DocumentListener()
         {
             public void changedUpdate(DocumentEvent e)
@@ -914,6 +934,7 @@ public class Application extends JFrame implements SerialPortEventListener
         });
         
         condition = new JTextField(10);
+        condition.setFont(font1);
         condition.getDocument().addDocumentListener(new DocumentListener()
         {
             public void changedUpdate(DocumentEvent e)
@@ -935,7 +956,30 @@ public class Application extends JFrame implements SerialPortEventListener
         });
         
         collectionDate = new JTextField(10);
+        collectionDate.setFont(font1);
         collectionDate.getDocument().addDocumentListener(new DocumentListener()
+        {
+            public void changedUpdate(DocumentEvent e)
+            {
+                warn();
+            }
+            public void removeUpdate(DocumentEvent e)
+            {
+                warn();
+            }
+            public void insertUpdate(DocumentEvent e)
+            {
+                warn();
+            }
+            public void warn()
+            {
+                
+            }
+        });
+        
+        experimentalCode = new JTextField(10);
+        experimentalCode.setFont(font1);
+        experimentalCode.getDocument().addDocumentListener(new DocumentListener()
         {
             public void changedUpdate(DocumentEvent e)
             {
@@ -1043,6 +1087,14 @@ public class Application extends JFrame implements SerialPortEventListener
         }
         else if (newGatorPage1)
         {
+            cageList.setSelectedIndex(0);
+            gender.setSelectedIndex(0);
+            umbilical.setSelectedIndex(0);
+            location.setText("");
+            condition.setText("");
+            collectionDate.setText("");
+            comments.setText("");
+            
             panel.setLayout(new BorderLayout());
             
             Dimension size = new Dimension((int)(width/8), (int)(height/10));           
@@ -1061,18 +1113,127 @@ public class Application extends JFrame implements SerialPortEventListener
         else if (newGatorPage2)
         {
             panel.setLayout(new GridBagLayout());
+            GridBagConstraints cLeft = new GridBagConstraints();
+            cLeft.insets = new Insets(10, 60, 10, 60);
+            cLeft.anchor = GridBagConstraints.LINE_START;
+            cLeft.fill = GridBagConstraints.BOTH;
+            GridBagConstraints cRight = new GridBagConstraints();
+            cRight.insets = new Insets(10, 60, 10, 60);
+            cRight.anchor = GridBagConstraints.LINE_END;
             
             Dimension size = new Dimension((int)(width/8), (int)(height/10));
             
-            JLabel gatorLabel = new JLabel("Gator: " + tag);
-            JLabel location = new JLabel("Egg Nest Location: ");
-            JLabel condition = new JLabel("Egg Nest Condition: ");
-            JLabel collectionDate = new JLabel("Egg Condition Date: ");
+            JLabel gatorLabel1 = new JLabel("Gator: ");
+            gatorLabel1.setFont(font1);
+            JLabel gatorLabel2 = new JLabel(tag);
+            gatorLabel2.setFont(font1);
+            JLabel locationLabel = new JLabel("Egg Nest Location: ");
+            locationLabel.setFont(font1);
+            JLabel conditionLabel = new JLabel("Egg Nest Condition: ");
+            conditionLabel.setFont(font1);
+            JLabel collectionDateLabel = new JLabel("Egg Condition Date: ");
+            collectionDateLabel.setFont(font1);
             JLabel hatchYear1 = new JLabel("Hatch Year: ");
+            hatchYear1.setFont(font1);
             JLabel hatchYear2 = new JLabel(currentDate.substring(6));
+            hatchYear2.setFont(font1);
             JLabel genderLabel = new JLabel("Gender: ");
+            genderLabel.setFont(font1);
             JLabel umbilicalLabel = new JLabel("Umbilical: ");
+            umbilicalLabel.setFont(font1);
+            JLabel penLabel = new JLabel("To Pen: ");
+            penLabel.setFont(font1);
             JLabel commentsLabel = new JLabel("Additional Comments: ");
+            commentsLabel.setFont(font1);
+            
+            confirm.setPreferredSize(size);
+            confirm.setFont(font1);
+            back.setPreferredSize(size);
+            back.setFont(font1);
+            cageList.setFont(font1);
+            gender.setFont(font1);
+            umbilical.setFont(font1);
+            
+            cRight.gridx = 0;
+            cRight.gridy = 0;
+            panel.add(gatorLabel1, cRight);
+            
+            cLeft.gridx = 1;
+            cLeft.gridy = 0;
+            panel.add(gatorLabel2, cLeft);
+            
+            cRight.gridx = 0;
+            cRight.gridy = 1;
+            panel.add(locationLabel, cRight);
+            
+            cLeft.gridx = 1;
+            cLeft.gridy = 1;
+            panel.add(location, cLeft);
+            
+            cRight.gridx = 0;
+            cRight.gridy = 2;
+            panel.add(conditionLabel, cRight);
+            
+            cLeft.gridx = 1;
+            cLeft.gridy = 2;
+            panel.add(condition, cLeft);
+            
+            cRight.gridx = 0;
+            cRight.gridy = 3;
+            panel.add(collectionDateLabel, cRight);
+            
+            cLeft.gridx = 1;
+            cLeft.gridy = 3;
+            panel.add(collectionDate, cLeft);
+            
+            cRight.gridx = 0;
+            cRight.gridy = 4;
+            panel.add(hatchYear1, cRight);
+            
+            cLeft.gridx = 1;
+            cLeft.gridy = 4;
+            panel.add(hatchYear2, cLeft);
+            
+            cRight.gridx = 0;
+            cRight.gridy = 5;
+            panel.add(genderLabel, cRight);
+            
+            cLeft.gridx = 1;
+            cLeft.gridy = 5;
+            panel.add(gender, cLeft);
+            
+            cRight.gridx = 0;
+            cRight.gridy = 6;
+            panel.add(umbilicalLabel, cRight);
+            
+            cLeft.gridx = 1;
+            cLeft.gridy = 6;
+            panel.add(umbilical, cLeft);
+            
+            cRight.gridx = 0;
+            cRight.gridy = 7;
+            panel.add(penLabel, cRight);
+            
+            cLeft.gridx = 1;
+            cLeft.gridy = 7;
+            panel.add(cageList, cLeft);
+            
+            cRight.gridx = 0;
+            cRight.gridy = 8;
+            panel.add(commentsLabel, cRight);
+            
+            cLeft.gridx = 1;
+            cLeft.gridy = 8;
+            panel.add(comments, cLeft);
+            
+            cRight.gridx = 0;
+            cRight.gridy = 9;
+            panel.add(back, cRight);
+            
+            cLeft.fill = GridBagConstraints.NONE;
+            cLeft.gridx = 1;
+            cLeft.gridy = 9;
+            panel.add(confirm, cLeft);
         }
         else if (harvestPage1)
         {
@@ -1301,9 +1462,9 @@ public class Application extends JFrame implements SerialPortEventListener
             label.setFont(font2);
             panel2.add(label);
             Panel panel3 = new Panel(new FlowLayout());
-            if (hasPreviousEntry)
+            if (isInteger(previousBellySize))
             {
-                for (int i = previousBellySize - 5; i < previousBellySize + 20; i++)
+                for (int i = Integer.parseInt(previousBellySize) - 5; i < Integer.parseInt(previousBellySize) + 20; i++)
                 {
                     numbers[i].setPreferredSize(size);
                     numbers[i].setFont(font1);
@@ -1526,8 +1687,8 @@ public class Application extends JFrame implements SerialPortEventListener
             cLeft.anchor = GridBagConstraints.LINE_END;
             panel.add(didFormula, cLeft);
             cLeft.anchor = GridBagConstraints.LINE_START;
-   
-            JLabel tempLabel15 = new JLabel("Additional comments: ");
+            
+            JLabel tempLabel15 = new JLabel("Experimental Code: ");
             tempLabel15.setFont(font1);
             cRight.gridx = 0;
             cRight.gridy = 8;
@@ -1535,14 +1696,24 @@ public class Application extends JFrame implements SerialPortEventListener
             
             cLeft.gridx = 1;
             cLeft.gridy = 8;
-            panel.add(comments, cLeft);
-            
+            panel.add(experimentalCode, cLeft);
+   
+            JLabel tempLabel16 = new JLabel("Additional comments: ");
+            tempLabel16.setFont(font1);
             cRight.gridx = 0;
             cRight.gridy = 9;
-            panel.add(cancel, cRight);
+            panel.add(tempLabel16, cRight);
             
             cLeft.gridx = 1;
             cLeft.gridy = 9;
+            panel.add(comments, cLeft);
+            
+            cRight.gridx = 0;
+            cRight.gridy = 10;
+            panel.add(cancel, cRight);
+            
+            cLeft.gridx = 1;
+            cLeft.gridy = 10;
             panel.add(confirm, cLeft);
         }
         else if (quit)
@@ -1691,7 +1862,7 @@ public class Application extends JFrame implements SerialPortEventListener
             frame2.setVisible(true);   
         }
         
-        if (start || transferStart || newGatorPage1 || harvestPage1 || harvestPage2 || setUp || addTo || removeTo || addPage1 || addPage2 || addPage3 || addPage4 || addPage5 || quit)
+        if (start || transferStart || newGatorPage1 || newGatorPage2 || harvestPage1 || harvestPage2 || setUp || addTo || removeTo || addPage1 || addPage2 || addPage3 || addPage4 || addPage5 || quit)
         {
             contentPane.add(panel);
             validate();
@@ -1856,7 +2027,7 @@ public class Application extends JFrame implements SerialPortEventListener
                     }
                     if (latestRow != null)
                     {
-                        previousBellySize = Integer.parseInt(latestRow.get("Belly Size").toString());
+                        previousBellySize = latestRow.get("Belly Size").toString();
                         previousLength = latestRow.get("Length").toString();
                         previousWeight = latestRow.get("Weight").toString();
                         previousRow = latestRow;
@@ -1866,19 +2037,12 @@ public class Application extends JFrame implements SerialPortEventListener
                     else
                     {
                         hasPreviousEntry = false;
-                        previousBellySize = 0;
+                        previousBellySize = "";
                         previousLength = "";
                         previousWeight = "";
                         previousRow = null;
                         fromCage = "";
                     }
-
-                    
-                    System.out.println(hasPreviousEntry);
-                    System.out.println(previousBellySize);
-                    System.out.println(previousLength);
-                    System.out.println(previousWeight);
-                    System.out.println();
                     
                     addPage1 = false;
                     addPage2 = true;
@@ -1887,6 +2051,12 @@ public class Application extends JFrame implements SerialPortEventListener
                 else if (harvestPage1)
                 {
                     harvestLabel.setText("Last harvested: " + tag);
+                    addComponents();
+                }
+                else if (newGatorPage1)
+                {
+                    newGatorPage1 = false;
+                    newGatorPage2 = true;
                     addComponents();
                 }
             }
