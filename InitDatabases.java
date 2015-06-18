@@ -41,6 +41,7 @@ public class InitDatabases
                 .addColumn(new ColumnBuilder("Experiment Code", DataType.TEXT))
                 .addColumn(new ColumnBuilder("Vaccinated", DataType.TEXT))
                 .addColumn(new ColumnBuilder("Comments", DataType.TEXT))
+                .addColumn(new ColumnBuilder("Harvested?", DataType.TEXT))
                 .toTable(gatordb);
             
             cageFile = new File("CageDatabase.accdb");
@@ -52,7 +53,6 @@ public class InitDatabases
                 .addIndex(new IndexBuilder("PenNumberIndex").addColumns("Pen Number"))
                 .addColumn(new ColumnBuilder("Pen Type", DataType.TEXT))
                 .addColumn(new ColumnBuilder("Square Footage", DataType.TEXT))
-                .addColumn(new ColumnBuilder("Gator Count", DataType.TEXT))
                 .addColumn(new ColumnBuilder("Water Change Date", DataType.TEXT))
                 .addColumn(new ColumnBuilder("Water Temperature", DataType.TEXT))
                 .addColumn(new ColumnBuilder("Feed Type", DataType.TEXT))
@@ -75,63 +75,63 @@ public class InitDatabases
         {
             for (int i = 101; i <= 127; i++)
             {
-                cageTable.addRow(0, i, "Large", 600, 300, "06-01-2015", "88", "R", "500", "39+", "");
+                cageTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "39+", "");
             }
             for (int i = 201; i <= 226; i++)
             {
-                cageTable.addRow(0, i, "Large", 600, 300, "06-01-2015", "88", "R", "500", "15-18", "");
+                cageTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "15-18", "");
             }
             for (int i = 1; i <= 4; i++)
             {
-                cageTable.addRow(0, "227." + i, "Quartered", 150, 50, "06-01-2015", "88", "H", "50", "Hatchling", "");
+                cageTable.addRow(0, "227." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "");
             }
             for (int i = 228; i <= 231; i++)
             {
-                cageTable.addRow(0, i, "Large", 600, 300, "06-01-2015", "88", "R", "500", "19-23", "");
+                cageTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "19-23", "");
             }
             for (int i = 1; i <= 4; i++)
             {
-                cageTable.addRow(0, "232." + i, "Quartered", 150, 50, "06-01-2015", "88", "H", "50", "Hatchling", "");
+                cageTable.addRow(0, "232." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "");
             }
             for (int i = 301; i <= 326; i++)
             {
-                cageTable.addRow(0, i, "Large", 600, 300, "06-01-2015", "88", "R", "500", "24-28", "");
+                cageTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "24-28", "");
             }
             for (int i = 401; i <= 409; i++)
             {
-                cageTable.addRow(0, i, "Large", 600, 300, "06-01-2015", "88", "R", "500", "29-33", "");
+                cageTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "29-33", "");
             }
             for (int i = 1; i <= 4; i++)
             {
-                cageTable.addRow(0, "410." + i, "Quartered", 150, 50, "06-01-2015", "88", "H", "50", "Hatchling", "");
+                cageTable.addRow(0, "410." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "");
             }
             for (int i = 1; i <= 4; i++)
             {
-                cageTable.addRow(0, "411." + i, "Quartered", 150, 50, "06-01-2015", "88", "H", "50", "Hatchling", "");
+                cageTable.addRow(0, "411." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "");
             }
             for (int i = 412; i <= 419; i++)
             {
-                cageTable.addRow(0, i, "Large", 600, 300, "06-01-2015", "88", "R", "500", "34-36", "");
+                cageTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "34-36", "");
             }
             for (int i = 1; i <= 4; i++)
             {
-                cageTable.addRow(0, "420." + i, "Quartered", 150, 50, "06-01-2015", "88", "H", "50", "Hatchling", "");
+                cageTable.addRow(0, "420." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "");
             }
             for (int i = 1; i <= 4; i++)
             {
-                cageTable.addRow(0, "421." + i, "Quartered", 150, 50, "06-01-2015", "88", "H", "50", "Hatchling", "");
+                cageTable.addRow(0, "421." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "");
             }
             for (int i = 422; i <= 437; i++)
             {
-                cageTable.addRow(0, i, "Large", 600, 300, "06-01-2015", "88", "R", "500", "37-38", "");
+                cageTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "37-38", "");
             }
             for (int i = 801; i <= 816; i++)
             {
-                cageTable.addRow(0, i, "Small", 200, 100, "06-01-2015", "88", "H", "50", "Family", "");
+                cageTable.addRow(0, i, "Small", 200, "06-01-2015", "88", "H", "50", "Family", "");
             }
             for (int i = 901; i <= 910; i++)
             {
-                cageTable.addRow(0, i, "Small", 200, 100, "06-01-2015", "88", "H", "50", "Empty", "");
+                cageTable.addRow(0, i, "Small", 200, "06-01-2015", "88", "H", "50", "Empty", "");
             }
         }
         catch (IOException e)
