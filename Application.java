@@ -57,16 +57,12 @@ public class Application extends JFrame implements SerialPortEventListener
     private boolean quit;
     private final JButton confirm;
     private final JButton cancel;
-    private String fromCage;
     private String toCage;
     private int toCageIndex;
     private int bellySize;
     private String length;
     private String weight;
     private Row previousRow;
-    private String previousBellySize;
-    private String previousLength;
-    private String previousWeight;
     private String fromYear;
     private int fromCount;
     private String fromClass;
@@ -130,15 +126,11 @@ public class Application extends JFrame implements SerialPortEventListener
         addPage4 = false;
         addPage5 = false;
         quit = false;
-        fromCage = "";
         fromCount = 0;
         toCage = "";
         bellySize = 0;
         length = "";
         weight = "";
-        previousBellySize = "";
-        previousLength = "";
-        previousWeight = "";
         toCages = new String[10];
         toUpperBounds = new int[10];
         toLowerBounds = new int[10];
@@ -321,6 +313,7 @@ public class Application extends JFrame implements SerialPortEventListener
             condition.setText("");
             collectionDate.setText("");
             comments.setText("");
+            confirm.setEnabled(true);
             
             panel.setLayout(new BorderLayout());
             
@@ -513,7 +506,7 @@ public class Application extends JFrame implements SerialPortEventListener
             cRight.gridy = 1;
             panel.add(tempLabel3, cRight);
             
-            JLabel tempLabel4 = new JLabel("" + fromCage);
+            JLabel tempLabel4 = new JLabel("" + previousRow.get("To").toString());
             tempLabel4.setFont(font1);
             cLeft.gridx = 1;
             cLeft.gridy = 1;
@@ -720,6 +713,7 @@ public class Application extends JFrame implements SerialPortEventListener
             didFormula.setEnabled(true);
             didNotFormula.setEnabled(false);
             comments.setText("");
+            experimentalCode.setText("");
             skipLength = false;
             skipWeight = false;
             length = "";
@@ -745,9 +739,10 @@ public class Application extends JFrame implements SerialPortEventListener
             label.setFont(font2);
             panel2.add(label);
             Panel panel3 = new Panel(new FlowLayout());
-            if (isInteger(previousBellySize))
+            String temp = previousRow.get("Belly Size").toString();
+            if (isInteger(temp))
             {
-                for (int i = Integer.parseInt(previousBellySize) - 5; i < Integer.parseInt(previousBellySize) + 20; i++)
+                for (int i = Integer.parseInt(temp) - 5; i < Integer.parseInt(temp) + 20; i++)
                 {
                     numbers[i].setPreferredSize(size);
                     numbers[i].setFont(font1);
@@ -780,9 +775,10 @@ public class Application extends JFrame implements SerialPortEventListener
             label.setFont(font2);
             panel2.add(label);
             Panel panel3 = new Panel(new FlowLayout());
-            if (isInteger(previousLength))
+            String temp = previousRow.get("Length").toString();
+            if (isInteger(temp))
             {
-                for (int i = Integer.parseInt(previousLength) - 5; i < Integer.parseInt(previousLength) + 20; i++)
+                for (int i = Integer.parseInt(temp) - 5; i < Integer.parseInt(temp) + 20; i++)
                 {
                     numbers[i].setPreferredSize(size);
                     numbers[i].setFont(font1);
@@ -819,9 +815,10 @@ public class Application extends JFrame implements SerialPortEventListener
             label.setFont(font2);
             panel2.add(label);
             Panel panel3 = new Panel(new FlowLayout());
-            if (isInteger(previousWeight))
+            String temp = previousRow.get("Weight").toString();
+            if (isInteger(temp))
             {
-                for (int i = Integer.parseInt(previousWeight) - 5; i < Integer.parseInt(previousWeight) + 20; i++)
+                for (int i = Integer.parseInt(temp) - 5; i < Integer.parseInt(temp) + 20; i++)
                 {
                     numbers[i].setPreferredSize(size);
                     numbers[i].setFont(font1);
@@ -891,7 +888,7 @@ public class Application extends JFrame implements SerialPortEventListener
             cRight.gridy = 1;
             panel.add(tempLabel3, cRight);
             
-            JLabel tempLabel4 = new JLabel("" + fromCage);
+            JLabel tempLabel4 = new JLabel("" + previousRow.get("To").toString());
             tempLabel4.setFont(font1);
             cLeft.gridx = 1;
             cLeft.gridy = 1;
@@ -1001,50 +998,7 @@ public class Application extends JFrame implements SerialPortEventListener
         }
         else if (quit)
         {            
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File("Pen" + fromCage + "_Birth" + fromYear + "_" + currentDate + "_log.txt")));)
-            {
-                writer.write("From Pen: " + fromCage + "\r\n\tTotal: " + fromCount + "\r\n\tYear: " + fromYear + "\r\n\tClass: " + fromClass + "\r\n");
-                for (int i = 0; i < cagesAtCapacityCounter; i++)
-                {
-                    if (cagesAtCapacity[i] != null)
-                    {
-                        writer.write("\r\n\r\nTo Pen: " + cagesAtCapacity[i] + "\r\n\tTransferred: " + cagesAtCapacityAmount[i] + "\r\n\tCurrent Size: " + cagesAtCapacityRange[i]);
-                    }
-                }
-                for (int i = 0; i < toCounter; i++)
-                {
-                    if (toCages[i] != null)
-                    {
-                        writer.write("\r\n\r\nTo Pen: " + toCages[i] + "\r\n\tTransferred: " + capacityCounters[i] + "\r\n\tCurrent Size: " + toLowerBounds[i] + "-" + toUpperBounds[i]);
-                    }
-                }
-            
-                int totalCount = 0;
-                for (int i = 0; i < toCounter; i++)
-                {
-                    if (toCages[i] != null)
-                    {
-                        totalCount = totalCount + capacityCounters[i];
-                    }
-                }
-                for (int i = 0; i < cagesAtCapacityCounter; i++)
-                {
-                    if (cagesAtCapacity[i] != null)
-                    {
-                        totalCount = totalCount + cagesAtCapacityAmount[i];
-                    }
-                }
-                if (fromCount - totalCount != 0)
-                {
-                    writer.write("\r\n\r\nUnspecified: " + (fromCount - totalCount));
-                }
-            
-                writer.close();
-            }
-            catch (IOException e)
-            {
-                
-            }
+                //output file
             
             frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
             System.exit(0);
@@ -1132,7 +1086,7 @@ public class Application extends JFrame implements SerialPortEventListener
             {
                 temp[k] = input[j];
                 k++;
-                }
+            }
             j++;
         }
         return temp;
@@ -1160,21 +1114,21 @@ public class Application extends JFrame implements SerialPortEventListener
     {
 	if (str == null)
         {
-		return false;
+            return false;
 	}
 	int length = str.length();
 	if (length == 0)
         {
-		return false;
+            return false;
 	}
 	int i = 0;
 	if (str.charAt(0) == '-')
         {
-		if (length == 1)
-                {
-			return false;
-		}
-		i = 1;
+            if (length == 1)
+            {
+                return false;
+            }
+            i = 1;
 	}
 	for (; i < length; i++)
         {
@@ -1256,19 +1210,11 @@ public class Application extends JFrame implements SerialPortEventListener
                     }
                     if (latestRow != null)
                     {
-                        previousBellySize = latestRow.get("Belly Size").toString();
-                        previousLength = latestRow.get("Length").toString();
-                        previousWeight = latestRow.get("Weight").toString();
                         previousRow = latestRow;
-                        fromCage = latestRow.get("To").toString();
                     }
                     else
                     {
-                        previousBellySize = "";
-                        previousLength = "";
-                        previousWeight = "";
                         previousRow = null;
-                        fromCage = "";
                     }
                     
                     addPage1 = false;
@@ -1290,19 +1236,11 @@ public class Application extends JFrame implements SerialPortEventListener
                     }
                     if (latestRow != null)
                     {
-                        previousBellySize = latestRow.get("Belly Size").toString();
-                        previousLength = latestRow.get("Length").toString();
-                        previousWeight = latestRow.get("Weight").toString();
                         previousRow = latestRow;
-                        fromCage = latestRow.get("To").toString();
                     }
                     else
                     {
-                        previousBellySize = "";
-                        previousLength = "";
-                        previousWeight = "";
                         previousRow = null;
-                        fromCage = "";
                     }
                     
                     harvestPage1 = false;
@@ -1576,41 +1514,17 @@ public class Application extends JFrame implements SerialPortEventListener
                 {
                     if (previousRow != null)
                     {
-                        String lengthEntry;
-                        if (!skipLength)
-                        {
-                            lengthEntry = "" + length;
-                        }
-                        else
-                        {
-                            lengthEntry = previousRow.get("Length").toString();
-                        }
-                        String weightEntry;
-                        if (!skipWeight)
-                        {
-                            weightEntry = "" + weight;
-                        }
-                        else
-                        {
-                            weightEntry = previousRow.get("Weight").toString();
-                        }
+                        String lengthEntry = (skipLength) ? previousRow.get("Length").toString() : length;
+                        String weightEntry = (skipWeight) ? previousRow.get("Weight").toString() : weight;
                             
-                        gatorTable.addRow(0, tag, previousRow.get("Egg Nest Location"), previousRow.get("Egg Nest Condition"), previousRow.get("Egg Collection Date"), previousRow.get("Hatch Year"), previousRow.get("Gender"), previousRow.get("Umbilical"), currentDate, fromCage, toCage, bellySize, lengthEntry, weightEntry, isFormula, experimentalCode.getText(), isVaccinated, comments.getText(), "");
+                        gatorTable.addRow(0, tag, previousRow.get("Egg Nest Location"), previousRow.get("Egg Nest Condition"), previousRow.get("Egg Collection Date"), previousRow.get("Hatch Year"), previousRow.get("Gender"), previousRow.get("Umbilical"), currentDate, previousRow.get("To"), toCage, bellySize, lengthEntry, weightEntry, isFormula, experimentalCode.getText(), isVaccinated, comments.getText(), "");
                     }
                     else
                     {
-                        String lengthEntry = "";
-                        if (!skipLength)
-                        {
-                            lengthEntry = lengthEntry + length;
-                        }
-                        String weightEntry = "";
-                        if (!skipWeight)
-                        {
-                            weightEntry = weightEntry + weight;
-                        }
+                        String lengthEntry = (skipLength) ? "" : length;
+                        String weightEntry = (skipWeight) ? "" : weight;
                             
-                        gatorTable.addRow(0, tag, "", "", "", "", "", "", currentDate, fromCage, toCage, bellySize, lengthEntry, weightEntry, isFormula, experimentalCode.getText(), isVaccinated, comments.getText(), "");
+                        gatorTable.addRow(0, tag, "", "", "", "", "", "", currentDate, previousRow.get("To"), toCage, bellySize, lengthEntry, weightEntry, isFormula, experimentalCode.getText(), isVaccinated, comments.getText(), "");
                     }
                     IndexCursor cursor = CursorBuilder.createCursor(gatorTable.getIndex("IDIndex"));
                     cursor.beforeFirst();
@@ -1690,26 +1604,10 @@ public class Application extends JFrame implements SerialPortEventListener
             {
                 try
                 {
-                    String lengthEntry;
-                    if (!skipLength)
-                    {
-                        lengthEntry = "" + length;
-                    }
-                    else
-                    {
-                        lengthEntry = previousRow.get("Length").toString();
-                    }
-                    String weightEntry;
-                    if (!skipWeight)
-                    {
-                        weightEntry = "" + weight;
-                    }
-                    else
-                    {
-                        weightEntry = previousRow.get("Weight").toString();
-                    }
+                    String lengthEntry = (skipLength) ? previousRow.get("Length").toString() : length;
+                    String weightEntry = (skipWeight) ? previousRow.get("Weight").toString() : weight;
                         
-                    gatorTable.addRow(0, tag, previousRow.get("Egg Nest Location"), previousRow.get("Egg Nest Condition"), previousRow.get("Egg Collection Date"), previousRow.get("Hatch Year"), previousRow.get("Gender"), previousRow.get("Umbilical"), currentDate, fromCage, "", bellySize, lengthEntry, weightEntry, "", "", "", comments.getText(), "Yes");
+                    gatorTable.addRow(0, tag, previousRow.get("Egg Nest Location"), previousRow.get("Egg Nest Condition"), previousRow.get("Egg Collection Date"), previousRow.get("Hatch Year"), previousRow.get("Gender"), previousRow.get("Umbilical"), currentDate, previousRow.get("To"), "", bellySize, lengthEntry, weightEntry, "", "", "", comments.getText(), "Yes");
                     for(Map<String,Object> row : CursorBuilder.createCursor(gatorTable.getIndex("IDIndex")))
                     {
  
