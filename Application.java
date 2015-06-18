@@ -20,32 +20,27 @@ import javax.swing.event.*;
 public class Application extends JFrame implements SerialPortEventListener
 {
     private static Application frame;
-    private Container contentPane;
-    private JButton[] numbers;
-    private JButton skip;
-    private JButton setUpDatabase;
-    private JButton addToCage;
-    private JButton removeToCage;
-    private JButton addEntry;
-    private JButton back;
-    private JButton addNewGator;
-    private JButton transferGator;
-    private JButton harvestGator;
-    private JButton quitButton;
-    private JComboBox cageList;
-    private JTextField input;
-    private JTextField location;
-    private JTextField condition;
-    private JTextField collectionDate;
-    private JTextField experimentalCode;
-    private JComboBox gender;
-    private JComboBox umbilical;
-    private ArrayList<String> cages;
+    private final Container contentPane;
+    private final JButton[] numbers;
+    private final JButton skip;
+    private final JButton addToCage;
+    private final JButton removeToCage;
+    private final JButton addEntry;
+    private final JButton back;
+    private final JButton addNewGator;
+    private final JButton transferGator;
+    private final JButton harvestGator;
+    private final JButton quitButton;
+    private final JComboBox cageList;
+    private final JTextField input;
+    private final JTextField location;
+    private final JTextField condition;
+    private final JTextField collectionDate;
+    private final JTextField experimentalCode;
+    private final JComboBox gender;
+    private final JComboBox umbilical;
+    private java.util.List<String> cages;
     private String[] years;
-    private JLabel label1;
-    private JLabel label2;
-    private JLabel label3;
-    private JLabel harvestLabel;
     private boolean start;
     private boolean newGatorPage1;
     private boolean newGatorPage2;
@@ -64,8 +59,8 @@ public class Application extends JFrame implements SerialPortEventListener
     private boolean addPage4;
     private boolean addPage5;
     private boolean quit;
-    private JButton confirm;
-    private JButton cancel;
+    private final JButton confirm;
+    private final JButton cancel;
     private String fromCage;
     private String toCage;
     private int toCageIndex;
@@ -85,7 +80,7 @@ public class Application extends JFrame implements SerialPortEventListener
     private String[] toClassSizes;
     private int[] capacities;
     private int[] capacityCounters;
-    private int toCounter; //number of to cages
+    private int toCounter;
     private String[] cagesAtCapacity;
     private int[] cagesAtCapacityAmount;
     private String[] cagesAtCapacityRange;
@@ -106,15 +101,14 @@ public class Application extends JFrame implements SerialPortEventListener
     private String errorMessage;
     private SerialPort serialPort;
     private BufferedReader serialInput;
-    private OutputStream serialOutput;
     private String tag;
-    private JButton didVaccinate;
-    private JButton didNotVaccinate;
+    private final JButton didVaccinate;
+    private final JButton didNotVaccinate;
     private boolean isVaccinated;
-    private JButton didFormula;
-    private JButton didNotFormula;
+    private final JButton didFormula;
+    private final JButton didNotFormula;
     private boolean isFormula;
-    private JTextField comments;
+    private final JTextField comments;
     private boolean skipLength;
     private boolean skipWeight;
     
@@ -188,7 +182,7 @@ public class Application extends JFrame implements SerialPortEventListener
             years[i] = "" + number;
         }
         
-        cages = new ArrayList<String>();
+        cages = new ArrayList<>();
         for (int i = 101; i <= 127; i++)
         {
             cages.add("" + i);
@@ -245,852 +239,57 @@ public class Application extends JFrame implements SerialPortEventListener
         {                   
         }
         
-        label1 = new JLabel("");
-        label2 = new JLabel("");
-        label3 = new JLabel("");
-        harvestLabel = new JLabel("");
-        
         contentPane = getContentPane();
         numbers = new JButton[201];
-        for (int i = 0; i <= 200; i++)
-        {
-            JButton button = new JButton("" + i);
-            button.addActionListener(new ActionListener()
-            {
-                public void actionPerformed(ActionEvent e)
-                {
-                    String entry = ((JButton) e.getSource()).getText();
-                    int number = Integer.parseInt(entry);
-                    if (addPage2)
-                    {
-                        bellySize = number;
-                        String classSize = "";
-                        
-                        for (int i = 0; i < toCounter; i++)
-                        {
-                            try
-                            {
-                                IndexCursor cursor = CursorBuilder.createCursor(cageTable.getIndex("PenNumberIndex"));                            
-                                cursor.beforeFirst();
-                                cursor.findFirstRow(Collections.singletonMap("Pen Number", toCages[i]));
-                                Row latestRow = cursor.getCurrentRow();
-                                while (cursor.findNextRow(Collections.singletonMap("Pen Number", toCages[i])))
-                                {
-                                    Row row = cursor.getCurrentRow();
-                                    if (row != null)
-                                    {
-                                        latestRow = row;
-                                    }
-                                }
-                                classSize = latestRow.get("Size Class").toString();
-                            }
-                            catch (IOException e1)
-                            {     
-                            }
-                        
-                            if (classSize.equals("Family") || (number >= toLowerBounds[i] && number <= toUpperBounds[i]) || (entry.equals("Hatchling") && classSize.equals("Hatchling")))
-                            {
-                                toCage = toCages[i];
-                                toCageIndex = i;
-                                i = toCounter;
-                            }
-                        }
-                        addPage2 = false;
-                        addPage3 = true;
-                        addComponents();
-                    }
-                    else if (addPage3)
-                    {
-                        length = entry;
-                        addPage3 = false;
-                        addPage4 = true;
-                        addComponents();
-                    }
-                    else if (addPage4)
-                    {
-                        weight = entry;
-                        addPage4 = false;
-                        addPage5 = true;
-                        addComponents();
-                    }
-                    else if (harvestPage2)
-                    {
-                        bellySize = number;
-                        harvestPage2 = false;
-                        harvestPage3 = true;
-                        addComponents();
-                    }
-                    else if (harvestPage3)
-                    {
-                        length = entry;
-                        harvestPage3 = false;
-                        harvestPage4 = true;
-                        addComponents();
-                    }
-                    else if (harvestPage4)
-                    {
-                        weight = entry;
-                        harvestPage4 = false;
-                        harvestPage5 = true;
-                        addComponents();
-                    }
-                }
-            });
-            numbers[i] = button;
-        }
         
-        skip = new JButton("Skip Recording");
-        skip.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                if (addPage3)
-                {
-                    skipLength = true;
-                    addPage4 = true;
-                    addPage3 = false;
-                    addComponents();
-                }
-                else if (addPage4)
-                {
-                    skipWeight = true;
-                    addPage4 = false;
-                    addPage5 = true;
-                    addComponents();
-                }
-            }
-        });
-        
-        addNewGator = new JButton("Add New Gator");
-        addNewGator.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                start = false;
-                newGatorPage1 = true;
-                newGatorPage2 = false;
-                harvestPage1 = false;
-                harvestPage2 = false;
-                transferStart = false;
-                setUp = false;
-                addTo = false;
-                removeTo = false;
-                addPage1 = false;
-                addPage2 = false;
-                quit = false;
-                addComponents();
-            }
-        });
-        
-        transferGator = new JButton("Transfer Gator");
-        transferGator.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                start = false;
-                transferStart = true;
-                newGatorPage1 = false;
-                newGatorPage2 = false;
-                harvestPage1 = false;
-                harvestPage2 = false;
-                setUp = false;
-                addTo = false;
-                removeTo = false;
-                addPage1 = false;
-                addPage2 = false;
-                quit = false;
-                addComponents();
-            }
-        });
-        
-        harvestGator = new JButton("Harvest Gator");
-        harvestGator.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                start = false;
-                newGatorPage1 = false;
-                newGatorPage2 = false;
-                transferStart = false;
-                harvestPage1 = true;
-                harvestPage2 = false;
-                setUp = false;
-                addTo = false;
-                removeTo = false;
-                addPage1 = false;
-                addPage2 = false;
-                quit = false;
-                harvestLabel.setText("");
-                addComponents();
-            }
-        });
-        
-        quitButton = new JButton("Quit");
-        quitButton.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                start = false;
-                transferStart = false;
-                newGatorPage1 = false;
-                newGatorPage2 = false;
-                harvestPage1 = false;
-                harvestPage2 = false;
-                setUp = false;
-                addTo = false;
-                removeTo = false;
-                addPage1 = false;
-                addPage2 = false;
-                quit = true;
-                addComponents();
-            }
-        });
-        
-        setUpDatabase = new JButton("Set Up Database");
-        setUpDatabase.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                start = false;
-                transferStart = false;
-                newGatorPage1 = false;
-                newGatorPage2 = false;
-                harvestPage1 = false;
-                harvestPage2 = false;
-                setUp = true;
-                addTo = false;
-                removeTo = false;
-                addPage1 = false;
-                addPage2 = false;
-                quit = false;
-                addComponents();
-            }
-        });
-        
-        addToCage = new JButton("Add To Pen");
-        addToCage.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                start = false;
-                transferStart = false;
-                newGatorPage1 = false;
-                newGatorPage2 = false;
-                harvestPage1 = false;
-                harvestPage2 = false;
-                setUp = false;
-                addTo = true;
-                removeTo = false;
-                addPage1 = false;
-                addPage2 = false;
-                quit = false;
-                addComponents();
-            }
-        });
-        
-        removeToCage = new JButton("Remove To Pen");
-        removeToCage.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                start = false;
-                transferStart = false;
-                newGatorPage1 = false;
-                newGatorPage2 = false;
-                harvestPage1 = false;
-                harvestPage2 = false;
-                setUp = false;
-                addTo = false;
-                removeTo = true;
-                addPage1 = false;
-                addPage2 = false;
-                quit = false;
-                addComponents();
-            }
-        });
-        
-        addEntry = new JButton("Add Entry");
-        addEntry.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                start = false;
-                transferStart = false;
-                newGatorPage1 = false;
-                newGatorPage2 = false;
-                harvestPage1 = false;
-                harvestPage2 = false;
-                setUp = false;
-                addTo = false;
-                removeTo = false;
-                addPage1 = true;
-                addPage2 = false;
-                quit = false;
-                addComponents();
-            }
-        });
-        
-        back = new JButton("Back");
-        back.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                start = true;
-                transferStart = false;
-                newGatorPage1 = false;
-                newGatorPage2 = false;
-                harvestPage1 = false;
-                harvestPage2 = false;
-                setUp = false;
-                addTo = false;
-                removeTo = false;
-                addPage1 = false;
-                addPage2 = false;
-                quit = false;
-                addComponents();
-            }
-        });
-        
-        cancel = new JButton("Cancel");
-        cancel.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                start = false;
-                transferStart = true;
-                newGatorPage1 = false;
-                newGatorPage2 = false;
-                harvestPage1 = false;
-                harvestPage2 = false;
-                setUp = false;
-                addTo = false;
-                removeTo = false;
-                addPage1 = false;
-                addPage2 = false;
-                addPage3 = false;
-                addPage4 = false;
-                addPage5 = false;
-                quit = false;
-                addComponents();
-            }
-        });
-        
+        skip = new JButton("Skip Recording");      
+        addNewGator = new JButton("Add New Gator");    
+        transferGator = new JButton("Transfer Gator");      
+        harvestGator = new JButton("Harvest Gator");       
+        quitButton = new JButton("Quit");      
+        addToCage = new JButton("Add To Pen");      
+        removeToCage = new JButton("Remove To Pen");       
+        addEntry = new JButton("Add Entry");            
+        back = new JButton("Back");       
+        cancel = new JButton("Cancel");      
         confirm = new JButton("Confirm");
-        confirm.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                errorMessage = "";
-                
-                if (addTo)
-                {
-                    cageTaken = false;
-                    for (int i = 0; i < toCounter; i++)
-                    {
-                        if (cageList.getSelectedItem().toString().equals(toCages[i]))
-                        {
-                            cageTaken = true;
-                            i = toCounter;
-                        }
-                    }
-                    if (cageTaken)
-                    {
-                        errorMessage = "Pen taken";
-                    }
-                    else
-                    {
-                        String pen = cageList.getSelectedItem().toString();
-                        String classSize = "";
-                        
-                        try
-                        {
-                            IndexCursor cursor = CursorBuilder.createCursor(cageTable.getIndex("PenNumberIndex"));                            
-                            cursor.beforeFirst();
-                            cursor.findFirstRow(Collections.singletonMap("Pen Number", pen));
-                            Row latestRow = cursor.getCurrentRow();
-                            while (cursor.findNextRow(Collections.singletonMap("Pen Number", pen)))
-                            {
-                                Row row = cursor.getCurrentRow();
-                                if (row != null)
-                                {
-                                    latestRow = row;
-                                }
-                            }
-                            classSize = latestRow.get("Size Class").toString();
-                        }
-                        catch (IOException e1)
-                        {      
-                        }
-                        if (classSize.equals("Empty"))
-                        {
-                            errorMessage = "Cannot transfer to designated empty pen";
-                        }
-                        else if (classSize.equals("Hatchling") || classSize.equals("Family"))
-                        {
-                            toCages[toCounter] = pen;
-                            toLowerBounds[toCounter] = 0;
-                            toUpperBounds[toCounter] = 0;
-                            toClassSizes[toCounter] = classSize;
-                            capacities[toCounter] = Integer.parseInt(input.getText());
-                            capacityCounters[toCounter] = 0;
-                            hasToCage = true;
-                            toCounter++;
-                        }
-                        else if (classSize.equals("39+"))
-                        {
-                            toCages[toCounter] = pen;
-                            toLowerBounds[toCounter] = 39;
-                            toUpperBounds[toCounter] = 46;
-                            toClassSizes[toCounter] = classSize;
-                            capacities[toCounter] = Integer.parseInt(input.getText());
-                            capacityCounters[toCounter] = 0;
-                            hasToCage = true;
-                            toCounter++;
-                        }
-                        else
-                        {
-                            int index = classSize.indexOf('-');
-                            toCages[toCounter] = pen;
-                            toLowerBounds[toCounter] = Integer.parseInt(classSize.substring(0, index));
-                            toUpperBounds[toCounter] = Integer.parseInt(classSize.substring(index+1));
-                            toClassSizes[toCounter] = classSize;
-                            capacities[toCounter] = Integer.parseInt(input.getText());
-                            capacityCounters[toCounter] = 0;
-                            hasToCage = true;
-                            toCounter++;
-                        }
-                    }   
-                }
-                else if (addPage5)
-                {
-                    fromCount++;
-                    try
-                    {
-                        if (previousRow != null)
-                        {
-                            String lengthEntry;
-                            if (!skipLength)
-                            {
-                                lengthEntry = "" + length;
-                            }
-                            else
-                            {
-                                lengthEntry = previousRow.get("Length").toString();
-                            }
-                            String weightEntry;
-                            if (!skipWeight)
-                            {
-                                weightEntry = "" + weight;
-                            }
-                            else
-                            {
-                                weightEntry = previousRow.get("Weight").toString();
-                            }
-                            
-                            gatorTable.addRow(0, tag, previousRow.get("Egg Nest Location"), previousRow.get("Egg Nest Condition"), previousRow.get("Egg Collection Date"), previousRow.get("Hatch Year"), previousRow.get("Gender"), previousRow.get("Umbilical"), currentDate, fromCage, toCage, bellySize, lengthEntry, weightEntry, isFormula, experimentalCode.getText(), isVaccinated, comments.getText(), "");
-                        }
-                        else
-                        {
-                            String lengthEntry = "";
-                            if (!skipLength)
-                            {
-                                lengthEntry = lengthEntry + length;
-                            }
-                            String weightEntry = "";
-                            if (!skipWeight)
-                            {
-                                weightEntry = weightEntry + weight;
-                            }
-                            
-                            gatorTable.addRow(0, tag, "", "", "", "", "", "", currentDate, fromCage, toCage, bellySize, lengthEntry, weightEntry, isFormula, experimentalCode.getText(), isVaccinated, comments.getText(), "");
-                        }
-                        IndexCursor cursor = CursorBuilder.createCursor(gatorTable.getIndex("IDIndex"));
-                        cursor.beforeFirst();
-                        for(Map<String,Object> row : cursor)
-                        {
- 
-                        }
-                    }
-                    catch (IOException e1)
-                    {    
-                    }
-                    if (toCageIndex != -1)
-                    {
-                        capacityCounters[toCageIndex]++;
-                    }
-                    if(toCageIndex != -1 && capacities[toCageIndex] == capacityCounters[toCageIndex])
-                    {
-                        cagesAtCapacity[cagesAtCapacityCounter] = toCages[toCageIndex];
-                        cagesAtCapacityAmount[cagesAtCapacityCounter] = capacities[toCageIndex];
-                        cagesAtCapacityRange[cagesAtCapacityCounter] = toLowerBounds[toCageIndex] + "-" + toUpperBounds[toCageIndex];
-                        cagesAtCapacityCounter++;
-                        toCages[toCageIndex] = null;
-                        toLowerBounds[toCageIndex] = 0;
-                        toUpperBounds[toCageIndex] = 0;
-                        toClassSizes[toCageIndex] = null;
-                        capacities[toCageIndex] = 0;
-                        capacityCounters[toCageIndex] = 0;
-                            
-                        toCages = stringShift(toCages);
-                        toLowerBounds = intShift(toLowerBounds);
-                        toUpperBounds = intShift(toUpperBounds);
-                        toClassSizes = stringShift(toClassSizes);
-                        capacities = intShift(capacities);
-                        capacityCounters = intShift(capacityCounters);
-                            
-                        toCounter--;
-                        if (toCounter == 0)
-                        {
-                            hasToCage = false;
-                        }
-                            
-                        errorMessage = "Capacity reached on Pen " + toCage;
-                        start = false;
-                        harvestPage1 = false;
-                        harvestPage2 = false;
-                        newGatorPage1 = false;
-                        newGatorPage2 = false;
-                        transferStart = false;
-                        setUp = false;
-                        addTo = false;
-                        removeTo = false;
-                        addPage1 = false;
-                        addPage2 = false;
-                        quit = false;
-                        addComponents();
-                    }
-                    
-                    toCage = "";
-                    toCageIndex = -1;
-                }
-                else if (newGatorPage2)
-                {
-                    try
-                    {
-                        gatorTable.addRow(0, tag, location.getText(), condition.getText(), collectionDate.getText(), currentDate.substring(6), gender.getSelectedItem().toString(), umbilical.getSelectedItem().toString(), currentDate, "", cageList.getSelectedItem().toString(), "", "", "", "", "", "", comments.getText(), "");
-                        for(Map<String,Object> row : CursorBuilder.createCursor(gatorTable.getIndex("IDIndex")))
-                        {
- 
-                        }
-                    }
-                    catch (IOException e1)
-                    {
-                        
-                    }
-                }
-                else if (harvestPage5)
-                {
-                    try
-                    {
-                        String lengthEntry;
-                        if (!skipLength)
-                        {
-                            lengthEntry = "" + length;
-                        }
-                        else
-                        {
-                            lengthEntry = previousRow.get("Length").toString();
-                        }
-                        String weightEntry;
-                        if (!skipWeight)
-                        {
-                            weightEntry = "" + weight;
-                        }
-                        else
-                        {
-                            weightEntry = previousRow.get("Weight").toString();
-                        }
-                        
-                        gatorTable.addRow(0, tag, previousRow.get("Egg Nest Location"), previousRow.get("Egg Nest Condition"), previousRow.get("Egg Collection Date"), previousRow.get("Hatch Year"), previousRow.get("Gender"), previousRow.get("Umbilical"), currentDate, fromCage, "", bellySize, lengthEntry, weightEntry, "", "", "", comments.getText(), "Yes");
-                        for(Map<String,Object> row : CursorBuilder.createCursor(gatorTable.getIndex("IDIndex")))
-                        {
- 
-                        }
-                    }
-                    catch (IOException e1)
-                    {
-                        
-                    }
-                }
-                
-                
-                if (!errorMessage.equals(""))
-                {
-                    transferStart = false;
-                    addPage1 = false;
-                    newGatorPage1 = false;
-                    harvestPage1 = false;
-                }
-                else if (addPage5)
-                {
-                    transferStart = false;
-                    addPage1 = true;
-                    newGatorPage1 = false;
-                    harvestPage1 = false;
-                }
-                else if (newGatorPage2)
-                {
-                    transferStart = false;
-                    addPage1 = false;
-                    newGatorPage1 = true;
-                    harvestPage1 = false;
-                }
-                else if (harvestPage5)
-                {
-                    transferStart = false;
-                    addPage1 = false;
-                    newGatorPage1 = false;
-                    harvestPage1 = true;
-                }
-                else
-                {
-                    transferStart = true;
-                    addPage1 = false;
-                    newGatorPage1 = false;
-                    harvestPage1 = false;
-                }
-                start = false;
-                newGatorPage2 = false;
-                harvestPage5 = false;
-                addTo = false;
-                removeTo = false;
-                addPage5 = false;
-                quit = false;
-                addComponents();
-            }
-        });
+        didVaccinate = new JButton("Yes");            
+        didNotVaccinate = new JButton("No"); 
+        didFormula = new JButton("Yes");     
+        didNotFormula = new JButton("No");
         
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        double w = screenSize.getWidth();
+        didNotVaccinate.setEnabled(false);
+        didNotFormula.setEnabled(false);
         
         cageList = new JComboBox();
-        for (int i = 0; i < cages.size(); i++)
+        for (String cage : cages)
         {
-            cageList.addItem(cages.get(i));
+            cageList.addItem(cage);
         }
         cageList.setEditable(false);
-        cageList.addPopupMenuListener(new PopupMenuListener()
-        {
-            public void popupMenuWillBecomeVisible(PopupMenuEvent e)
-            {
-                JComboBox comboBox = (JComboBox) e.getSource();
-                Object popup = comboBox.getUI().getAccessibleChild(comboBox, 0);
-                Component c = ((Container) popup).getComponent(0);
-                if (c instanceof JScrollPane)
-                {
-                    JScrollPane scrollpane = (JScrollPane) c;
-                    JScrollBar scrollBar = scrollpane.getVerticalScrollBar();
-                    Dimension scrollBarDim = new Dimension((int)(w / 48), scrollBar.getPreferredSize().height);
-                    scrollBar.setPreferredSize(scrollBarDim);
-                }
-            }
-            
-            public void popupMenuCanceled(PopupMenuEvent e)
-            {
-                if (setUp)
-                {
-                }
-                else if (addTo)
-                {
-                    cageTaken = false;
-                    for (int i = 0; i < toCounter; i++)
-                    {
-                        if (cageList.getSelectedItem().toString().equals(toCages[i]))
-                        {
-                            cageTaken = true;
-                            i = toCounter;
-                        }
-                    }
-                    confirm.setEnabled(!cageTaken && isInteger(input.getText()) && Integer.parseInt(input.getText()) > 0);
-                }
-            }
-            
-            public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
-            {
-                if (setUp)
-                {
-                }
-                else if (addTo)
-                {
-                    cageTaken = false;
-                    for (int i = 0; i < toCounter; i++)
-                    {
-                        if (cageList.getSelectedItem().toString().equals(toCages[i]))
-                        {
-                            cageTaken = true;
-                            i = toCounter;
-                        }
-                    }
-                    confirm.setEnabled(!cageTaken && isInteger(input.getText()) && Integer.parseInt(input.getText()) > 0);
-                }
-            }
-        });
         
-        input = new JTextField(10);
-        input.getDocument().addDocumentListener(new DocumentListener()
-        {
-            public void changedUpdate(DocumentEvent e)
-            {
-                warn();
-            }
-            public void removeUpdate(DocumentEvent e)
-            {
-                warn();
-            }
-            public void insertUpdate(DocumentEvent e)
-            {
-                warn();
-            }
-            public void warn()
-            {
-                confirm.setEnabled(!cageTaken && isInteger(input.getText()) && Integer.parseInt(input.getText()) > 0);
-            }
-        });
-        
-        location = new JTextField(10);
-        location.setFont(font1);
-        location.getDocument().addDocumentListener(new DocumentListener()
-        {
-            public void changedUpdate(DocumentEvent e)
-            {
-                warn();
-            }
-            public void removeUpdate(DocumentEvent e)
-            {
-                warn();
-            }
-            public void insertUpdate(DocumentEvent e)
-            {
-                warn();
-            }
-            public void warn()
-            {
-                
-            }
-        });
-        
-        condition = new JTextField(10);
-        condition.setFont(font1);
-        condition.getDocument().addDocumentListener(new DocumentListener()
-        {
-            public void changedUpdate(DocumentEvent e)
-            {
-                warn();
-            }
-            public void removeUpdate(DocumentEvent e)
-            {
-                warn();
-            }
-            public void insertUpdate(DocumentEvent e)
-            {
-                warn();
-            }
-            public void warn()
-            {
-                
-            }
-        });
-        
-        collectionDate = new JTextField(10);
-        collectionDate.setFont(font1);
-        collectionDate.getDocument().addDocumentListener(new DocumentListener()
-        {
-            public void changedUpdate(DocumentEvent e)
-            {
-                warn();
-            }
-            public void removeUpdate(DocumentEvent e)
-            {
-                warn();
-            }
-            public void insertUpdate(DocumentEvent e)
-            {
-                warn();
-            }
-            public void warn()
-            {
-                
-            }
-        });
-        
+        input = new JTextField(10);      
+        location = new JTextField(10);       
+        condition = new JTextField(10);      
+        collectionDate = new JTextField(10);       
         experimentalCode = new JTextField(10);
+        comments = new JTextField(10);
+        
+        input.setFont(font1);
+        location.setFont(font1);
+        condition.setFont(font1);
+        collectionDate.setFont(font1);
         experimentalCode.setFont(font1);
-        experimentalCode.getDocument().addDocumentListener(new DocumentListener()
-        {
-            public void changedUpdate(DocumentEvent e)
-            {
-                warn();
-            }
-            public void removeUpdate(DocumentEvent e)
-            {
-                warn();
-            }
-            public void insertUpdate(DocumentEvent e)
-            {
-                warn();
-            }
-            public void warn()
-            {
-                
-            }
-        });
-        
-        didVaccinate = new JButton("Yes");
-        didVaccinate.setEnabled(true);
-        didVaccinate.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                isVaccinated = true;
-                didVaccinate.setEnabled(false);
-                didNotVaccinate.setEnabled(true);
-            }
-        });
-        
-        didNotVaccinate = new JButton("No");
-        didNotVaccinate.setEnabled(false);
-        didNotVaccinate.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                isVaccinated = false;
-                didVaccinate.setEnabled(true);
-                didNotVaccinate.setEnabled(false);
-            }
-        });
-        
-        didFormula = new JButton("Yes");
-        didFormula.setEnabled(true);
-        didFormula.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                isFormula = true;
-                didFormula.setEnabled(false);
-                didNotFormula.setEnabled(true);
-            }
-        });
-        
-        didNotFormula = new JButton("No");
-        didNotFormula.setEnabled(false);
-        didNotFormula.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                isFormula = false;
-                didFormula.setEnabled(true);
-                didNotFormula.setEnabled(false);
-            }
-        });
+        comments.setFont(font1);
         
         String[] genderList = {"Female", "Male"};
-        gender = new JComboBox(genderList);
-        
         String[] umbilicalList = {"Y", "N"};
+        
+        gender = new JComboBox(genderList);
         umbilical = new JComboBox(umbilicalList);
         
-        comments = new JTextField(10);
-        comments.setFont(font1);
+        gender.setEditable(false);
+        umbilical.setEditable(false);
     }
     
     public void addComponents()
@@ -1281,7 +480,6 @@ public class Application extends JFrame implements SerialPortEventListener
             Panel panel3 = new Panel(new FlowLayout());
             JLabel tempLabel = new JLabel("Scan Microchip");
             tempLabel.setFont(font1);
-            harvestLabel.setFont(font1);
             back.setPreferredSize(size);
             back.setFont(font1);
             panel2.add(back);
@@ -1398,7 +596,6 @@ public class Application extends JFrame implements SerialPortEventListener
             panel.setLayout(new FlowLayout());
             
             addEntry.setEnabled(hasToCage);
-            setUpDatabase.setFont(font2);
             addToCage.setFont(font2);
             removeToCage.setFont(font2);
             addEntry.setFont(font2);
@@ -1406,7 +603,6 @@ public class Application extends JFrame implements SerialPortEventListener
             
             Dimension size = new Dimension((int)(width/6), (int)(height/4));
             
-            setUpDatabase.setPreferredSize(size);
             addToCage.setPreferredSize(size);
             removeToCage.setPreferredSize(size);
             addEntry.setPreferredSize(size);
@@ -1414,39 +610,8 @@ public class Application extends JFrame implements SerialPortEventListener
             
             panel.add(addEntry);
             panel.add(addToCage);
-            //panel.add(setUpDatabase);
             panel.add(removeToCage);
             panel.add(back);
-        }
-        else if (setUp)
-        {
-            Dimension size = new Dimension((int)(width/8), (int)(height/10));
-            
-            panel.setLayout(new BorderLayout());
-            Panel panel2 = new Panel(new BorderLayout());
-            Panel panel4 = new Panel(new FlowLayout());
-            Panel panel5 = new Panel(new FlowLayout());
-            Panel panel6 = new Panel(new FlowLayout());
-
-            label3.setText("From Pen?");
-            label3.setFont(font1);
-            cageList.setPreferredSize(size);
-            cageList.setFont(font1);
-            confirm.setPreferredSize(size);
-            confirm.setFont(font1);
-            
-            confirm.setEnabled(!cageTaken);
-            
-            cancel.setPreferredSize(size);
-            cancel.setFont(font1);
-            panel5.add(label3);
-            panel5.add(cageList);
-            panel4.add(cancel);
-            panel4.add(confirm);
-            panel2.add(panel5, BorderLayout.NORTH);
-            panel2.add(panel4, BorderLayout.CENTER);
-            panel.add(panel6, BorderLayout.NORTH);
-            panel.add(panel2, BorderLayout.SOUTH);
         }
         else if (addTo)
         {
@@ -1454,10 +619,8 @@ public class Application extends JFrame implements SerialPortEventListener
             
             panel.setLayout(new BorderLayout());
             Panel panel2 = new Panel(new BorderLayout());
-            Panel panel3 = new Panel(new FlowLayout());
             Panel panel4 = new Panel(new FlowLayout());
             Panel panel5 = new Panel(new FlowLayout());
-            Panel panel6 = new Panel(new FlowLayout());
             Panel panel7 = new Panel(new FlowLayout());
 
             cageList.setPreferredSize(size);
@@ -1503,44 +666,40 @@ public class Application extends JFrame implements SerialPortEventListener
                 panel2.add(label);
                 
                 button = new JButton("Remove Pen " + toCages[i]);
-                button.addActionListener(new ActionListener()
-                {
-                    public void actionPerformed(ActionEvent e)
+                button.addActionListener(e -> {
+                    String temp = ((JButton) e.getSource()).getText();
+                    int index = temp.indexOf(' ');
+                    int index2 = temp.indexOf(" ", index+1);
+                    String cage = temp.substring(index2+1);
+                    for (int j = 0; j < toCounter; j++)
                     {
-                        String temp = ((JButton) e.getSource()).getText();
-                        int index = temp.indexOf(' ');
-                        int index2 = temp.indexOf(" ", index+1);
-                        String cage = temp.substring(index2+1);
-                        for (int i = 0; i < toCounter; i++)
+                        if (cage.equals(toCages[j]))
                         {
-                            if (cage.equals(toCages[i]))
-                            {
-                                index = i;
-                                i = toCounter;
-                            }
+                            index = j;
+                            j = toCounter;
                         }
-                        
-                        toCages[index] = null;
-                        toLowerBounds[index] = 0;
-                        toUpperBounds[index] = 0;
-                        toClassSizes[index] = null;
-                        capacities[index] = 0;
-                        capacityCounters[index] = 0;
-                            
-                        toCages = stringShift(toCages);
-                        toLowerBounds = intShift(toLowerBounds);
-                        toUpperBounds = intShift(toUpperBounds);
-                        toClassSizes= stringShift(toClassSizes);
-                        capacities = intShift(capacities);
-                        capacityCounters = intShift(capacityCounters);
-                            
-                        toCounter--;
-                        if (toCounter == 0)
-                        {
-                            hasToCage = false;
-                        }
-                        addComponents();
                     }
+                        
+                    toCages[index] = null;
+                    toLowerBounds[index] = 0;
+                    toUpperBounds[index] = 0;
+                    toClassSizes[index] = null;
+                    capacities[index] = 0;
+                    capacityCounters[index] = 0;
+                            
+                    toCages = stringShift(toCages);
+                    toLowerBounds = intShift(toLowerBounds);
+                    toUpperBounds = intShift(toUpperBounds);
+                    toClassSizes= stringShift(toClassSizes);
+                    capacities = intShift(capacities);
+                    capacityCounters = intShift(capacityCounters);
+                            
+                    toCounter--;
+                    if (toCounter == 0)
+                    {
+                        hasToCage = false;
+                    }
+                    addComponents();
                 });
                 button.setPreferredSize(size);
                 button.setFont(font2);
@@ -1850,10 +1009,8 @@ public class Application extends JFrame implements SerialPortEventListener
         }
         else if (quit)
         {            
-            try
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File("Pen" + fromCage + "_Birth" + fromYear + "_" + currentDate + "_log.txt")));)
             {
-                outputFile = new File("Pen" + fromCage + "_Birth" + fromYear + "_" + currentDate + "_log.txt");
-                BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
                 writer.write("From Pen: " + fromCage + "\r\n\tTotal: " + fromCount + "\r\n\tYear: " + fromYear + "\r\n\tClass: " + fromClass + "\r\n");
                 for (int i = 0; i < cagesAtCapacityCounter; i++)
                 {
@@ -1913,25 +1070,21 @@ public class Application extends JFrame implements SerialPortEventListener
             JButton tempButton = new JButton("Back");
             tempButton.setPreferredSize(size);
             tempButton.setFont(font1);
-            tempButton.addActionListener(new ActionListener()
-            {
-                public void actionPerformed(ActionEvent e)
-                {
-                    start = false;
-                    transferStart = true;
-                    newGatorPage1 = false;
-                    newGatorPage2 = false;
-                    harvestPage1 = false;
-                    harvestPage2 = false;
-                    setUp = false;
-                    addTo = false;
-                    removeTo = false;
-                    addPage1 = false;
-                    addPage2 = false;
-                    quit = false;
-                    addComponents();
-                    frame2.dispose();
-                }
+            tempButton.addActionListener(e -> {
+                start = false;
+                transferStart = true;
+                newGatorPage1 = false;
+                newGatorPage2 = false;
+                harvestPage1 = false;
+                harvestPage2 = false;
+                setUp = false;
+                addTo = false;
+                removeTo = false;
+                addPage1 = false;
+                addPage2 = false;
+                quit = false;
+                addComponents();
+                frame2.dispose();
             });
             
             tempPanel.add(tempLabel);
@@ -1954,7 +1107,9 @@ public class Application extends JFrame implements SerialPortEventListener
     
     public static void createAndShowGUI()
     {
-        frame = new Application();     
+        frame = new Application();
+        frame.addListeners();
+        frame.initializeButtonArray();
         frame.initialize();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Rectangle rect = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
@@ -2064,7 +1219,6 @@ public class Application extends JFrame implements SerialPortEventListener
             serialPort.setSerialPortParams(9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
 
             serialInput = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
-            serialOutput = serialPort.getOutputStream();
 
             serialPort.addEventListener(this);
             serialPort.notifyOnDataAvailable(true);
@@ -2084,9 +1238,10 @@ public class Application extends JFrame implements SerialPortEventListener
         }
     }
     
+    @Override
     public synchronized void serialEvent(SerialPortEvent oEvent)
     {
-        String temp = "";
+        String temp;
 	if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE)
         {
             try
@@ -2173,6 +1328,647 @@ public class Application extends JFrame implements SerialPortEventListener
             {
                 System.err.println(e.toString());
             }
+        }
+    }
+    
+    public void addListeners()
+    {
+        skip.addActionListener(e -> {
+            if (addPage3)
+            {
+                skipLength = true;
+                addPage4 = true;
+                addPage3 = false;
+                addComponents();
+            }
+            else if (addPage4)
+            {
+                skipWeight = true;
+                addPage4 = false;
+                addPage5 = true;
+                addComponents();
+            }
+        });
+        
+        addNewGator.addActionListener(e -> {
+            start = false;
+            newGatorPage1 = true;
+            newGatorPage2 = false;
+            harvestPage1 = false;
+            harvestPage2 = false;
+            transferStart = false;
+            setUp = false;
+            addTo = false;
+            removeTo = false;
+            addPage1 = false;
+            addPage2 = false;
+            quit = false;
+            addComponents();
+        });
+        
+        transferGator.addActionListener(e -> {
+            start = false;
+            transferStart = true;
+            newGatorPage1 = false;
+            newGatorPage2 = false;
+            harvestPage1 = false;
+            harvestPage2 = false;
+            setUp = false;
+            addTo = false;
+            removeTo = false;
+            addPage1 = false;
+            addPage2 = false;
+            quit = false;
+            addComponents();
+        });
+        
+        harvestGator.addActionListener(e -> {
+            start = false;
+            newGatorPage1 = false;
+            newGatorPage2 = false;
+            transferStart = false;
+            harvestPage1 = true;
+            harvestPage2 = false;
+            setUp = false;
+            addTo = false;
+            removeTo = false;
+            addPage1 = false;
+            addPage2 = false;
+            quit = false;
+            addComponents();
+        });
+        
+        quitButton.addActionListener(e -> {
+            start = false;
+            transferStart = false;
+            newGatorPage1 = false;
+            newGatorPage2 = false;
+            harvestPage1 = false;
+            harvestPage2 = false;
+            setUp = false;
+            addTo = false;
+            removeTo = false;
+            addPage1 = false;
+            addPage2 = false;
+            quit = true;
+            addComponents();
+        });
+        
+        addToCage.addActionListener(e -> {
+            start = false;
+            transferStart = false;
+            newGatorPage1 = false;
+            newGatorPage2 = false;
+            harvestPage1 = false;
+            harvestPage2 = false;
+            setUp = false;
+            addTo = true;
+            removeTo = false;
+            addPage1 = false;
+            addPage2 = false;
+            quit = false;
+            addComponents();
+        });
+        
+        removeToCage.addActionListener(e -> {
+            start = false;
+            transferStart = false;
+            newGatorPage1 = false;
+            newGatorPage2 = false;
+            harvestPage1 = false;
+            harvestPage2 = false;
+            setUp = false;
+            addTo = false;
+            removeTo = true;
+            addPage1 = false;
+            addPage2 = false;
+            quit = false;
+            addComponents();
+        });
+        
+        addEntry.addActionListener(e -> {
+            start = false;
+            transferStart = false;
+            newGatorPage1 = false;
+            newGatorPage2 = false;
+            harvestPage1 = false;
+            harvestPage2 = false;
+            setUp = false;
+            addTo = false;
+            removeTo = false;
+            addPage1 = true;
+            addPage2 = false;
+            quit = false;
+            addComponents();
+        });
+        
+        back.addActionListener(e -> {
+            start = true;
+            transferStart = false;
+            newGatorPage1 = false;
+            newGatorPage2 = false;
+            harvestPage1 = false;
+            harvestPage2 = false;
+            setUp = false;
+            addTo = false;
+            removeTo = false;
+            addPage1 = false;
+            addPage2 = false;
+            quit = false;
+            addComponents();
+        });
+        
+        cancel.addActionListener(e -> {
+            start = false;
+            transferStart = true;
+            newGatorPage1 = false;
+            newGatorPage2 = false;
+            harvestPage1 = false;
+            harvestPage2 = false;
+            setUp = false;
+            addTo = false;
+            removeTo = false;
+            addPage1 = false;
+            addPage2 = false;
+            addPage3 = false;
+            addPage4 = false;
+            addPage5 = false;
+            quit = false;
+            addComponents();
+        });
+        
+        confirm.addActionListener(e -> {
+            errorMessage = "";  
+            if (addTo)
+            {
+                cageTaken = false;
+                for (int i = 0; i < toCounter; i++)
+                {
+                    if (cageList.getSelectedItem().toString().equals(toCages[i]))
+                    {
+                        cageTaken = true;
+                        i = toCounter;
+                    }
+                }
+                if (cageTaken)
+                {
+                    errorMessage = "Pen taken";
+                }
+                else
+                {
+                    String pen = cageList.getSelectedItem().toString();
+                    String classSize = "";
+                        
+                    try
+                    {
+                        IndexCursor cursor = CursorBuilder.createCursor(cageTable.getIndex("PenNumberIndex"));                            
+                        cursor.beforeFirst();
+                        cursor.findFirstRow(Collections.singletonMap("Pen Number", pen));
+                        Row latestRow = cursor.getCurrentRow();
+                        while (cursor.findNextRow(Collections.singletonMap("Pen Number", pen)))
+                        {
+                            Row row = cursor.getCurrentRow();
+                            if (row != null)
+                            {
+                                latestRow = row;
+                            }
+                        }
+                        classSize = latestRow.get("Size Class").toString();
+                    }
+                    catch (IOException e1)
+                    {      
+                    }
+                    if (classSize.equals("Empty"))
+                    {
+                        errorMessage = "Cannot transfer to designated empty pen";
+                    }
+                    else if (classSize.equals("Hatchling") || classSize.equals("Family"))
+                    {
+                        toCages[toCounter] = pen;
+                        toLowerBounds[toCounter] = 0;
+                        toUpperBounds[toCounter] = 0;
+                        toClassSizes[toCounter] = classSize;
+                        capacities[toCounter] = Integer.parseInt(input.getText());
+                        capacityCounters[toCounter] = 0;
+                        hasToCage = true;
+                        toCounter++;
+                    }
+                    else if (classSize.equals("39+"))
+                    {
+                        toCages[toCounter] = pen;
+                        toLowerBounds[toCounter] = 39;
+                        toUpperBounds[toCounter] = 46;
+                        toClassSizes[toCounter] = classSize;
+                        capacities[toCounter] = Integer.parseInt(input.getText());
+                        capacityCounters[toCounter] = 0;
+                        hasToCage = true;
+                        toCounter++;
+                    }
+                    else
+                    {
+                        int index = classSize.indexOf('-');
+                        toCages[toCounter] = pen;
+                        toLowerBounds[toCounter] = Integer.parseInt(classSize.substring(0, index));
+                        toUpperBounds[toCounter] = Integer.parseInt(classSize.substring(index+1));
+                        toClassSizes[toCounter] = classSize;
+                        capacities[toCounter] = Integer.parseInt(input.getText());
+                        capacityCounters[toCounter] = 0;
+                        hasToCage = true;
+                        toCounter++;
+                    }
+                }   
+            }
+            else if (addPage5)
+            {
+                fromCount++;
+                try
+                {
+                    if (previousRow != null)
+                    {
+                        String lengthEntry;
+                        if (!skipLength)
+                        {
+                            lengthEntry = "" + length;
+                        }
+                        else
+                        {
+                            lengthEntry = previousRow.get("Length").toString();
+                        }
+                        String weightEntry;
+                        if (!skipWeight)
+                        {
+                            weightEntry = "" + weight;
+                        }
+                        else
+                        {
+                            weightEntry = previousRow.get("Weight").toString();
+                        }
+                            
+                        gatorTable.addRow(0, tag, previousRow.get("Egg Nest Location"), previousRow.get("Egg Nest Condition"), previousRow.get("Egg Collection Date"), previousRow.get("Hatch Year"), previousRow.get("Gender"), previousRow.get("Umbilical"), currentDate, fromCage, toCage, bellySize, lengthEntry, weightEntry, isFormula, experimentalCode.getText(), isVaccinated, comments.getText(), "");
+                    }
+                    else
+                    {
+                        String lengthEntry = "";
+                        if (!skipLength)
+                        {
+                            lengthEntry = lengthEntry + length;
+                        }
+                        String weightEntry = "";
+                        if (!skipWeight)
+                        {
+                            weightEntry = weightEntry + weight;
+                        }
+                            
+                        gatorTable.addRow(0, tag, "", "", "", "", "", "", currentDate, fromCage, toCage, bellySize, lengthEntry, weightEntry, isFormula, experimentalCode.getText(), isVaccinated, comments.getText(), "");
+                    }
+                    IndexCursor cursor = CursorBuilder.createCursor(gatorTable.getIndex("IDIndex"));
+                    cursor.beforeFirst();
+                    for(Map<String,Object> row : cursor)
+                    {
+ 
+                    }
+                }
+                catch (IOException e1)
+                {    
+                }
+                if (toCageIndex != -1)
+                {
+                    capacityCounters[toCageIndex]++;
+                }
+                if(toCageIndex != -1 && capacities[toCageIndex] == capacityCounters[toCageIndex])
+                {
+                    cagesAtCapacity[cagesAtCapacityCounter] = toCages[toCageIndex];
+                    cagesAtCapacityAmount[cagesAtCapacityCounter] = capacities[toCageIndex];
+                    cagesAtCapacityRange[cagesAtCapacityCounter] = toLowerBounds[toCageIndex] + "-" + toUpperBounds[toCageIndex];
+                    cagesAtCapacityCounter++;
+                    toCages[toCageIndex] = null;
+                    toLowerBounds[toCageIndex] = 0;
+                    toUpperBounds[toCageIndex] = 0;
+                    toClassSizes[toCageIndex] = null;
+                    capacities[toCageIndex] = 0;
+                    capacityCounters[toCageIndex] = 0;
+                            
+                    toCages = stringShift(toCages);
+                    toLowerBounds = intShift(toLowerBounds);
+                    toUpperBounds = intShift(toUpperBounds);
+                    toClassSizes = stringShift(toClassSizes);
+                    capacities = intShift(capacities);
+                    capacityCounters = intShift(capacityCounters);
+                            
+                    toCounter--;
+                    if (toCounter == 0)
+                    {
+                        hasToCage = false;
+                    }
+                            
+                    errorMessage = "Capacity reached on Pen " + toCage;
+                    start = false;
+                    harvestPage1 = false;
+                    harvestPage2 = false;
+                    newGatorPage1 = false;
+                    newGatorPage2 = false;
+                    transferStart = false;
+                    setUp = false;
+                    addTo = false;
+                    removeTo = false;
+                    addPage1 = false;
+                    addPage2 = false;
+                    quit = false;
+                    addComponents();
+                }
+                    
+                toCage = "";
+                toCageIndex = -1;
+            }
+            else if (newGatorPage2)
+            {
+                try
+                {
+                    gatorTable.addRow(0, tag, location.getText(), condition.getText(), collectionDate.getText(), currentDate.substring(6), gender.getSelectedItem().toString(), umbilical.getSelectedItem().toString(), currentDate, "", cageList.getSelectedItem().toString(), "", "", "", "", "", "", comments.getText(), "");
+                    for(Map<String,Object> row : CursorBuilder.createCursor(gatorTable.getIndex("IDIndex")))
+                    {
+ 
+                    }
+                }
+                catch (IOException e1)
+                {
+                        
+                }
+            }
+            else if (harvestPage5)
+            {
+                try
+                {
+                    String lengthEntry;
+                    if (!skipLength)
+                    {
+                        lengthEntry = "" + length;
+                    }
+                    else
+                    {
+                        lengthEntry = previousRow.get("Length").toString();
+                    }
+                    String weightEntry;
+                    if (!skipWeight)
+                    {
+                        weightEntry = "" + weight;
+                    }
+                    else
+                    {
+                        weightEntry = previousRow.get("Weight").toString();
+                    }
+                        
+                    gatorTable.addRow(0, tag, previousRow.get("Egg Nest Location"), previousRow.get("Egg Nest Condition"), previousRow.get("Egg Collection Date"), previousRow.get("Hatch Year"), previousRow.get("Gender"), previousRow.get("Umbilical"), currentDate, fromCage, "", bellySize, lengthEntry, weightEntry, "", "", "", comments.getText(), "Yes");
+                    for(Map<String,Object> row : CursorBuilder.createCursor(gatorTable.getIndex("IDIndex")))
+                    {
+ 
+                    }
+                }
+                catch (IOException e1)
+                {
+                        
+                }
+            }
+                
+                
+            if (!errorMessage.equals(""))
+            {
+                transferStart = false;
+                addPage1 = false;
+                newGatorPage1 = false;
+                harvestPage1 = false;
+            }
+            else if (addPage5)
+            {
+                transferStart = false;
+                addPage1 = true;
+                newGatorPage1 = false;
+                harvestPage1 = false;
+            }
+            else if (newGatorPage2)
+            {
+                transferStart = false;
+                addPage1 = false;
+                newGatorPage1 = true;
+                harvestPage1 = false;
+            }
+            else if (harvestPage5)
+            {
+                transferStart = false;
+                addPage1 = false;
+                newGatorPage1 = false;
+                harvestPage1 = true;
+            }
+            else
+            {
+                transferStart = true;
+                addPage1 = false;
+                newGatorPage1 = false;
+                harvestPage1 = false;
+            }
+            start = false;
+            newGatorPage2 = false;
+            harvestPage5 = false;
+            addTo = false;
+            removeTo = false;
+            addPage5 = false;
+            quit = false;
+            addComponents();
+        });
+        
+        cageList.addPopupMenuListener(new PopupMenuListener()
+        {
+            @Override
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e)
+            {
+                JComboBox comboBox = (JComboBox) e.getSource();
+                Object popup = comboBox.getUI().getAccessibleChild(comboBox, 0);
+                Component c = ((Container) popup).getComponent(0);
+                if (c instanceof JScrollPane)
+                {
+                    JScrollPane scrollpane = (JScrollPane) c;
+                    JScrollBar scrollBar = scrollpane.getVerticalScrollBar();
+                    Dimension scrollBarDim = new Dimension((int)(width / 48), scrollBar.getPreferredSize().height);
+                    scrollBar.setPreferredSize(scrollBarDim);
+                }
+            }
+            
+            @Override
+            public void popupMenuCanceled(PopupMenuEvent e)
+            {
+                if (setUp)
+                {
+                }
+                else if (addTo)
+                {
+                    cageTaken = false;
+                    for (int i = 0; i < toCounter; i++)
+                    {
+                        if (cageList.getSelectedItem().toString().equals(toCages[i]))
+                        {
+                            cageTaken = true;
+                            i = toCounter;
+                        }
+                    }
+                    confirm.setEnabled(!cageTaken && isInteger(input.getText()) && Integer.parseInt(input.getText()) > 0);
+                }
+            }
+            
+            @Override
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
+            {
+                if (setUp)
+                {
+                }
+                else if (addTo)
+                {
+                    cageTaken = false;
+                    for (int i = 0; i < toCounter; i++)
+                    {
+                        if (cageList.getSelectedItem().toString().equals(toCages[i]))
+                        {
+                            cageTaken = true;
+                            i = toCounter;
+                        }
+                    }
+                    confirm.setEnabled(!cageTaken && isInteger(input.getText()) && Integer.parseInt(input.getText()) > 0);
+                }
+            }
+        });
+        
+        input.getDocument().addDocumentListener(new DocumentListener()
+        {
+            @Override
+            public void changedUpdate(DocumentEvent e)
+            {
+                check();
+            }
+            
+            @Override
+            public void removeUpdate(DocumentEvent e)
+            {
+                check();
+            }
+            
+            @Override
+            public void insertUpdate(DocumentEvent e)
+            {
+                check();
+            }
+            public void check()
+            {
+                confirm.setEnabled(!cageTaken && isInteger(input.getText()) && Integer.parseInt(input.getText()) > 0);
+            }
+        });
+        
+        didVaccinate.addActionListener(e -> {
+            isVaccinated = true;
+            didVaccinate.setEnabled(false);
+            didNotVaccinate.setEnabled(true);
+        });
+        
+        didNotVaccinate.addActionListener(e -> {
+            isVaccinated = false;
+            didVaccinate.setEnabled(true);
+            didNotVaccinate.setEnabled(false);
+        });
+        
+        didFormula.addActionListener(e -> {
+            isFormula = true;
+            didFormula.setEnabled(false);
+            didNotFormula.setEnabled(true);
+        });
+        
+        didNotFormula.addActionListener(e -> {
+            isFormula = false;
+            didFormula.setEnabled(true);
+            didNotFormula.setEnabled(false);
+        });
+    }
+    
+    public void initializeButtonArray()
+    {
+        for (int i = 0; i <= 200; i++)
+        {
+            JButton button = new JButton("" + i);
+            button.addActionListener(e -> {
+                String entry = ((JButton) e.getSource()).getText();
+                int number = Integer.parseInt(entry);
+                if (addPage2)
+                {
+                    bellySize = number;
+                    String classSize = "";
+                        
+                    for (int j = 0; j < toCounter; j++)
+                    {
+                        try
+                        {
+                            IndexCursor cursor = CursorBuilder.createCursor(cageTable.getIndex("PenNumberIndex"));                            
+                            cursor.beforeFirst();
+                            cursor.findFirstRow(Collections.singletonMap("Pen Number", toCages[j]));
+                            Row latestRow = cursor.getCurrentRow();
+                            while (cursor.findNextRow(Collections.singletonMap("Pen Number", toCages[j])))
+                            {
+                                Row row = cursor.getCurrentRow();
+                                if (row != null)
+                                {
+                                    latestRow = row;
+                                }
+                            }
+                            classSize = latestRow.get("Size Class").toString();
+                        }
+                        catch (IOException e1)
+                        {     
+                        }
+                        
+                        if (classSize.equals("Family") || (number >= toLowerBounds[j] && number <= toUpperBounds[j]) || (entry.equals("Hatchling") && classSize.equals("Hatchling")))
+                        {
+                            toCage = toCages[j];
+                            toCageIndex = j;
+                            j = toCounter;
+                        }
+                    }
+                    addPage2 = false;
+                    addPage3 = true;
+                    addComponents();
+                }
+                else if (addPage3)
+                {
+                    length = entry;
+                    addPage3 = false;
+                    addPage4 = true;
+                    addComponents();
+                }
+                else if (addPage4)
+                {
+                    weight = entry;
+                    addPage4 = false;
+                    addPage5 = true;
+                    addComponents();
+                }
+                else if (harvestPage2)
+                {
+                    bellySize = number;
+                    harvestPage2 = false;
+                    harvestPage3 = true;
+                    addComponents();
+                }
+                else if (harvestPage3)
+                {
+                    length = entry;
+                    harvestPage3 = false;
+                    harvestPage4 = true;
+                    addComponents();
+                }
+                else if (harvestPage4)
+                {
+                    weight = entry;
+                    harvestPage4 = false;
+                    harvestPage5 = true;
+                    addComponents();
+                }
+            });
+            numbers[i] = button;
         }
     }
 }
