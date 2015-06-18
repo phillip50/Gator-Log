@@ -19,25 +19,25 @@ public class ModifyWindow extends JFrame
     private Row row;
     private File cageFile;
     private Table cageTable;
-    private JTabbedPane tabbedPanel;
-    private JButton doChange;
-    private JButton doNotChange;
+    private final JTabbedPane tabbedPanel;
+    private final JButton doChange;
+    private final JButton doNotChange;
     private String waterChangeDate;
-    private JComboBox temperatures;
-    private JComboBox feeds;
-    private JTextField amount;
-    private JComboBox classes;
-    private JTextField comments;
-    private JButton confirm;
-    private JButton cancel;
-    private JLabel label1;
-    private JLabel label2;
-    private JLabel label3;
-    private JLabel label4;
-    private JLabel label5;
-    private JLabel label6;
-    private JLabel label7;
-    private JLabel label8;
+    private final JComboBox temperatures;
+    private final JComboBox feeds;
+    private final JTextField amount;
+    private final JComboBox classes;
+    private final JTextField comments;
+    private final JButton confirm;
+    private final JButton cancel;
+    private final JLabel label1;
+    private final JLabel label2;
+    private final JLabel label3;
+    private final JLabel label4;
+    private final JLabel label5;
+    private final JLabel label6;
+    private final JLabel label7;
+    private final JLabel label8;
     private Dimension screenSize;
     private boolean feedAmountValid;
     private Dimension size;
@@ -90,31 +90,11 @@ public class ModifyWindow extends JFrame
         doChange.setEnabled(true);
         doChange.setPreferredSize(size);
         doChange.setFont(font);
-        doChange.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                doNotChange.setEnabled(true);
-                doChange.setEnabled(false);
-                DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
-                Date date = new Date();
-                waterChangeDate = dateFormat.format(date);   
-            }
-        });
         
         doNotChange = new JButton("No");
         doNotChange.setEnabled(false);
         doNotChange.setPreferredSize(size);
         doNotChange.setFont(font);
-        doNotChange.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                doNotChange.setEnabled(false);
-                doChange.setEnabled(true);
-                waterChangeDate = row.get("Water Change Date").toString();  
-            }
-        });
         
         String[] temperatureList = new String[10];
         for (int i = 0; i < 10; i++)
@@ -126,32 +106,6 @@ public class ModifyWindow extends JFrame
         temperatures.setPrototypeDisplayValue("Any Additional Commen");
         temperatures.setFont(font);
         temperatures.setSelectedItem(row.get("Water Temperature"));
-        temperatures.addPopupMenuListener(new PopupMenuListener()
-        {
-            public void popupMenuWillBecomeVisible(PopupMenuEvent e)
-            {
-                JComboBox comboBox = (JComboBox) e.getSource();
-                Object popup = comboBox.getUI().getAccessibleChild(comboBox, 0);
-                Component c = ((Container) popup).getComponent(0);
-                if (c instanceof JScrollPane)
-                {
-                    JScrollPane scrollpane = (JScrollPane) c;
-                    JScrollBar scrollBar = scrollpane.getVerticalScrollBar();
-                    Dimension scrollBarDim = new Dimension((int)(width / 60), scrollBar.getPreferredSize().height);
-                    scrollBar.setPreferredSize(scrollBarDim);
-                }
-            }
-            
-            public void popupMenuCanceled(PopupMenuEvent e)
-            {
-                
-            }
-            
-            public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
-            {
-                
-            }
-        });
         
         String[] feedList = {"(R) - Regular", "(H) - Hatchling", "(I) - Intermediate"};
         feeds = new JComboBox(feedList);
@@ -159,43 +113,22 @@ public class ModifyWindow extends JFrame
         feeds.setPrototypeDisplayValue("Any Additional Commen");
         feeds.setPreferredSize(size);
         feeds.setFont(font);
-        if (row.get("Feed Type").toString().equals("R"))
-        {
-            feeds.setSelectedItem("(R) - Regular");
-        }
-        else if (row.get("Feed Type").toString().equals("H"))
-        {
-            feeds.setSelectedItem("(H) - Hatchling");
-        }
-        else
-        {
-            feeds.setSelectedItem("(I) - Intermediate");
-        }
         
+        switch (row.get("Feed Type").toString())
+        {
+            case "R":   feeds.setSelectedItem("(R) - Regular");
+                        break;
+                
+            case "H":   feeds.setSelectedItem("(H) - Hatchling");
+                        break;
+                
+            case "I":   feeds.setSelectedItem("(I) - Intermediate");
+                        break;
+        }
+
         amount = new JTextField(10);
         amount.setFont(font);
         amount.setText(row.get("Feed Amount").toString());
-        amount.getDocument().addDocumentListener(new DocumentListener()
-        {
-            public void changedUpdate(DocumentEvent e)
-            {
-                warn();
-            }
-            public void removeUpdate(DocumentEvent e)
-            {
-                warn();
-            }
-            public void insertUpdate(DocumentEvent e)
-            {
-                warn();
-            }
-
-            public void warn()
-            {
-                feedAmountValid = isInteger(amount.getText()) && Integer.parseInt(amount.getText()) >= 0;
-                confirm.setEnabled(feedAmountValid);
-            }
-        });
         
         String[] classList = {"Empty", "Hatchling", "Family", "15-18", "19-23", "24-28", "29-33", "34-36", "37-38", "39+"};
         classes = new JComboBox(classList);
@@ -203,32 +136,6 @@ public class ModifyWindow extends JFrame
         classes.setPrototypeDisplayValue("Any Additional Commen");
         classes.setFont(font);
         classes.setSelectedItem(row.get("Size Class"));
-        classes.addPopupMenuListener(new PopupMenuListener()
-        {
-            public void popupMenuWillBecomeVisible(PopupMenuEvent e)
-            {
-                JComboBox comboBox = (JComboBox) e.getSource();
-                Object popup = comboBox.getUI().getAccessibleChild(comboBox, 0);
-                Component c = ((Container) popup).getComponent(0);
-                if (c instanceof JScrollPane)
-                {
-                    JScrollPane scrollpane = (JScrollPane) c;
-                    JScrollBar scrollBar = scrollpane.getVerticalScrollBar();
-                    Dimension scrollBarDim = new Dimension((int)(width / 60), scrollBar.getPreferredSize().height);
-                    scrollBar.setPreferredSize(scrollBarDim);
-                }
-            }
-            
-            public void popupMenuCanceled(PopupMenuEvent e)
-            {
-                
-            }
-            
-            public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
-            {
-                
-            }
-        });
         
         comments = new JTextField(10);
         comments.setFont(font);
@@ -237,33 +144,11 @@ public class ModifyWindow extends JFrame
         confirm.setEnabled(true);
         confirm.setPreferredSize(size);
         confirm.setFont(font);
-        confirm.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {     
-                try
-                {
-                    cageTable.addRow(0, row.get("Pen Number"), row.get("Pen Type"), row.get("Square Footage"), row.get("Gator Count"), waterChangeDate, temperatures.getSelectedItem().toString(), feeds.getSelectedItem().toString().charAt(1), amount.getText(), classes.getSelectedItem().toString(), comments.getText());
-                }
-                catch (IOException e1)
-                {
-                    
-                }
-                frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
-            }
-        });
         
         cancel = new JButton("Cancel");
         cancel.setEnabled(true);
         cancel.setPreferredSize(size);
         cancel.setFont(font);
-        cancel.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
-            }
-        });
     }
     
     public void addComponents()
@@ -389,5 +274,125 @@ public class ModifyWindow extends JFrame
             }
 	}
 	return true;
+    }
+    
+    public void addListeners()
+    {
+        doChange.addActionListener(e -> {
+            doNotChange.setEnabled(true);
+            doChange.setEnabled(false);
+            DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+            Date date = new Date();
+            waterChangeDate = dateFormat.format(date);   
+        });
+        
+        doNotChange.addActionListener(e -> {
+            doNotChange.setEnabled(false);
+            doChange.setEnabled(true);
+            waterChangeDate = row.get("Water Change Date").toString();  
+        });
+        
+        temperatures.addPopupMenuListener(new PopupMenuListener()
+        {
+            @Override
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e)
+            {
+                JComboBox comboBox = (JComboBox) e.getSource();
+                Object popup = comboBox.getUI().getAccessibleChild(comboBox, 0);
+                Component c = ((Container) popup).getComponent(0);
+                if (c instanceof JScrollPane)
+                {
+                    JScrollPane scrollpane = (JScrollPane) c;
+                    JScrollBar scrollBar = scrollpane.getVerticalScrollBar();
+                    Dimension scrollBarDim = new Dimension((int)(width / 60), scrollBar.getPreferredSize().height);
+                    scrollBar.setPreferredSize(scrollBarDim);
+                }
+            }
+            
+            @Override
+            public void popupMenuCanceled(PopupMenuEvent e)
+            {
+                
+            }
+            
+            @Override
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
+            {
+                
+            }
+        });
+        
+        amount.getDocument().addDocumentListener(new DocumentListener()
+        {
+            @Override
+            public void changedUpdate(DocumentEvent e)
+            {
+                check();
+            }
+            
+            @Override
+            public void removeUpdate(DocumentEvent e)
+            {
+                check();
+            }
+            
+            @Override
+            public void insertUpdate(DocumentEvent e)
+            {
+                check();
+            }
+
+            public void check()
+            {
+                feedAmountValid = isInteger(amount.getText()) && Integer.parseInt(amount.getText()) >= 0;
+                confirm.setEnabled(feedAmountValid);
+            }
+        });
+        
+        classes.addPopupMenuListener(new PopupMenuListener()
+        {
+            @Override
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e)
+            {
+                JComboBox comboBox = (JComboBox) e.getSource();
+                Object popup = comboBox.getUI().getAccessibleChild(comboBox, 0);
+                Component c = ((Container) popup).getComponent(0);
+                if (c instanceof JScrollPane)
+                {
+                    JScrollPane scrollpane = (JScrollPane) c;
+                    JScrollBar scrollBar = scrollpane.getVerticalScrollBar();
+                    Dimension scrollBarDim = new Dimension((int)(width / 60), scrollBar.getPreferredSize().height);
+                    scrollBar.setPreferredSize(scrollBarDim);
+                }
+            }
+            
+            @Override
+            public void popupMenuCanceled(PopupMenuEvent e)
+            {
+                
+            }
+            
+            @Override
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
+            {
+                
+            }
+        });
+        
+        confirm.addActionListener(e -> {
+            try
+            {
+                cageTable.addRow(0, row.get("Pen Number"), row.get("Pen Type"), row.get("Square Footage"), row.get("Gator Count"), waterChangeDate, temperatures.getSelectedItem().toString(), feeds.getSelectedItem().toString().charAt(1), amount.getText(), classes.getSelectedItem().toString(), comments.getText());
+            }
+            catch (IOException e1)
+            {
+                    
+            }
+            frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+        });
+        
+        cancel.addActionListener(e -> {
+            frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+        });
     }
 }

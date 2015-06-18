@@ -2,7 +2,6 @@ package test;
 
 import javax.swing.*; 
 import java.awt.*;
-import java.awt.event.*;
 import com.healthmarketscience.jackcess.*;
 import java.io.*;
 import java.util.Collections;
@@ -11,7 +10,7 @@ import java.awt.Graphics;
 public class CageApplication extends JFrame
 {
     private static CageApplication frame;
-    private JButton[] cages;
+    private final JButton[] cages;
     private File file;
     private Table table;
     Image image;
@@ -29,11 +28,66 @@ public class CageApplication extends JFrame
         {      
         }
         
-        cages = new JButton[169];
+        cages = new JButton[169];      
+    }
+    
+    public void modifyWindow(Row row)
+    {
+        ModifyWindow modifyFrame = new ModifyWindow(row);
+        modifyFrame.setFrame(modifyFrame);
+        modifyFrame.addListeners();
+        modifyFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        Rectangle rect = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+        double length = rect.getHeight();
+        double width = rect.getWidth();
+        Dimension screenSize = new Dimension((int)width, (int)length - 50);
+        modifyFrame.getContentPane().setPreferredSize(screenSize);
+        modifyFrame.addComponents();
+        modifyFrame.pack();
+        modifyFrame.setLocationRelativeTo(null);
+        modifyFrame.setVisible(true);   
+    }
+    
+    public void addComponents()
+    {        
+        for (JButton cage : cages)
+        {
+            frame.add(cage);
+        }
+        validate();
+        setVisible(true);
+    }
+ 
+    public static void main(String[] args)
+    {
+        frame = new CageApplication();
+        frame.InitializeButtonArray();
+        frame.setContentPane(new JPanel()
+        {
+            Image image = Toolkit.getDefaultToolkit().createImage("farm.jpg");
+            @Override
+            public void paintComponent(Graphics g)
+            {
+                super.paintComponent(g);
+                g.drawImage(image, 0, 0, this);
+            }
+        });
+        frame.setLayout(null);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Dimension screenSize = new Dimension(780, 594);
+        frame.getContentPane().setPreferredSize(screenSize);
+        frame.addComponents();
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);   
+    }
+    
+    public void InitializeButtonArray()
+    {
         for (int i = 1; i < 170; i++)
         {
             JButton button;
-            String cageNumber = "";
+            String cageNumber;
             int x, y, xlength, ylength;
             if (i == 1)
             {
@@ -1231,39 +1285,22 @@ public class CageApplication extends JFrame
                               + "Click for expanded information and to modify pen"
                          + "</html>");
             
-            button.addActionListener(new ActionListener()
-            {
-                public void actionPerformed(ActionEvent e)
+            button.addActionListener(e -> {
+                IndexCursor cursor;
+                Row latestRow = null;
+                String penNumber = ((JButton) e.getSource()).getText();
+                try
                 {
-                    IndexCursor cursor;
-                    Row latestRow = null;
-                    String penNumber = ((JButton) e.getSource()).getText();
-                    try
+                    cursor = CursorBuilder.createCursor(table.getIndex("PenNumberIndex"));
+                    cursor.beforeFirst();
+                    if (penNumber.equals("227") || penNumber.equals("232") || penNumber.equals("410") || penNumber.equals("411") || penNumber.equals("420") || penNumber.equals("421"))
                     {
-                        cursor = CursorBuilder.createCursor(table.getIndex("PenNumberIndex"));
-                        cursor.beforeFirst();
-                        if (penNumber.equals("227") || penNumber.equals("232") || penNumber.equals("410") || penNumber.equals("411") || penNumber.equals("420") || penNumber.equals("421"))
+                        for (int j = 1; j <= 4; j++)
                         {
-                            for (int i = 1; i <= 4; i++)
-                            {
-                                cursor.beforeFirst();
-                                cursor.findFirstRow(Collections.singletonMap("Pen Number", penNumber + "." + i));
-                                latestRow = cursor.getCurrentRow();                         
-                                while (cursor.findNextRow(Collections.singletonMap("Pen Number", penNumber + "." + i)))
-                                {
-                                    Row row = cursor.getCurrentRow();
-                                    if (row != null)
-                                    {
-                                        latestRow = row;
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            cursor.findFirstRow(Collections.singletonMap("Pen Number", penNumber));
-                            latestRow = cursor.getCurrentRow();
-                            while (cursor.findNextRow(Collections.singletonMap("Pen Number", penNumber)))
+                            cursor.beforeFirst();
+                            cursor.findFirstRow(Collections.singletonMap("Pen Number", penNumber + "." + j));
+                            latestRow = cursor.getCurrentRow();                         
+                            while (cursor.findNextRow(Collections.singletonMap("Pen Number", penNumber + "." + j)))
                             {
                                 Row row = cursor.getCurrentRow();
                                 if (row != null)
@@ -1273,61 +1310,26 @@ public class CageApplication extends JFrame
                             }
                         }
                     }
-                    catch (IOException e1)
+                    else
                     {
+                        cursor.findFirstRow(Collections.singletonMap("Pen Number", penNumber));
+                        latestRow = cursor.getCurrentRow();
+                        while (cursor.findNextRow(Collections.singletonMap("Pen Number", penNumber)))
+                        {
+                            Row row = cursor.getCurrentRow();
+                            if (row != null)
+                            {
+                                latestRow = row;
+                            }
+                        }
                     }
-                    modifyWindow(latestRow);
                 }
+                catch (IOException e1)
+                {
+                }
+                modifyWindow(latestRow);
             });
             cages[i-1] = button;
-        }        
-    }
-    
-    public void modifyWindow(Row row)
-    {
-        ModifyWindow modifyFrame = new ModifyWindow(row);
-        modifyFrame.setFrame(modifyFrame);
-        modifyFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        Rectangle rect = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
-        double length = rect.getHeight();
-        double width = rect.getWidth();
-        Dimension screenSize = new Dimension((int)width, (int)length - 50);
-        modifyFrame.getContentPane().setPreferredSize(screenSize);
-        modifyFrame.addComponents();
-        modifyFrame.pack();
-        modifyFrame.setLocationRelativeTo(null);
-        modifyFrame.setVisible(true);   
-    }
-    
-    public void addComponents()
-    {        
-        for (int i = 0; i < cages.length; i++)
-        {
-            frame.add(cages[i]);
         }
-        validate();
-        setVisible(true);
     }
- 
-    public static void main(String[] args)
-    {
-        frame = new CageApplication();
-        frame.setContentPane(new JPanel()
-        {
-            Image image = Toolkit.getDefaultToolkit().createImage("farm.jpg");
-            public void paintComponent(Graphics g)
-            {
-                super.paintComponent(g);
-                g.drawImage(image, 0, 0, this);
-            }
-        });
-        frame.setLayout(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Dimension screenSize = new Dimension(780, 594);
-        frame.getContentPane().setPreferredSize(screenSize);
-        frame.addComponents();
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);   
-    }    
 }

@@ -7,11 +7,7 @@ import java.awt.event.*;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import com.healthmarketscience.jackcess.*;
-import gnu.io.CommPortIdentifier;
-import gnu.io.NoSuchPortException;
-import gnu.io.SerialPort;
-import gnu.io.SerialPortEvent;
-import gnu.io.SerialPortEventListener;
+import gnu.io.*;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -261,11 +257,7 @@ public class Application extends JFrame implements SerialPortEventListener
         didNotVaccinate.setEnabled(false);
         didNotFormula.setEnabled(false);
         
-        cageList = new JComboBox();
-        for (String cage : cages)
-        {
-            cageList.addItem(cage);
-        }
+        cageList = new JComboBox(cages.toArray());
         cageList.setEditable(false);
         
         input = new JTextField(10);      
@@ -1223,9 +1215,9 @@ public class Application extends JFrame implements SerialPortEventListener
             serialPort.addEventListener(this);
             serialPort.notifyOnDataAvailable(true);
         }
-        catch (Exception e)
+        catch (UnsupportedCommOperationException | PortInUseException | TooManyListenersException | IOException e)
         {
-            System.err.println(e.toString());
+ 
         }
     }
     
@@ -1538,43 +1530,42 @@ public class Application extends JFrame implements SerialPortEventListener
                     catch (IOException e1)
                     {      
                     }
-                    if (classSize.equals("Empty"))
+                    switch (classSize)
                     {
-                        errorMessage = "Cannot transfer to designated empty pen";
-                    }
-                    else if (classSize.equals("Hatchling") || classSize.equals("Family"))
-                    {
-                        toCages[toCounter] = pen;
-                        toLowerBounds[toCounter] = 0;
-                        toUpperBounds[toCounter] = 0;
-                        toClassSizes[toCounter] = classSize;
-                        capacities[toCounter] = Integer.parseInt(input.getText());
-                        capacityCounters[toCounter] = 0;
-                        hasToCage = true;
-                        toCounter++;
-                    }
-                    else if (classSize.equals("39+"))
-                    {
-                        toCages[toCounter] = pen;
-                        toLowerBounds[toCounter] = 39;
-                        toUpperBounds[toCounter] = 46;
-                        toClassSizes[toCounter] = classSize;
-                        capacities[toCounter] = Integer.parseInt(input.getText());
-                        capacityCounters[toCounter] = 0;
-                        hasToCage = true;
-                        toCounter++;
-                    }
-                    else
-                    {
-                        int index = classSize.indexOf('-');
-                        toCages[toCounter] = pen;
-                        toLowerBounds[toCounter] = Integer.parseInt(classSize.substring(0, index));
-                        toUpperBounds[toCounter] = Integer.parseInt(classSize.substring(index+1));
-                        toClassSizes[toCounter] = classSize;
-                        capacities[toCounter] = Integer.parseInt(input.getText());
-                        capacityCounters[toCounter] = 0;
-                        hasToCage = true;
-                        toCounter++;
+                        case "Empty":   errorMessage = "Cannot transfer to designated empty pen";
+                                        break;
+                            
+                        case "Hatchling":
+                        case "Family":  toCages[toCounter] = pen;
+                                        toLowerBounds[toCounter] = 0;
+                                        toUpperBounds[toCounter] = 0;
+                                        toClassSizes[toCounter] = classSize;
+                                        capacities[toCounter] = Integer.parseInt(input.getText());
+                                        capacityCounters[toCounter] = 0;
+                                        hasToCage = true;
+                                        toCounter++;
+                                        break;
+                            
+                        case "39+":     toCages[toCounter] = pen;
+                                        toLowerBounds[toCounter] = 39;
+                                        toUpperBounds[toCounter] = 46;
+                                            toClassSizes[toCounter] = classSize;
+                                        capacities[toCounter] = Integer.parseInt(input.getText());
+                                        capacityCounters[toCounter] = 0;
+                                        hasToCage = true;
+                                        toCounter++;
+                                        break;
+                            
+                        default:        int index = classSize.indexOf('-');
+                                        toCages[toCounter] = pen;
+                                        toLowerBounds[toCounter] = Integer.parseInt(classSize.substring(0, index));
+                                        toUpperBounds[toCounter] = Integer.parseInt(classSize.substring(index+1));
+                                        toClassSizes[toCounter] = classSize;
+                                        capacities[toCounter] = Integer.parseInt(input.getText());
+                                        capacityCounters[toCounter] = 0;
+                                        hasToCage = true;
+                                        toCounter++;
+                                        break;
                     }
                 }   
             }
