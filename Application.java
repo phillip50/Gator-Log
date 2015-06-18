@@ -63,9 +63,6 @@ public class Application extends JFrame implements SerialPortEventListener
     private String length;
     private String weight;
     private Row previousRow;
-    private String fromYear;
-    private int fromCount;
-    private String fromClass;
     private String[] toCages;
     private int[] toUpperBounds;
     private int[] toLowerBounds;
@@ -81,7 +78,6 @@ public class Application extends JFrame implements SerialPortEventListener
     private boolean cageTaken;
     private File gatorFile;
     private Table gatorTable;
-    private File outputFile;
     private File cageFile;
     private Table cageTable;
     private String currentDate;
@@ -126,7 +122,6 @@ public class Application extends JFrame implements SerialPortEventListener
         addPage4 = false;
         addPage5 = false;
         quit = false;
-        fromCount = 0;
         toCage = "";
         bellySize = 0;
         length = "";
@@ -1467,49 +1462,53 @@ public class Application extends JFrame implements SerialPortEventListener
                     }
                     catch (IOException e1)
                     {      
+                        
                     }
                     switch (classSize)
                     {
-                        case "Empty":   errorMessage = "Cannot transfer to designated empty pen";
-                                        break;
+                        case "Empty":   
+                            errorMessage = "Cannot transfer to designated empty pen";
+                            break;
                             
                         case "Hatchling":
-                        case "Family":  toCages[toCounter] = pen;
-                                        toLowerBounds[toCounter] = 0;
-                                        toUpperBounds[toCounter] = 0;
-                                        toClassSizes[toCounter] = classSize;
-                                        capacities[toCounter] = Integer.parseInt(input.getText());
-                                        capacityCounters[toCounter] = 0;
-                                        hasToCage = true;
-                                        toCounter++;
-                                        break;
+                        case "Family":  
+                            toCages[toCounter] = pen;
+                            toLowerBounds[toCounter] = 0;
+                            toUpperBounds[toCounter] = 0;
+                            toClassSizes[toCounter] = classSize;
+                            capacities[toCounter] = Integer.parseInt(input.getText());
+                            capacityCounters[toCounter] = 0;
+                            hasToCage = true;
+                            toCounter++;
+                            break;
                             
-                        case "39+":     toCages[toCounter] = pen;
-                                        toLowerBounds[toCounter] = 39;
-                                        toUpperBounds[toCounter] = 46;
-                                            toClassSizes[toCounter] = classSize;
-                                        capacities[toCounter] = Integer.parseInt(input.getText());
-                                        capacityCounters[toCounter] = 0;
-                                        hasToCage = true;
-                                        toCounter++;
-                                        break;
+                        case "39+":     
+                            toCages[toCounter] = pen;
+                            toLowerBounds[toCounter] = 39;
+                            toUpperBounds[toCounter] = 46;
+                            toClassSizes[toCounter] = classSize;
+                            capacities[toCounter] = Integer.parseInt(input.getText());
+                            capacityCounters[toCounter] = 0;
+                            hasToCage = true;
+                            toCounter++;
+                            break;
                             
-                        default:        int index = classSize.indexOf('-');
-                                        toCages[toCounter] = pen;
-                                        toLowerBounds[toCounter] = Integer.parseInt(classSize.substring(0, index));
-                                        toUpperBounds[toCounter] = Integer.parseInt(classSize.substring(index+1));
-                                        toClassSizes[toCounter] = classSize;
-                                        capacities[toCounter] = Integer.parseInt(input.getText());
-                                        capacityCounters[toCounter] = 0;
-                                        hasToCage = true;
-                                        toCounter++;
-                                        break;
+                        default:        
+                            int index = classSize.indexOf('-');
+                            toCages[toCounter] = pen;
+                            toLowerBounds[toCounter] = Integer.parseInt(classSize.substring(0, index));
+                            toUpperBounds[toCounter] = Integer.parseInt(classSize.substring(index+1));
+                            toClassSizes[toCounter] = classSize;
+                            capacities[toCounter] = Integer.parseInt(input.getText());
+                            capacityCounters[toCounter] = 0;
+                            hasToCage = true;
+                            toCounter++;
+                            break;
                     }
                 }   
             }
             else if (addPage5)
             {
-                fromCount++;
                 try
                 {
                     if (previousRow != null)

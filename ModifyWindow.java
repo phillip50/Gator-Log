@@ -116,14 +116,17 @@ public class ModifyWindow extends JFrame
         
         switch (row.get("Feed Type").toString())
         {
-            case "R":   feeds.setSelectedItem("(R) - Regular");
-                        break;
+            case "R":   
+                feeds.setSelectedItem("(R) - Regular");
+                break;
                 
-            case "H":   feeds.setSelectedItem("(H) - Hatchling");
-                        break;
+            case "H":   
+                feeds.setSelectedItem("(H) - Hatchling");
+                break;
                 
-            case "I":   feeds.setSelectedItem("(I) - Intermediate");
-                        break;
+            case "I":   
+                feeds.setSelectedItem("(I) - Intermediate");
+                break;
         }
 
         amount = new JTextField(10);
