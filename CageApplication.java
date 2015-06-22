@@ -36,6 +36,8 @@ public class CageApplication extends JFrame
         ModifyWindow modifyFrame = new ModifyWindow(row);
         modifyFrame.setFrame(modifyFrame);
         modifyFrame.addListeners();
+        modifyFrame.addGators();
+        modifyFrame.setLabels();
         modifyFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         Rectangle rect = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
         double length = rect.getHeight();

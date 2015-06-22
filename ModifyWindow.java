@@ -12,6 +12,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+import java.util.*;
 
 public class ModifyWindow extends JFrame
 {
@@ -19,6 +20,8 @@ public class ModifyWindow extends JFrame
     private Row row;
     private File cageFile;
     private Table cageTable;
+    private File gatorFile;
+    private Table gatorTable;
     private final JTabbedPane tabbedPanel;
     private final JButton doChange;
     private final JButton doNotChange;
@@ -44,6 +47,8 @@ public class ModifyWindow extends JFrame
     private double width;
     private double height;
     private Font font;
+    private java.util.List<Row> gatorList;
+    private java.util.List<String> tagList;
     
     public ModifyWindow(Row inputRow)
     {
@@ -63,28 +68,22 @@ public class ModifyWindow extends JFrame
         {
             cageFile = new File("CageDatabase.accdb");
             cageTable = DatabaseBuilder.open(cageFile).getTable("Database");
+            gatorFile = new File("AnimalDatabase.accdb");
+            gatorTable = DatabaseBuilder.open(gatorFile).getTable("Database");
         }
         catch (IOException e1)
         {
                             
         }
         
-        label1 = new JLabel("Pen: " + row.get("Pen Number"));
-        label1.setFont(font);
-        label2 = new JLabel("Gator Count: " + row.get("Gator Count"));
-        label2.setFont(font);
-        label3 = new JLabel("Water Change Date: ");
-        label3.setFont(font);
-        label4 = new JLabel("Water Temperature: ");
-        label4.setFont(font);
-        label5 = new JLabel("Feed Type: ");
-        label5.setFont(font);
-        label6 = new JLabel("Feed Amount (in lbs.): ");
-        label6.setFont(font);
-        label7 = new JLabel("Size Class: ");
-        label7.setFont(font);
-        label8 = new JLabel("Any additional comments: ");
-        label8.setFont(font);
+        label1 = new JLabel();
+        label2 = new JLabel();
+        label3 = new JLabel();
+        label4 = new JLabel();
+        label5 = new JLabel();
+        label6 = new JLabel();
+        label7 = new JLabel();
+        label8 = new JLabel();
         
         doChange = new JButton("Yes");
         doChange.setEnabled(true);
@@ -152,6 +151,9 @@ public class ModifyWindow extends JFrame
         cancel.setEnabled(true);
         cancel.setPreferredSize(size);
         cancel.setFont(font);
+        
+        gatorList = new ArrayList<>();
+        tagList = new ArrayList<>();
     }
     
     public void addComponents()
@@ -397,5 +399,50 @@ public class ModifyWindow extends JFrame
         cancel.addActionListener(e -> {
             frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
         });
+    }
+    
+    public void addGators()
+    {
+        try
+        {
+            com.healthmarketscience.jackcess.Cursor cursor = CursorBuilder.createCursor(gatorTable);
+            cursor.afterLast();
+            while (cursor.moveToPreviousRow())
+            {
+                Row currentRow = cursor.getCurrentRow();
+                if (tagList.indexOf(currentRow.get("Tag Number").toString()) == -1)
+                {
+                    if (currentRow.get("To").toString().equals(row.get("Pen Number").toString()))
+                    {
+                        gatorList.add(currentRow);
+                    }
+                    tagList.add(currentRow.get("Tag Number").toString());
+                }
+            }
+        }
+        catch (IOException e)
+        {
+            
+        }
+    }
+    
+    public void setLabels()
+    {
+        label1.setText("Pen: " + row.get("Pen Number"));
+        label1.setFont(font);
+        label2.setText("Gator Count: " + gatorList.size());
+        label2.setFont(font);
+        label3.setText("Water Change Date: ");
+        label3.setFont(font);
+        label4.setText("Water Temperature: ");
+        label4.setFont(font);
+        label5.setText("Feed Type: ");
+        label5.setFont(font);
+        label6.setText("Feed Amount (in lbs.): ");
+        label6.setFont(font);
+        label7.setText("Size Class: ");
+        label7.setFont(font);
+        label8.setText("Any additional comments: ");
+        label8.setFont(font);
     }
 }
