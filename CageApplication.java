@@ -66,7 +66,7 @@ public class CageApplication extends JFrame
         frame.InitializeButtonArray();
         frame.setContentPane(new JPanel()
         {
-            Image image = Toolkit.getDefaultToolkit().createImage("farm.jpg");
+            Image image = Toolkit.getDefaultToolkit().createImage("farm2.jpg");
             @Override
             public void paintComponent(Graphics g)
             {
@@ -76,7 +76,7 @@ public class CageApplication extends JFrame
         });
         frame.setLayout(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Dimension screenSize = new Dimension(780, 594);
+        Dimension screenSize = new Dimension(990, 801);
         frame.getContentPane().setPreferredSize(screenSize);
         frame.addComponents();
         frame.pack();
@@ -94,1187 +94,1187 @@ public class CageApplication extends JFrame
             if (i == 1)
             {
                 cageNumber = "901";
-                x = 451;
-                y = 386;
-                xlength = 20;
-                ylength = 19;
+                x = 629;
+                y = 520;
+                xlength = 30;
+                ylength = 28;
             }
             else if (i == 2)
             {
                 cageNumber = "905";
-                x = 477;
-                y = 384;
-                xlength = 18;
-                ylength = 18;
+                x = 665;
+                y = 513;
+                xlength = 27;
+                ylength = 27;
             }
             else if (i == 3)
             {
                 cageNumber = "902";
-                x = 454;
-                y = 410;
-                xlength = 19;
-                ylength = 19;
+                x = 636;
+                y = 552;
+                xlength = 29;
+                ylength = 27;
             }
             else if (i == 4)
             {
                 cageNumber = "906";
-                x = 479;
-                y = 407;
-                xlength = 19;
-                ylength = 19;
+                x = 672;
+                y = 545;
+                xlength = 27;
+                ylength = 26;
             }
             else if (i == 5)
             {
                 cageNumber = "903";
-                x = 456;
-                y = 433;
-                xlength = 19;
-                ylength = 18;
+                x = 644;
+                y = 583;
+                xlength = 26;
+                ylength = 26;
                 
             }
             else if (i == 6)
             {
                 cageNumber = "907";
-                x = 482;
-                y = 430;
-                xlength = 18;
-                ylength = 18;
+                x = 677;
+                y = 574;
+                xlength = 28;
+                ylength = 27;
             }
             else if (i == 7)
             {
                 cageNumber = "904";
-                x = 459;
-                y = 455;
-                xlength = 18;
-                ylength = 18;
+                x = 650;
+                y = 612;
+                xlength = 28;
+                ylength = 27;
             }
             else if (i == 8)
             {
                 cageNumber = "908";
-                x = 484;
-                y = 452;
-                xlength = 19;
-                ylength = 19;
+                x = 683;
+                y = 604;
+                xlength = 28;
+                ylength = 27;
             }
             else if (i == 9)
             {
                 cageNumber = "410";
-                x = 508;
-                y = 398;
-                xlength = 35;
-                ylength = 35;
+                x = 713;
+                y = 526;
+                xlength = 46;
+                ylength = 47;
             }
             else if (i == 10)
             {
                 cageNumber = "420";
-                x = 553;
-                y = 394;
-                xlength = 33;
-                ylength = 32;
+                x = 772;
+                y = 513;
+                xlength = 46;
+                ylength = 47;
             }
             else if (i == 11)
             {
                 cageNumber = "909";
-                x = 505;
-                y = 373;
-                xlength = 18;
-                ylength = 17;
+                x = 704;
+                y = 494;
+                xlength = 27;
+                ylength = 27;
             }
             else if (i == 12)
             {
                 cageNumber = "411";
-                x = 513;
-                y = 437;
-                xlength = 34;
-                ylength = 32;
+                x = 723;
+                y = 579;
+                xlength = 46;
+                ylength = 45;
             }
             else if (i == 13)
             {
                 cageNumber = "421";
-                x = 557;
-                y = 432;
-                xlength = 34;
-                ylength = 33;
+                x = 783;
+                y = 566;
+                xlength = 46;
+                ylength = 46;
             }
             else if (i == 14)
             {
                 cageNumber = "910";
-                x = 532;
-                y = 367;
-                xlength = 18;
-                ylength = 17;
+                x = 739;
+                y = 483;
+                xlength = 27;
+                ylength = 26;
             }
             else if (i == 15)
             {
                 cageNumber = "101";
-                x = 89;
-                y = 162;
-                xlength = 29;
-                ylength = 29;
+                x = 75;
+                y = 253;
+                xlength = 46;
+                ylength = 46;
             }
             else if (i == 16)
             {
                 cageNumber = "102";
-                x = 89;
-                y = 196;
-                xlength = 30;
-                ylength = 29;
+                x = 85;
+                y = 304;
+                xlength = 45;
+                ylength = 46;
             }
             else if (i == 17)
             {
                 cageNumber = "103";
-                x = 89;
-                y = 230;
-                xlength = 31;
-                ylength = 30;
+                x = 95;
+                y = 353;
+                xlength = 45;
+                ylength = 47;
             }
             else if (i == 18)
             {
                 cageNumber = "104";
-                x = 90;
-                y = 265;
-                xlength = 31;
-                ylength = 30;
+                x = 104;
+                y = 404;
+                xlength = 46;
+                ylength = 47;
             }
             else if (i == 19)
             {
                 cageNumber = "105";
-                x = 92;
-                y = 302;
-                xlength = 29;
-                ylength = 30;
+                x = 113;
+                y = 454;
+                xlength = 46;
+                ylength = 48;
             }
             else if (i == 20)
             {
                 cageNumber = "106";
-                x = 90;
-                y = 338;
-                xlength = 32;
-                ylength = 31;
+                x = 123;
+                y = 506;
+                xlength = 47;
+                ylength = 46;
             }
             else if (i == 21)
             {
                 cageNumber = "107";
-                x = 91;
-                y = 375;
-                xlength = 32;
-                ylength = 32;
+                x = 133;
+                y = 557;
+                xlength = 46;
+                ylength = 46;
             }
             else if (i == 22)
             {
                 cageNumber = "108";
-                x = 92;
-                y = 412;
-                xlength = 33;
-                ylength = 31;
+                x = 145;
+                y = 608;
+                xlength = 45;
+                ylength = 46;
             }
             else if (i == 23)
             {
                 cageNumber = "109";
-                x = 95;
-                y = 451;
-                xlength = 30;
-                ylength = 31;
+                x = 153;
+                y = 658;
+                xlength = 47;
+                ylength = 46;
             }
             else if (i == 24)
             {
                 cageNumber = "110";
-                x = 129;
-                y = 116;
-                xlength = 30;
-                ylength = 28;
+                x = 124;
+                y = 178;
+                xlength = 46;
+                ylength = 46;
             }
             else if (i == 25)
             {
                 cageNumber = "111";
-                x = 132;
-                y = 159;
-                xlength = 29;
-                ylength = 29;
+                x = 136;
+                y = 242;
+                xlength = 46;
+                ylength = 46;
             }
             else if (i == 26)
             {
                 cageNumber = "112";
-                x = 132;
-                y = 193;
-                xlength = 31;
-                ylength = 29;
+                x = 147;
+                y = 292;
+                xlength = 45;
+                ylength = 46;
             }
             else if (i == 27)
             {
                 cageNumber = "113";
-                x = 134;
-                y = 227;
-                xlength = 29;
-                ylength = 29;
+                x = 156;
+                y = 342;
+                xlength = 46;
+                ylength = 46;
             }
             else if (i == 28)
             {
                 cageNumber = "114";
-                x = 135;
-                y = 262;
-                xlength = 29;
-                ylength = 30;
+                x = 165;
+                y = 392;
+                xlength = 46;
+                ylength = 46;
             }
             else if (i == 29)
             {
                 cageNumber = "115";
-                x = 135;
-                y = 297;
-                xlength = 31;
-                ylength = 31;
+                x = 174;
+                y = 443;
+                xlength = 46;
+                ylength = 46;
             }
             else if (i == 30)
             {
                 cageNumber = "116";
-                x = 137;
-                y = 335;
-                xlength = 29;
-                ylength = 30;
+                x = 184;
+                y = 495;
+                xlength = 47;
+                ylength = 46;
             }
             else if (i == 31)
             {
                 cageNumber = "117";
-                x = 137;
-                y = 371;
-                xlength = 31;
-                ylength = 30;
+                x = 195;
+                y = 545;
+                xlength = 46;
+                ylength = 45;
             }
             else if (i == 32)
             {
                 cageNumber = "118";
-                x = 138;
-                y = 409;
-                xlength = 32;
-                ylength = 30;
+                x = 206;
+                y = 595;
+                xlength = 45;
+                ylength = 45;
             }
             else if (i == 33)
             {
                 cageNumber = "119";
-                x = 140;
-                y = 447;
-                xlength = 31;
-                ylength = 30;
+                x = 214;
+                y = 646;
+                xlength = 47;
+                ylength = 46;
             }
             else if (i == 34)
             {
                 cageNumber = "120";
-                x = 141;
-                y = 485;
-                xlength = 31;
-                ylength = 31;
+                x = 224;
+                y = 696;
+                xlength = 47;
+                ylength = 45;
             }
             else if (i == 35)
             {
                 cageNumber = "121";
-                x = 164;
-                y = 80;
-                xlength = 29;
-                ylength = 28;
+                x = 166;
+                y = 117;
+                xlength = 45;
+                ylength = 46;
             }
             else if (i == 36)
             {
                 cageNumber = "122";
-                x = 166;
-                y = 114;
-                xlength = 28;
-                ylength = 27;
+                x = 175;
+                y = 168;
+                xlength = 45;
+                ylength = 45;
             }
             else if (i == 37)
             {
                 cageNumber = "123";
-                x = 167;
-                y = 156;
-                xlength = 29;
-                ylength = 29;
+                x = 188;
+                y = 232;
+                xlength = 45;
+                ylength = 46;
             }
             else if (i == 38)
             {
                 cageNumber = "124";
-                x = 169;
-                y = 190;
-                xlength = 29;
-                ylength = 29;
+                x = 197;
+                y = 282;
+                xlength = 46;
+                ylength = 47;
             }
             else if (i == 39)
             {
                 cageNumber = "125";
-                x = 170;
-                y = 224;
-                xlength = 29;
-                ylength = 30;
+                x = 207;
+                y = 333;
+                xlength = 45;
+                ylength = 46;
             }
             else if (i == 40)
             {
                 cageNumber = "126";
-                x = 171;
-                y = 259;
-                xlength = 29;
-                ylength = 30;
+                x = 216;
+                y = 384;
+                xlength = 46;
+                ylength = 45;
             }
             else if (i == 41)
             {
                 cageNumber = "127";
-                x = 172;
-                y = 295;
-                xlength = 30;
-                ylength = 30;
+                x = 226;
+                y = 434;
+                xlength = 45;
+                ylength = 44;
             }
             else if (i == 42)
             {
                 cageNumber = "201";
-                x = 206;
-                y = 79;
-                xlength = 30;
-                ylength = 27;
+                x = 227;
+                y = 108;
+                xlength = 45;
+                ylength = 45;
             }
             else if (i == 43)
             {
                 cageNumber = "202";
-                x = 208;
-                y = 111;
-                xlength = 30;
-                ylength = 27;
+                x = 235;
+                y = 157;
+                xlength = 46;
+                ylength = 44;
             }
             else if (i == 44)
             {
                 cageNumber = "203";
-                x = 210;
-                y = 153;
-                xlength = 30;
-                ylength = 29;
+                x = 250;
+                y = 221;
+                xlength = 45;
+                ylength = 45;
             }
             else if (i == 45)
             {
                 cageNumber = "204";
-                x = 211;
-                y = 187;
-                xlength = 30;
-                ylength = 30;
+                x = 259;
+                y = 272;
+                xlength = 44;
+                ylength = 45;
             }
             else if (i == 46)
             {
                 cageNumber = "205";
-                x = 212;
-                y = 221;
-                xlength = 31;
-                ylength = 29;
+                x = 267;
+                y = 322;
+                xlength = 45;
+                ylength = 44;
             }
             else if (i == 47)
             {
                 cageNumber = "206";
-                x = 214;
-                y = 255;
-                xlength = 30;
-                ylength = 29;
+                x = 276;
+                y = 371;
+                xlength = 46;
+                ylength = 44;
             }
             else if (i == 48)
             {
                 cageNumber = "207";
-                x = 215;
-                y = 289;
-                xlength = 30;
-                ylength = 29;
+                x = 286;
+                y = 419;
+                xlength = 44;
+                ylength = 42;
             }
             else if (i == 49)
             {
                 cageNumber = "208";
-                x = 223;
-                y = 322;
-                xlength = 31;
-                ylength = 30;
+                x = 305;
+                y = 465;
+                xlength = 44;
+                ylength = 43;
             }
             else if (i == 50)
             {
                 cageNumber = "209";
-                x = 219;
-                y = 360;
-                xlength = 32;
-                ylength = 31;
+                x = 307;
+                y = 518;
+                xlength = 45;
+                ylength = 45;
             }
             else if (i == 51)
             {
                 cageNumber = "210";
-                x = 215;
-                y = 400;
-                xlength = 30;
-                ylength = 30;
+                x = 308;
+                y = 573;
+                xlength = 44;
+                ylength = 43;
             }
             else if (i == 52)
             {
                 cageNumber = "211";
-                x = 210;
-                y = 438;
-                xlength = 31;
-                ylength = 33;
+                x = 308;
+                y = 627;
+                xlength = 46;
+                ylength = 44;
             }
             else if (i == 53)
             {
                 cageNumber = "212";
-                x = 206;
-                y = 477;
-                xlength = 30;
-                ylength = 32;
+                x = 311;
+                y = 677;
+                xlength = 44;
+                ylength = 45;
             }
             else if (i == 54)
             {
                 cageNumber = "213";
-                x = 201;
-                y = 516;
-                xlength = 31;
-                ylength = 33;
+                x = 313;
+                y = 729;
+                xlength = 44;
+                ylength = 44;
             }
             else if (i == 55)
             {
                 cageNumber = "214";
-                x = 245;
-                y = 151;
-                xlength = 29;
-                ylength = 28;
+                x = 300;
+                y = 212;
+                xlength = 45;
+                ylength = 45;
             }
             else if (i == 56)
             {
                 cageNumber = "215";
-                x = 247;
-                y = 186;
-                xlength = 30;
-                ylength = 28;
+                x = 310;
+                y = 263;
+                xlength = 44;
+                ylength = 46;
             }
             else if (i == 57)
             {
                 cageNumber = "216";
-                x = 248;
-                y = 221;
-                xlength = 30;
-                ylength = 29;
+                x = 318;
+                y = 316;
+                xlength = 46;
+                ylength = 44;
             }
             else if (i == 58)
             {
                 cageNumber = "217";
-                x = 250;
-                y = 255;
-                xlength = 30;
-                ylength = 30;
+                x = 328;
+                y = 366;
+                xlength = 45;
+                ylength = 44;
             }
             else if (i == 59)
             {
                 cageNumber = "218";
-                x = 251;
-                y = 290;
-                xlength = 30;
-                ylength = 29;
+                x = 336;
+                y = 415;
+                xlength = 44;
+                ylength = 42;
             }
             else if (i == 60)
             {
                 cageNumber = "219";
-                x = 263;
-                y = 325;
-                xlength = 31;
-                ylength = 31;
+                x = 361;
+                y = 463;
+                xlength = 44;
+                ylength = 44;
             }
             else if (i == 61)
             {
                 cageNumber = "220";
-                x = 259;
-                y = 363;
-                xlength = 30;
-                ylength = 32;
+                x = 361;
+                y = 517;
+                xlength = 46;
+                ylength = 45;
             }
             else if (i == 62)
             {
                 cageNumber = "221";
-                x = 253;
-                y = 402;
-                xlength = 32;
-                ylength = 33;
+                x = 364;
+                y = 571;
+                xlength = 45;
+                ylength = 44;
             }
             else if (i == 63)
             {
                 cageNumber = "222";
-                x = 250;
-                y = 442;
-                xlength = 31;
-                ylength = 33;
+                x = 364;
+                y = 625;
+                xlength = 46;
+                ylength = 45;
             }
             else if (i == 64)
             {
                 cageNumber = "223";
-                x = 247;
-                y = 480;
-                xlength = 31;
-                ylength = 34;
+                x = 367;
+                y = 676;
+                xlength = 45;
+                ylength = 45;
             }
             else if (i == 65)
             {
                 cageNumber = "224";
-                x = 243;
-                y = 520;
-                xlength = 31;
-                ylength = 33;
+                x = 369;
+                y = 727;
+                xlength = 44;
+                ylength = 44;
             }
             else if (i == 66)
             {
                 cageNumber = "301";
-                x = 288;
-                y = 52;
-                xlength = 30;
-                ylength = 27;
+                x = 343;
+                y = 51;
+                xlength = 45;
+                ylength = 45;
             }
             else if (i == 67)
             {
                 cageNumber = "302";
-                x = 290;
-                y = 86;
-                xlength = 29;
-                ylength = 27;
+                x = 352;
+                y = 105;
+                xlength = 45;
+                ylength = 44;
             }
             else if (i == 68)
             {
                 cageNumber = "303";
-                x = 294;
-                y = 139;
-                xlength = 29;
-                ylength = 29;
+                x = 367;
+                y = 186;
+                xlength = 45;
+                ylength = 44;
             }
             else if (i == 69)
             {
                 cageNumber = "304";
-                x = 295;
-                y = 174;
-                xlength = 30;
-                ylength = 30;
+                x = 375;
+                y = 240;
+                xlength = 47;
+                ylength = 45;
             }
             else if (i == 70)
             {
                 cageNumber = "225";
-                x = 334;
-                y = 326;
-                xlength = 30;
-                ylength = 31;
+                x = 460;
+                y = 453;
+                xlength = 45;
+                ylength = 44;
             }
             else if (i == 71)
             {
                 cageNumber = "226";
-                x = 331;
-                y = 363;
-                xlength = 31;
-                ylength = 32;
+                x = 462;
+                y = 506;
+                xlength = 43;
+                ylength = 44;
             }
             else if (i == 72)
             {
                 cageNumber = "227";
-                x = 326;
-                y = 413;
-                xlength = 31;
-                ylength = 32;
+                x = 463;
+                y = 574;
+                xlength = 45;
+                ylength = 44;
             }
             else if (i == 73)
             {
                 cageNumber = "228";
-                x = 324;
-                y = 452;
-                xlength = 31;
-                ylength = 33;
+                x = 467;
+                y = 626;
+                xlength = 44;
+                ylength = 45;
             }
             else if (i == 74)
             {
                 cageNumber = "305";
-                x = 330;
-                y = 48;
-                xlength = 30;
-                ylength = 28;
+                x = 404;
+                y = 40;
+                xlength = 46;
+                ylength = 45;
             }
             else if (i == 75)
             {
                 cageNumber = "306";
-                x = 331;
-                y = 83;
-                xlength = 31;
-                ylength = 28;
+                x = 413;
+                y = 93;
+                xlength = 46;
+                ylength = 46;
             }
             else if (i == 76)
             {
                 cageNumber = "307";
-                x = 336;
-                y = 134;
-                xlength = 30;
-                ylength = 31;
+                x = 428;
+                y = 174;
+                xlength = 46;
+                ylength = 45;
             }
             else if (i == 77)
             {
                 cageNumber = "308";
-                x = 338;
-                y = 171;
-                xlength = 30;
-                ylength = 30;
+                x = 438;
+                y = 228;
+                xlength = 45;
+                ylength = 46;
             }
             else if (i == 78)
             {
                 cageNumber = "229";
-                x = 378;
-                y = 328;
-                xlength = 30;
-                ylength = 32;
+                x = 521;
+                y = 451;
+                xlength = 44;
+                ylength = 45;
             }
             else if (i == 79)
             {
                 cageNumber = "230";
-                x = 375;
-                y = 367;
-                xlength = 30;
-                ylength = 31;
+                x = 523;
+                y = 504;
+                xlength = 44;
+                ylength = 45;
             }
             else if (i == 80)
             {
                 cageNumber = "231";
-                x = 371;
-                y = 416;
-                xlength = 30;
-                ylength = 32;
+                x = 524;
+                y = 571;
+                xlength = 45;
+                ylength = 44;
             }
             else if (i == 81)
             {
                 cageNumber = "232";
-                x = 368;
-                y = 454;
-                xlength = 30;
-                ylength = 33;
+                x = 527;
+                y = 624;
+                xlength = 44;
+                ylength = 45;
             }
             else if (i == 82)
             {
                 cageNumber = "309";
-                x = 373;
-                y = 46;
-                xlength = 29;
-                ylength = 27;
+                x = 467;
+                y = 28;
+                xlength = 44;
+                ylength = 45;
             }
             else if (i == 83)
             {
                 cageNumber = "310";
-                x = 376;
-                y = 80;
-                xlength = 29;
-                ylength = 28;
+                x = 476;
+                y = 82;
+                xlength = 45;
+                ylength = 44;
             }
             else if (i == 84)
             {
                 cageNumber = "311";
-                x = 380;
-                y = 120;
-                xlength = 29;
-                ylength = 30;
+                x = 491;
+                y = 146;
+                xlength = 44;
+                ylength = 44;
             }
             else if (i == 85)
             {
                 cageNumber = "312";
-                x = 407;
-                y = 44;
-                xlength = 28;
-                ylength = 27;
+                x = 516;
+                y = 19;
+                xlength = 44;
+                ylength = 46;
             }
             else if (i == 86)
             {
                 cageNumber = "313";
-                x = 409;
-                y = 77;
-                xlength = 29;
-                ylength = 29;
+                x = 526;
+                y = 73;
+                xlength = 43;
+                ylength = 45;
             }
             else if (i == 87)
             {
                 cageNumber = "314";
-                x = 416;
-                y = 119;
-                xlength = 29;
-                ylength = 30;
+                x = 542;
+                y = 138;
+                xlength = 45;
+                ylength = 45;
             }
             else if (i == 88)
             {
                 cageNumber = "315";
-                x = 412;
-                y = 152;
-                xlength = 30;
-                ylength = 30;
+                x = 542;
+                y = 188;
+                xlength = 45;
+                ylength = 45;
             }
             else if (i == 89)
             {
                 cageNumber = "316";
-                x = 408;
-                y = 186;
-                xlength = 31;
-                ylength = 30;
+                x = 543;
+                y = 240;
+                xlength = 44;
+                ylength = 45;
             }
             else if (i == 90)
             {
                 cageNumber = "317";
-                x = 405;
-                y = 221;
-                xlength = 31;
-                ylength = 30;
+                x = 543;
+                y = 291;
+                xlength = 45;
+                ylength = 45;
             }
             else if (i == 91)
             {
                 cageNumber = "318";
-                x = 455;
-                y = 57;
-                xlength = 30;
-                ylength = 28;
+                x = 591;
+                y = 34;
+                xlength = 45;
+                ylength = 45;
             }
             else if (i == 92)
             {
                 cageNumber = "319";
-                x = 453;
-                y = 90;
-                xlength = 29;
-                ylength = 28;
+                x = 591;
+                y = 85;
+                xlength = 46;
+                ylength = 46;
             }
             else if (i == 93)
             {
                 cageNumber = "320";
-                x = 450;
-                y = 122;
-                xlength = 29;
-                ylength = 29;
+                x = 593;
+                y = 137;
+                xlength = 44;
+                ylength = 45;
             }
             else if (i == 94)
             {
                 cageNumber = "321";
-                x = 447;
-                y = 156;
-                xlength = 30;
-                ylength = 29;
+                x = 593;
+                y = 188;
+                xlength = 45;
+                ylength = 46;
             }
             else if (i == 95)
             {
                 cageNumber = "322";
-                x = 444;
-                y = 189;
-                xlength = 30;
-                ylength = 30;
+                x = 594;
+                y = 239;
+                xlength = 44;
+                ylength = 46;
             }
             else if (i == 96)
             {
                 cageNumber = "323";
-                x = 441;
-                y = 223;
-                xlength = 30;
-                ylength = 31;
+                x = 594;
+                y = 290;
+                xlength = 45;
+                ylength = 46;
             }
             else if (i == 97)
             {
                 cageNumber = "324";
-                x = 438;
-                y = 259;
-                xlength = 29;
-                ylength = 31;
+                x = 594;
+                y = 341;
+                xlength = 46;
+                ylength = 46;
             }
             else if (i == 98)
             {
                 cageNumber = "325";
-                x = 434;
-                y = 294;
-                xlength = 31;
-                ylength = 32;
+                x = 595;
+                y = 393;
+                xlength = 45;
+                ylength = 46;
             }
             else if (i == 99)
             {
                 cageNumber = "326";
-                x = 431;
-                y = 330;
-                xlength = 30;
-                ylength = 31;
+                x = 595;
+                y = 445;
+                xlength = 45;
+                ylength = 44;
             }
             else if (i == 100)
             {
                 cageNumber = "801";
-                x = 295;
-                y = 226;
-                xlength = 17;
-                ylength = 18;
+                x = 384;
+                y = 317;
+                xlength = 29;
+                ylength = 29;
             }
             else if (i == 101)
             {
                 cageNumber = "802";
-                x = 296;
-                y = 248;
-                xlength = 18;
-                ylength = 18;
+                x = 391;
+                y = 349;
+                xlength = 30;
+                ylength = 28;
             }
             else if (i == 102)
             {
                 cageNumber = "803";
-                x = 297;
-                y = 271;
-                xlength = 18;
-                ylength = 18;
+                x = 397;
+                y = 382;
+                xlength = 29;
+                ylength = 27;
             }
             else if (i == 103)
             {
                 cageNumber = "804";
-                x = 298;
-                y = 294;
-                xlength = 18;
-                ylength = 18;
+                x = 403;
+                y = 414;
+                xlength = 29;
+                ylength = 26;
             }
             else if (i == 104)
             {
                 cageNumber = "805";
-                x = 319;
-                y = 224;
-                xlength = 18;
-                ylength = 18;
+                x = 418;
+                y = 312;
+                xlength = 30;
+                ylength = 27;
             }
             else if (i == 105)
             {
                 cageNumber = "806";
-                x = 320;
-                y = 246;
-                xlength = 18;
-                ylength = 18;
+                x = 425;
+                y = 342;
+                xlength = 29;
+                ylength = 27;
             }
             else if (i == 106)
             {
                 cageNumber = "807";
-                x = 322;
-                y = 269;
-                xlength = 17;
-                ylength = 18;
+                x = 432;
+                y = 376;
+                xlength = 28;
+                ylength = 27;
             }
             else if (i == 107)
             {
                 cageNumber = "808";
-                x = 322;
-                y = 292;
-                xlength = 18;
-                ylength = 17;
+                x = 437;
+                y = 406;
+                xlength = 29;
+                ylength = 29;
             }
             else if (i == 108)
             {
                 cageNumber = "809";
-                x = 344;
-                y = 228;
-                xlength = 18;
-                ylength = 19;
+                x = 454;
+                y = 312;
+                xlength = 31;
+                ylength = 29;
             }
             else if (i == 109)
             {
                 cageNumber = "810";
-                x = 346;
-                y = 250;
-                xlength = 17;
-                ylength = 17;
+                x = 461;
+                y = 344;
+                xlength = 29;
+                ylength = 28;
             }
             else if (i == 110)
             {
                 cageNumber = "811";
-                x = 347;
-                y = 273;
-                xlength = 18;
-                ylength = 17;
+                x = 467;
+                y = 377;
+                xlength = 29;
+                ylength = 27;
             }
             else if (i == 111)
             {
                 cageNumber = "812";
-                x = 349;
-                y = 296;
-                xlength = 17;
-                ylength = 18;
+                x = 474;
+                y = 408;
+                xlength = 30;
+                ylength = 28;
             }
             else if (i == 112)
             {
                 cageNumber = "813";
-                x = 369;
-                y = 226;
-                xlength = 17;
-                ylength = 17;
+                x = 490;
+                y = 307;
+                xlength = 28;
+                ylength = 27;
             }
             else if (i == 113)
             {
                 cageNumber = "814";
-                x = 370;
-                y = 248;
-                xlength = 18;
-                ylength = 18;
+                x = 497;
+                y = 337;
+                xlength = 28;
+                ylength = 27;
             }
             else if (i == 114)
             {
                 cageNumber = "815";
-                x = 372;
-                y = 272;
-                xlength = 17;
-                ylength = 17;
+                x = 502;
+                y = 371;
+                xlength = 29;
+                ylength = 28;
             }
             else if (i == 115)
             {
                 cageNumber = "816";
-                x = 374;
-                y = 295;
-                xlength = 17;
-                ylength = 17;
+                x = 509;
+                y = 404;
+                xlength = 29;
+                ylength = 28;
             }
             else if (i == 116)
             {
                 cageNumber = "401";
-                x = 498;
-                y = 61;
-                xlength = 29;
-                ylength = 29;
+                x = 654;
+                y = 34;
+                xlength = 44;
+                ylength = 45;
             }
             else if (i == 117)
             {
                 cageNumber = "402";
-                x = 495;
-                y = 93;
-                xlength = 30;
-                ylength = 30;
+                x = 653;
+                y = 85;
+                xlength = 46;
+                ylength = 45;
             }
             else if (i == 118)
             {
                 cageNumber = "403";
-                x = 492;
-                y = 126;
-                xlength = 30;
-                ylength = 30;
+                x = 655;
+                y = 136;
+                xlength = 45;
+                ylength = 46;
             }
             else if (i == 119)
             {
                 cageNumber = "404";
-                x = 489;
-                y = 159;
-                xlength = 31;
-                ylength = 31;
+                x = 655;
+                y = 187;
+                xlength = 45;
+                ylength = 46;
             }
             else if (i == 120)
             {
                 cageNumber = "405";
-                x = 487;
-                y = 193;
-                xlength = 30;
-                ylength = 31;
+                x = 656;
+                y = 238;
+                xlength = 45;
+                ylength = 47;
             }
             else if (i == 121)
             {
                 cageNumber = "406";
-                x = 484;
-                y = 227;
-                xlength = 31;
-                ylength = 32;
+                x = 657;
+                y = 290;
+                xlength = 45;
+                ylength = 46;
             }
             else if (i == 122)
             {
                 cageNumber = "407";
-                x = 480;
-                y = 261;
-                xlength = 32;
-                ylength = 33;
+                x = 657;
+                y = 341;
+                xlength = 45;
+                ylength = 46;
             }
             else if (i == 123)
             {
                 cageNumber = "408";
-                x = 479;
-                y = 298;
-                xlength = 30;
-                ylength = 32;
+                x = 659;
+                y = 392;
+                xlength = 43;
+                ylength = 46;
             }
             else if (i == 124)
             {
                 cageNumber = "409";
-                x = 476;
-                y = 334;
-                xlength = 31;
-                ylength = 32;
+                x = 658;
+                y = 444;
+                xlength = 45;
+                ylength = 44;
             }
             else if (i == 125)
             {
                 cageNumber = "412";
-                x = 532;
-                y = 64;
-                xlength = 29;
-                ylength = 29;
+                x = 705;
+                y = 33;
+                xlength = 44;
+                ylength = 45;
             }
             else if (i == 126)
             {
                 cageNumber = "413";
-                x = 529;
-                y = 96;
-                xlength = 30;
-                ylength = 29;
+                x = 705;
+                y = 84;
+                xlength = 45;
+                ylength = 46;
             }
             else if (i == 127)
             {
                 cageNumber = "414";
-                x = 527;
-                y = 129;
-                xlength = 30;
-                ylength = 30;
+                x = 706;
+                y = 135;
+                xlength = 44;
+                ylength = 46;
             }
             else if (i == 128)
             {
                 cageNumber = "415";
-                x = 525;
-                y = 162;
-                xlength = 30;
-                ylength = 30;
+                x = 707;
+                y = 186;
+                xlength = 45;
+                ylength = 47;
             }
             else if (i == 129)
             {
                 cageNumber = "416";
-                x = 521;
-                y = 195;
-                xlength = 31;
-                ylength = 32;
+                x = 707;
+                y = 237;
+                xlength = 45;
+                ylength = 47;
             }
             else if (i == 130)
             {
                 cageNumber = "417";
-                x = 519;
-                y = 230;
-                xlength = 31;
-                ylength = 32;
+                x = 708;
+                y = 288;
+                xlength = 45;
+                ylength = 47;
             }
             else if (i == 131)
             {
                 cageNumber = "418";
-                x = 517;
-                y = 265;
-                xlength = 31;
-                ylength = 32;
+                x = 708;
+                y = 340;
+                xlength = 45;
+                ylength = 47;
             }
             else if (i == 132)
             {
                 cageNumber = "419";
-                x = 515;
-                y = 301;
-                xlength = 30;
-                ylength = 32;
+                x = 708;
+                y = 391;
+                xlength = 46;
+                ylength = 46;
             }
             else if (i == 133)
             {
                 cageNumber = "422";
-                x = 574;
-                y = 67;
-                xlength = 29;
-                ylength = 30;
+                x = 767;
+                y = 32;
+                xlength = 46;
+                ylength = 46;
             }
             else if (i == 134)
             {
                 cageNumber = "423";
-                x = 572;
-                y = 100;
-                xlength = 30;
-                ylength = 30;
+                x = 768;
+                y = 83;
+                xlength = 45;
+                ylength = 47;
             }
             else if (i == 135)
             {
                 cageNumber = "424";
-                x = 570;
-                y = 133;
-                xlength = 30;
-                ylength = 30;
+                x = 769;
+                y = 134;
+                xlength = 45;
+                ylength = 46;
             }
             else if (i == 136)
             {
                 cageNumber = "425";
-                x = 568;
-                y = 166;
-                xlength = 30;
-                ylength = 31;
+                x = 768;
+                y = 186;
+                xlength = 46;
+                ylength = 46;
             }
             else if (i == 137)
             {
                 cageNumber = "426";
-                x = 565;
-                y = 200;
-                xlength = 31;
-                ylength = 32;
+                x = 769;
+                y = 237;
+                xlength = 47;
+                ylength = 47;
             }
             else if (i == 138)
             {
                 cageNumber = "427";
-                x = 564;
-                y = 235;
-                xlength = 30;
-                ylength = 31;
+                x = 770;
+                y = 288;
+                xlength = 46;
+                ylength = 47;
             }
             else if (i == 139)
             {
                 cageNumber = "428";
-                x = 561;
-                y = 270;
-                xlength = 32;
-                ylength = 32;
+                x = 770;
+                y = 339;
+                xlength = 47;
+                ylength = 47;
             }
             else if (i == 140)
             {
                 cageNumber = "429";
-                x = 560;
-                y = 305;
-                xlength = 31;
-                ylength = 32;
+                x = 772;
+                y = 390;
+                xlength = 46;
+                ylength = 47;
             }
             else if (i == 141)
             {
                 cageNumber = "430";
-                x = 608;
-                y = 71;
-                xlength = 30;
-                ylength = 29;
+                x = 818;
+                y = 31;
+                xlength = 46;
+                ylength = 47;
             }
             else if (i == 142)
             {
                 cageNumber = "431";
-                x = 607;
-                y = 102;
-                xlength = 29;
-                ylength = 31;
+                x = 819;
+                y = 82;
+                xlength = 45;
+                ylength = 47;
             }
             else if (i == 143)
             {
                 cageNumber = "432";
-                x = 604;
-                y = 136;
-                xlength = 30;
-                ylength = 30;
+                x = 819;
+                y = 134;
+                xlength = 46;
+                ylength = 46;
             }
             else if (i == 144)
             {
                 cageNumber = "433";
-                x = 603;
-                y = 169;
-                xlength = 29;
-                ylength = 31;
+                x = 820;
+                y = 185;
+                xlength = 44;
+                ylength = 46;
             }
             else if (i == 145)
             {
                 cageNumber = "434";
-                x = 601;
-                y = 203;
-                xlength = 30;
-                ylength = 32;
+                x = 820;
+                y = 237;
+                xlength = 45;
+                ylength = 46;
             }
             else if (i == 146)
             {
                 cageNumber = "435";
-                x = 600;
-                y = 238;
-                xlength = 30;
-                ylength = 32;
+                x = 821;
+                y = 288;
+                xlength = 46;
+                ylength = 46;
             }
             else if (i == 147)
             {
                 cageNumber = "436";
-                x = 598;
-                y = 273;
-                xlength = 30;
-                ylength = 33;
+                x = 822;
+                y = 339;
+                xlength = 45;
+                ylength = 46;
             }
             else
             {
                 cageNumber = "437";
-                x = 596;
-                y = 308;
-                xlength = 31;
-                ylength = 33;
+                x = 823;
+                y = 390;
+                xlength = 46;
+                ylength = 47;
             }
             button = new JButton(cageNumber);
             button.setBounds(x, y, xlength, ylength);

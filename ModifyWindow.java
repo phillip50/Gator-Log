@@ -47,12 +47,12 @@ public class ModifyWindow extends JFrame
     private double width;
     private double height;
     private Font font;
-    private java.util.List<Row> gatorList;
-    private java.util.List<String> tagList;
+    private final java.util.List<Row> gatorList;
+    private final java.util.List<String> tagList;
     
     public ModifyWindow(Row inputRow)
     {
-        super("View Pen");
+        super("View Pen " + inputRow.get("Pen Number"));
         row = inputRow;
         tabbedPanel = new JTabbedPane();
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -158,89 +158,124 @@ public class ModifyWindow extends JFrame
     
     public void addComponents()
     {
+        //modify panel
+        
         JComponent modifyPanel = new JPanel();
         modifyPanel.setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
-        c.insets = new Insets(10, 30, 10, 30);
-        c.anchor = GridBagConstraints.LINE_END;
+        GridBagConstraints modc = new GridBagConstraints();
+        modc.insets = new Insets(10, 30, 10, 30);
+        modc.anchor = GridBagConstraints.LINE_END;
         
-        c.gridx = 0;
-        c.gridy = 0;
-        modifyPanel.add(label1, c);
+        modc.gridx = 0;
+        modc.gridy = 0;
+        modifyPanel.add(label1, modc);
         
-        c.anchor = GridBagConstraints.LINE_START;
-        c.gridx = 1;
-        c.gridy = 0;
-        modifyPanel.add(label2, c);
+        modc.anchor = GridBagConstraints.LINE_START;
+        modc.gridx = 1;
+        modc.gridy = 0;
+        modifyPanel.add(label2, modc);
         
-        c.insets = new Insets(50, 30, 10, 30);
+        modc.insets = new Insets(50, 30, 10, 30);
         
-        c.gridx = 0;
-        c.gridy = 3;
-        modifyPanel.add(label3, c);
-        c.gridx = 1;
-        c.gridy = 3;
-        modifyPanel.add(doNotChange, c);
-        c.anchor = GridBagConstraints.CENTER;
-        modifyPanel.add(doChange, c);
+        modc.gridx = 0;
+        modc.gridy = 3;
+        modifyPanel.add(label3, modc);
+        modc.gridx = 1;
+        modc.gridy = 3;
+        modifyPanel.add(doNotChange, modc);
+        modc.anchor = GridBagConstraints.CENTER;
+        modifyPanel.add(doChange, modc);
         
-        c.insets = new Insets(10, 30, 10, 30);
+        modc.insets = new Insets(10, 30, 10, 30);
         
-        c.anchor = GridBagConstraints.LINE_START;
-        c.gridx = 0;
-        c.gridy = 4;
-        modifyPanel.add(label4, c);
-        c.gridx = 1;
-        c.gridy = 4;
-        modifyPanel.add(temperatures, c);
+        modc.anchor = GridBagConstraints.LINE_START;
+        modc.gridx = 0;
+        modc.gridy = 4;
+        modifyPanel.add(label4, modc);
+        modc.gridx = 1;
+        modc.gridy = 4;
+        modifyPanel.add(temperatures, modc);
         
-        c.gridx = 0;
-        c.gridy = 5;
-        modifyPanel.add(label5, c);
-        c.gridx = 1;
-        c.gridy = 5;
-        modifyPanel.add(feeds, c);
+        modc.gridx = 0;
+        modc.gridy = 5;
+        modifyPanel.add(label5, modc);
+        modc.gridx = 1;
+        modc.gridy = 5;
+        modifyPanel.add(feeds, modc);
         
-        c.gridx = 0;
-        c.gridy = 6;
-        modifyPanel.add(label6, c);
-        c.gridx = 1;
-        c.gridy = 6;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        modifyPanel.add(amount, c);
+        modc.gridx = 0;
+        modc.gridy = 6;
+        modifyPanel.add(label6, modc);
+        modc.gridx = 1;
+        modc.gridy = 6;
+        modc.fill = GridBagConstraints.HORIZONTAL;
+        modifyPanel.add(amount, modc);
         
-        c.fill = GridBagConstraints.NONE;
-        c.gridx = 0;
-        c.gridy = 7;
-        modifyPanel.add(label7, c);
-        c.gridx = 1;
-        c.gridy = 7;
-        modifyPanel.add(classes, c);
+        modc.fill = GridBagConstraints.NONE;
+        modc.gridx = 0;
+        modc.gridy = 7;
+        modifyPanel.add(label7, modc);
+        modc.gridx = 1;
+        modc.gridy = 7;
+        modifyPanel.add(classes, modc);
         
-        c.gridx = 0;
-        c.gridy = 8;
-        modifyPanel.add(label8, c);
-        c.gridx = 1;
-        c.gridy = 8;
-        c.fill = GridBagConstraints.BOTH;
-        modifyPanel.add(comments, c);
+        modc.gridx = 0;
+        modc.gridy = 8;
+        modifyPanel.add(label8, modc);
+        modc.gridx = 1;
+        modc.gridy = 8;
+        modc.fill = GridBagConstraints.BOTH;
+        modifyPanel.add(comments, modc);
         
-        c.insets = new Insets(50, 30, 10, 30);
-        c.fill = GridBagConstraints.NONE;
-        c.anchor = GridBagConstraints.LINE_END;
-        c.gridx = 0;
-        c.gridy = 9;
-        modifyPanel.add(confirm, c);
-        c.anchor = GridBagConstraints.LINE_START;
-        c.gridx = 1;
-        c.gridy = 9;
-        modifyPanel.add(cancel, c);
+        modc.insets = new Insets(50, 30, 10, 30);
+        modc.fill = GridBagConstraints.NONE;
+        modc.anchor = GridBagConstraints.LINE_END;
+        modc.gridx = 0;
+        modc.gridy = 9;
+        modifyPanel.add(confirm, modc);
+        modc.anchor = GridBagConstraints.LINE_START;
+        modc.gridx = 1;
+        modc.gridy = 9;
+        modifyPanel.add(cancel, modc);
+        
+        
+        //view gators panel
         
         JComponent viewPanel = new JPanel();
-
+        viewPanel.setLayout(new GridBagLayout());
+        GridBagConstraints viewc = new GridBagConstraints();
+        viewc.insets = new Insets(10, 30, 10, 30);
+        viewc.weightx = 1;
+        viewc.weighty = 0;
+        int i = 0;
         
-        tabbedPanel.addTab("<html><body leftmargin=15 topmargin=8 marginwidth=15 marginheight=5>Modify Pen</body></html>", modifyPanel);
-        tabbedPanel.addTab("<html><body leftmargin=15 topmargin=8 marginwidth=15 marginheight=5>View Gators</body></html>", viewPanel);
+        for (Row tempRow : gatorList)
+        {
+            
+            viewc.gridy = i;
+            viewc.anchor = GridBagConstraints.LINE_START;
+            viewc.gridx = 0;
+            JLabel tempLabel = new JLabel("Gator ID: " + tempRow.get("Tag Number").toString());
+            tempLabel.setFont(font);
+            viewPanel.add(tempLabel, viewc);
+            
+            viewc.anchor = GridBagConstraints.LINE_END;
+            viewc.gridx = 1;
+            JButton tempButton = new JButton("test");
+            viewPanel.add(tempButton, viewc);
+            
+            i++;
+        }
+        
+        viewc.gridy = i;
+        viewc.weighty = 1;
+        JLabel dummyLabel = new JLabel("");
+        viewPanel.add(dummyLabel, viewc);
+        
+        
+        //putting the two panels together
+        tabbedPanel.addTab("<html><body leftmargin=15 topmargin=8 marginwidth=30 marginheight=5>Modify Pen</body></html>", modifyPanel);
+        tabbedPanel.addTab("<html><body leftmargin=15 topmargin=8 marginwidth=30 marginheight=5>View Gators</body></html>", viewPanel);
         
         add(tabbedPanel);
     }
