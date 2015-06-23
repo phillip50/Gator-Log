@@ -49,6 +49,7 @@ public class ModifyWindow extends JFrame
     private Font font;
     private final java.util.List<Row> gatorList;
     private final java.util.List<String> tagList;
+    private Row selectedGator;
     
     public ModifyWindow(Row inputRow)
     {
@@ -158,6 +159,8 @@ public class ModifyWindow extends JFrame
     
     public void addComponents()
     {
+        tabbedPanel.removeAll();
+        
         //modify panel
         
         JComponent modifyPanel = new JPanel();
@@ -262,6 +265,10 @@ public class ModifyWindow extends JFrame
             viewc.anchor = GridBagConstraints.LINE_END;
             viewc.gridx = 1;
             JButton tempButton = new JButton("test");
+            tempButton.addActionListener(e -> {
+                selectedGator = tempRow;
+                addComponents();
+            });
             viewPanel.add(tempButton, viewc);
             
             i++;
@@ -276,6 +283,72 @@ public class ModifyWindow extends JFrame
         //putting the two panels together
         tabbedPanel.addTab("<html><body leftmargin=15 topmargin=8 marginwidth=30 marginheight=5>Modify Pen</body></html>", modifyPanel);
         tabbedPanel.addTab("<html><body leftmargin=15 topmargin=8 marginwidth=30 marginheight=5>View Gators</body></html>", viewPanel);
+        
+        if (selectedGator != null)
+        {
+            java.util.List<Row> allSelectedGatorEntries = new ArrayList<>();
+            try
+            {
+                com.healthmarketscience.jackcess.Cursor cursor = CursorBuilder.createCursor(gatorTable);
+                cursor.beforeFirst();
+                while (cursor.moveToNextRow())
+                {
+                    Row currentRow = cursor.getCurrentRow();
+                    if (currentRow.get("Tag Number").toString().equals(selectedGator.get("Tag Number").toString()))
+                    {
+                        allSelectedGatorEntries.add(currentRow);
+                    }
+                }
+            }
+            catch (IOException e)
+            {
+            
+            }
+            
+            JComponent gatorPanel = new JPanel();
+            gatorPanel.setLayout(new GridBagLayout());
+            GridBagConstraints gatorc = new GridBagConstraints();
+            gatorc.insets = new Insets(10, 30, 10, 30);
+            gatorc.weightx = 1;
+            gatorc.weighty = 0;
+            i = 0;
+            
+            for (Row tempRow : allSelectedGatorEntries)
+            {           
+                gatorc.gridy = i;
+                
+                gatorc.anchor = GridBagConstraints.LINE_START;
+                gatorc.gridx = 0;
+                JLabel tempLabel = new JLabel("" + (i+1));
+                tempLabel.setFont(font);
+                gatorPanel.add(tempLabel, gatorc);
+                
+                gatorc.gridx = 1;
+                JLabel tempLabel2 = new JLabel(tempRow.get("Date").toString());
+                tempLabel2.setFont(font);
+                gatorPanel.add(tempLabel2, gatorc);
+            
+                gatorc.gridx = 2;
+                JLabel tempLabel3 = new JLabel(tempRow.get("From").toString());
+                tempLabel3.setFont(font);
+                gatorPanel.add(tempLabel3, gatorc);
+                
+                gatorc.gridx = 3;
+                JLabel tempLabel4 = new JLabel(tempRow.get("To").toString());
+                tempLabel4.setFont(font);
+                gatorPanel.add(tempLabel4, gatorc);
+            
+                i++;
+            }
+        
+            gatorc.gridy = i;
+            gatorc.weighty = 1;
+            JLabel dummyLabel2 = new JLabel("");
+            gatorPanel.add(dummyLabel2, gatorc);
+            
+            tabbedPanel.addTab("<html><body leftmargin=15 topmargin=8 marginwidth=30 marginheight=5>Gator " + selectedGator.get("Tag Number").toString() + "</body></html>", gatorPanel);
+            tabbedPanel.setSelectedComponent(gatorPanel);
+        }
         
         add(tabbedPanel);
     }

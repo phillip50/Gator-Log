@@ -66,7 +66,7 @@ public class CageApplication extends JFrame
         frame.InitializeButtonArray();
         frame.setContentPane(new JPanel()
         {
-            Image image = Toolkit.getDefaultToolkit().createImage("farm2.jpg");
+            Image image = Toolkit.getDefaultToolkit().createImage("farm.jpg");
             @Override
             public void paintComponent(Graphics g)
             {
