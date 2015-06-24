@@ -1,6 +1,6 @@
 package test;
 
-import javax.swing.*; 
+import javax.swing.*;
 import java.awt.*;
 import com.healthmarketscience.jackcess.*;
 import java.io.*;
@@ -26,10 +26,10 @@ public class CageApplication extends JFrame
             table = DatabaseBuilder.open(file).getTable("Database");
         }
         catch (IOException e)
-        {      
+        {
         }
         
-        cages = new JButton[169];      
+        cages = new JButton[169];
     }
     
     public void modifyWindow(java.util.List<Row> rows, String penNumber)
@@ -48,11 +48,11 @@ public class CageApplication extends JFrame
         modifyFrame.addComponents();
         modifyFrame.pack();
         modifyFrame.setLocationRelativeTo(null);
-        modifyFrame.setVisible(true);   
+        modifyFrame.setVisible(true);
     }
-    
+
     public void addComponents()
-    {        
+    {
         for (JButton cage : cages)
         {
             frame.add(cage);
@@ -1284,9 +1284,9 @@ public class CageApplication extends JFrame
             button.setBorderPainted(false);
             button.setForeground(new Color(0, 0, 0, 0));
             button.setToolTipText("<html>"
-                              + "<center>Pen: " + cageNumber +"</center><br>"
-                              + "Click for expanded information and to modify pen"
-                         + "</html>");
+                        + "<center>Pen: " + cageNumber +"</center><br>"
+                        + "Click for expanded information and to modify pen"
+                        + "</html>");
             
             button.addActionListener(e -> {
                 IndexCursor cursor;

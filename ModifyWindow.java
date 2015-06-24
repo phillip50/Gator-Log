@@ -42,7 +42,7 @@ public class ModifyWindow extends JFrame
     private final java.util.List<JLabel> label7;
     private final java.util.List<JLabel> label8;
     private Dimension screenSize;
-    private boolean feedAmountValid;
+    private java.util.List<Boolean> feedAmountValid;
     private Dimension size;
     private double width;
     private double height;
@@ -57,12 +57,8 @@ public class ModifyWindow extends JFrame
         rows = inputRows;
         tabbedPanel = new JTabbedPane();
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        feedAmountValid = true;
+        feedAmountValid = new ArrayList<>();
         waterChangeDates = new ArrayList<>();
-        for (int i = 0; i < rows.size(); i++)
-        {
-            waterChangeDates.add(rows.get(i).get("Water Change Date").toString());
-        }
         width = screenSize.getWidth();
         height = screenSize.getHeight();
         font = new Font("Arial", Font.PLAIN, 25); 
@@ -376,6 +372,8 @@ public class ModifyWindow extends JFrame
             });
             doNotChange.add(tempDoNotChange);
             
+            waterChangeDates.add(rows.get(i).get("Water Change Date").toString());
+            
             JComboBox tempTemperature = new JComboBox(temperatureList);
             tempTemperature.setEditable(false);
             tempTemperature.setPrototypeDisplayValue("Any Additional Commen");
@@ -465,6 +463,8 @@ public class ModifyWindow extends JFrame
                 }
             });
             amounts.add(tempAmount);
+            
+            feedAmountValid.add(true);
             
             JComboBox tempClass = new JComboBox(classList);
             tempClass.setEditable(false);
