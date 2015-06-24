@@ -6,6 +6,7 @@ import com.healthmarketscience.jackcess.*;
 import java.io.*;
 import java.util.Collections;
 import java.awt.Graphics;
+import java.util.*;
 
 public class CageApplication extends JFrame
 {
@@ -31,11 +32,11 @@ public class CageApplication extends JFrame
         cages = new JButton[169];      
     }
     
-    public void modifyWindow(Row row)
+    public void modifyWindow(java.util.List<Row> rows, String penNumber)
     {
-        ModifyWindow modifyFrame = new ModifyWindow(row);
+        ModifyWindow modifyFrame = new ModifyWindow(rows, penNumber);
         modifyFrame.setFrame(modifyFrame);
-        modifyFrame.addListeners();
+        modifyFrame.Initialize();
         modifyFrame.addGators();
         modifyFrame.setLabels();
         modifyFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -1289,7 +1290,7 @@ public class CageApplication extends JFrame
             
             button.addActionListener(e -> {
                 IndexCursor cursor;
-                Row latestRow = null;
+                java.util.List<Row> latestRows = new ArrayList<>();
                 String penNumber = ((JButton) e.getSource()).getText();
                 try
                 {
@@ -1301,7 +1302,7 @@ public class CageApplication extends JFrame
                         {
                             cursor.beforeFirst();
                             cursor.findFirstRow(Collections.singletonMap("Pen Number", penNumber + "." + j));
-                            latestRow = cursor.getCurrentRow();                         
+                            Row latestRow = cursor.getCurrentRow();                         
                             while (cursor.findNextRow(Collections.singletonMap("Pen Number", penNumber + "." + j)))
                             {
                                 Row row = cursor.getCurrentRow();
@@ -1310,12 +1311,13 @@ public class CageApplication extends JFrame
                                     latestRow = row;
                                 }
                             }
+                            latestRows.add(latestRow);
                         }
                     }
                     else
                     {
                         cursor.findFirstRow(Collections.singletonMap("Pen Number", penNumber));
-                        latestRow = cursor.getCurrentRow();
+                        Row latestRow = cursor.getCurrentRow();
                         while (cursor.findNextRow(Collections.singletonMap("Pen Number", penNumber)))
                         {
                             Row row = cursor.getCurrentRow();
@@ -1324,12 +1326,13 @@ public class CageApplication extends JFrame
                                 latestRow = row;
                             }
                         }
+                        latestRows.add(latestRow);
                     }
                 }
                 catch (IOException e1)
                 {
                 }
-                modifyWindow(latestRow);
+                modifyWindow(latestRows, penNumber);
             });
             cages[i-1] = button;
         }
