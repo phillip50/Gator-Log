@@ -59,7 +59,7 @@ public class CageApplication extends JFrame
         validate();
         setVisible(true);
     }
- 
+
     public static void main(String[] args)
     {
         frame = new CageApplication();
@@ -81,7 +81,7 @@ public class CageApplication extends JFrame
         frame.addComponents();
         frame.pack();
         frame.setLocationRelativeTo(null);
-        frame.setVisible(true);   
+        frame.setVisible(true);
     }
     
     public void InitializeButtonArray()
@@ -93,126 +93,13 @@ public class CageApplication extends JFrame
             int x, y, xlength, ylength;
             if (i == 1)
             {
-                cageNumber = "901";
-                x = 629;
-                y = 520;
-                xlength = 30;
-                ylength = 28;
-            }
-            else if (i == 2)
-            {
-                cageNumber = "905";
-                x = 665;
-                y = 513;
-                xlength = 27;
-                ylength = 27;
-            }
-            else if (i == 3)
-            {
-                cageNumber = "902";
-                x = 636;
-                y = 552;
-                xlength = 29;
-                ylength = 27;
-            }
-            else if (i == 4)
-            {
-                cageNumber = "906";
-                x = 672;
-                y = 545;
-                xlength = 27;
-                ylength = 26;
-            }
-            else if (i == 5)
-            {
-                cageNumber = "903";
-                x = 644;
-                y = 583;
-                xlength = 26;
-                ylength = 26;
-                
-            }
-            else if (i == 6)
-            {
-                cageNumber = "907";
-                x = 677;
-                y = 574;
-                xlength = 28;
-                ylength = 27;
-            }
-            else if (i == 7)
-            {
-                cageNumber = "904";
-                x = 650;
-                y = 612;
-                xlength = 28;
-                ylength = 27;
-            }
-            else if (i == 8)
-            {
-                cageNumber = "908";
-                x = 683;
-                y = 604;
-                xlength = 28;
-                ylength = 27;
-            }
-            else if (i == 9)
-            {
-                cageNumber = "410";
-                x = 713;
-                y = 526;
-                xlength = 46;
-                ylength = 47;
-            }
-            else if (i == 10)
-            {
-                cageNumber = "420";
-                x = 772;
-                y = 513;
-                xlength = 46;
-                ylength = 47;
-            }
-            else if (i == 11)
-            {
-                cageNumber = "909";
-                x = 704;
-                y = 494;
-                xlength = 27;
-                ylength = 27;
-            }
-            else if (i == 12)
-            {
-                cageNumber = "411";
-                x = 723;
-                y = 579;
-                xlength = 46;
-                ylength = 45;
-            }
-            else if (i == 13)
-            {
-                cageNumber = "421";
-                x = 783;
-                y = 566;
-                xlength = 46;
-                ylength = 46;
-            }
-            else if (i == 14)
-            {
-                cageNumber = "910";
-                x = 739;
-                y = 483;
-                xlength = 27;
-                ylength = 26;
-            }
-            else if (i == 15)
-            {
                 cageNumber = "101";
                 x = 75;
                 y = 253;
                 xlength = 46;
                 ylength = 46;
             }
-            else if (i == 16)
+            else if (i == 2)
             {
                 cageNumber = "102";
                 x = 85;
@@ -220,7 +107,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 46;
             }
-            else if (i == 17)
+            else if (i == 3)
             {
                 cageNumber = "103";
                 x = 95;
@@ -228,7 +115,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 47;
             }
-            else if (i == 18)
+            else if (i == 4)
             {
                 cageNumber = "104";
                 x = 104;
@@ -236,7 +123,7 @@ public class CageApplication extends JFrame
                 xlength = 46;
                 ylength = 47;
             }
-            else if (i == 19)
+            else if (i == 5)
             {
                 cageNumber = "105";
                 x = 113;
@@ -244,7 +131,7 @@ public class CageApplication extends JFrame
                 xlength = 46;
                 ylength = 48;
             }
-            else if (i == 20)
+            else if (i == 6)
             {
                 cageNumber = "106";
                 x = 123;
@@ -252,7 +139,7 @@ public class CageApplication extends JFrame
                 xlength = 47;
                 ylength = 46;
             }
-            else if (i == 21)
+            else if (i == 7)
             {
                 cageNumber = "107";
                 x = 133;
@@ -260,7 +147,7 @@ public class CageApplication extends JFrame
                 xlength = 46;
                 ylength = 46;
             }
-            else if (i == 22)
+            else if (i == 8)
             {
                 cageNumber = "108";
                 x = 145;
@@ -268,7 +155,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 46;
             }
-            else if (i == 23)
+            else if (i == 9)
             {
                 cageNumber = "109";
                 x = 153;
@@ -276,7 +163,7 @@ public class CageApplication extends JFrame
                 xlength = 47;
                 ylength = 46;
             }
-            else if (i == 24)
+            else if (i == 10)
             {
                 cageNumber = "110";
                 x = 124;
@@ -284,7 +171,7 @@ public class CageApplication extends JFrame
                 xlength = 46;
                 ylength = 46;
             }
-            else if (i == 25)
+            else if (i == 11)
             {
                 cageNumber = "111";
                 x = 136;
@@ -292,7 +179,7 @@ public class CageApplication extends JFrame
                 xlength = 46;
                 ylength = 46;
             }
-            else if (i == 26)
+            else if (i == 12)
             {
                 cageNumber = "112";
                 x = 147;
@@ -300,7 +187,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 46;
             }
-            else if (i == 27)
+            else if (i == 13)
             {
                 cageNumber = "113";
                 x = 156;
@@ -308,7 +195,7 @@ public class CageApplication extends JFrame
                 xlength = 46;
                 ylength = 46;
             }
-            else if (i == 28)
+            else if (i == 14)
             {
                 cageNumber = "114";
                 x = 165;
@@ -316,7 +203,7 @@ public class CageApplication extends JFrame
                 xlength = 46;
                 ylength = 46;
             }
-            else if (i == 29)
+            else if (i == 15)
             {
                 cageNumber = "115";
                 x = 174;
@@ -324,7 +211,7 @@ public class CageApplication extends JFrame
                 xlength = 46;
                 ylength = 46;
             }
-            else if (i == 30)
+            else if (i == 16)
             {
                 cageNumber = "116";
                 x = 184;
@@ -332,7 +219,7 @@ public class CageApplication extends JFrame
                 xlength = 47;
                 ylength = 46;
             }
-            else if (i == 31)
+            else if (i == 17)
             {
                 cageNumber = "117";
                 x = 195;
@@ -340,7 +227,7 @@ public class CageApplication extends JFrame
                 xlength = 46;
                 ylength = 45;
             }
-            else if (i == 32)
+            else if (i == 18)
             {
                 cageNumber = "118";
                 x = 206;
@@ -348,7 +235,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 45;
             }
-            else if (i == 33)
+            else if (i == 19)
             {
                 cageNumber = "119";
                 x = 214;
@@ -356,7 +243,7 @@ public class CageApplication extends JFrame
                 xlength = 47;
                 ylength = 46;
             }
-            else if (i == 34)
+            else if (i == 20)
             {
                 cageNumber = "120";
                 x = 224;
@@ -364,7 +251,7 @@ public class CageApplication extends JFrame
                 xlength = 47;
                 ylength = 45;
             }
-            else if (i == 35)
+            else if (i == 21)
             {
                 cageNumber = "121";
                 x = 166;
@@ -372,7 +259,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 46;
             }
-            else if (i == 36)
+            else if (i == 22)
             {
                 cageNumber = "122";
                 x = 175;
@@ -380,7 +267,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 45;
             }
-            else if (i == 37)
+            else if (i == 23)
             {
                 cageNumber = "123";
                 x = 188;
@@ -388,7 +275,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 46;
             }
-            else if (i == 38)
+            else if (i == 24)
             {
                 cageNumber = "124";
                 x = 197;
@@ -396,7 +283,7 @@ public class CageApplication extends JFrame
                 xlength = 46;
                 ylength = 47;
             }
-            else if (i == 39)
+            else if (i == 25)
             {
                 cageNumber = "125";
                 x = 207;
@@ -404,7 +291,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 46;
             }
-            else if (i == 40)
+            else if (i == 26)
             {
                 cageNumber = "126";
                 x = 216;
@@ -412,7 +299,7 @@ public class CageApplication extends JFrame
                 xlength = 46;
                 ylength = 45;
             }
-            else if (i == 41)
+            else if (i == 27)
             {
                 cageNumber = "127";
                 x = 226;
@@ -420,7 +307,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 44;
             }
-            else if (i == 42)
+            else if (i == 28)
             {
                 cageNumber = "201";
                 x = 227;
@@ -428,7 +315,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 45;
             }
-            else if (i == 43)
+            else if (i == 29)
             {
                 cageNumber = "202";
                 x = 235;
@@ -436,7 +323,7 @@ public class CageApplication extends JFrame
                 xlength = 46;
                 ylength = 44;
             }
-            else if (i == 44)
+            else if (i == 30)
             {
                 cageNumber = "203";
                 x = 250;
@@ -444,7 +331,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 45;
             }
-            else if (i == 45)
+            else if (i == 31)
             {
                 cageNumber = "204";
                 x = 259;
@@ -452,7 +339,7 @@ public class CageApplication extends JFrame
                 xlength = 44;
                 ylength = 45;
             }
-            else if (i == 46)
+            else if (i == 32)
             {
                 cageNumber = "205";
                 x = 267;
@@ -460,7 +347,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 44;
             }
-            else if (i == 47)
+            else if (i == 33)
             {
                 cageNumber = "206";
                 x = 276;
@@ -468,7 +355,7 @@ public class CageApplication extends JFrame
                 xlength = 46;
                 ylength = 44;
             }
-            else if (i == 48)
+            else if (i == 34)
             {
                 cageNumber = "207";
                 x = 286;
@@ -476,7 +363,7 @@ public class CageApplication extends JFrame
                 xlength = 44;
                 ylength = 42;
             }
-            else if (i == 49)
+            else if (i == 35)
             {
                 cageNumber = "208";
                 x = 305;
@@ -484,7 +371,7 @@ public class CageApplication extends JFrame
                 xlength = 44;
                 ylength = 43;
             }
-            else if (i == 50)
+            else if (i == 36)
             {
                 cageNumber = "209";
                 x = 307;
@@ -492,7 +379,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 45;
             }
-            else if (i == 51)
+            else if (i == 37)
             {
                 cageNumber = "210";
                 x = 308;
@@ -500,7 +387,7 @@ public class CageApplication extends JFrame
                 xlength = 44;
                 ylength = 43;
             }
-            else if (i == 52)
+            else if (i == 38)
             {
                 cageNumber = "211";
                 x = 308;
@@ -508,7 +395,7 @@ public class CageApplication extends JFrame
                 xlength = 46;
                 ylength = 44;
             }
-            else if (i == 53)
+            else if (i == 39)
             {
                 cageNumber = "212";
                 x = 311;
@@ -516,7 +403,7 @@ public class CageApplication extends JFrame
                 xlength = 44;
                 ylength = 45;
             }
-            else if (i == 54)
+            else if (i == 40)
             {
                 cageNumber = "213";
                 x = 313;
@@ -524,7 +411,7 @@ public class CageApplication extends JFrame
                 xlength = 44;
                 ylength = 44;
             }
-            else if (i == 55)
+            else if (i == 41)
             {
                 cageNumber = "214";
                 x = 300;
@@ -532,7 +419,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 45;
             }
-            else if (i == 56)
+            else if (i == 42)
             {
                 cageNumber = "215";
                 x = 310;
@@ -540,7 +427,7 @@ public class CageApplication extends JFrame
                 xlength = 44;
                 ylength = 46;
             }
-            else if (i == 57)
+            else if (i == 43)
             {
                 cageNumber = "216";
                 x = 318;
@@ -548,7 +435,7 @@ public class CageApplication extends JFrame
                 xlength = 46;
                 ylength = 44;
             }
-            else if (i == 58)
+            else if (i == 44)
             {
                 cageNumber = "217";
                 x = 328;
@@ -556,7 +443,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 44;
             }
-            else if (i == 59)
+            else if (i == 45)
             {
                 cageNumber = "218";
                 x = 336;
@@ -564,7 +451,7 @@ public class CageApplication extends JFrame
                 xlength = 44;
                 ylength = 42;
             }
-            else if (i == 60)
+            else if (i == 46)
             {
                 cageNumber = "219";
                 x = 361;
@@ -572,7 +459,7 @@ public class CageApplication extends JFrame
                 xlength = 44;
                 ylength = 44;
             }
-            else if (i == 61)
+            else if (i == 47)
             {
                 cageNumber = "220";
                 x = 361;
@@ -580,7 +467,7 @@ public class CageApplication extends JFrame
                 xlength = 46;
                 ylength = 45;
             }
-            else if (i == 62)
+            else if (i == 48)
             {
                 cageNumber = "221";
                 x = 364;
@@ -588,7 +475,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 44;
             }
-            else if (i == 63)
+            else if (i == 49)
             {
                 cageNumber = "222";
                 x = 364;
@@ -596,7 +483,7 @@ public class CageApplication extends JFrame
                 xlength = 46;
                 ylength = 45;
             }
-            else if (i == 64)
+            else if (i == 50)
             {
                 cageNumber = "223";
                 x = 367;
@@ -604,7 +491,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 45;
             }
-            else if (i == 65)
+            else if (i == 51)
             {
                 cageNumber = "224";
                 x = 369;
@@ -612,39 +499,7 @@ public class CageApplication extends JFrame
                 xlength = 44;
                 ylength = 44;
             }
-            else if (i == 66)
-            {
-                cageNumber = "301";
-                x = 343;
-                y = 51;
-                xlength = 45;
-                ylength = 45;
-            }
-            else if (i == 67)
-            {
-                cageNumber = "302";
-                x = 352;
-                y = 105;
-                xlength = 45;
-                ylength = 44;
-            }
-            else if (i == 68)
-            {
-                cageNumber = "303";
-                x = 367;
-                y = 186;
-                xlength = 45;
-                ylength = 44;
-            }
-            else if (i == 69)
-            {
-                cageNumber = "304";
-                x = 375;
-                y = 240;
-                xlength = 47;
-                ylength = 45;
-            }
-            else if (i == 70)
+            else if (i == 52)
             {
                 cageNumber = "225";
                 x = 460;
@@ -652,7 +507,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 44;
             }
-            else if (i == 71)
+            else if (i == 53)
             {
                 cageNumber = "226";
                 x = 462;
@@ -660,7 +515,7 @@ public class CageApplication extends JFrame
                 xlength = 43;
                 ylength = 44;
             }
-            else if (i == 72)
+            else if (i == 54)
             {
                 cageNumber = "227";
                 x = 463;
@@ -668,7 +523,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 44;
             }
-            else if (i == 73)
+            else if (i == 55)
             {
                 cageNumber = "228";
                 x = 467;
@@ -676,39 +531,7 @@ public class CageApplication extends JFrame
                 xlength = 44;
                 ylength = 45;
             }
-            else if (i == 74)
-            {
-                cageNumber = "305";
-                x = 404;
-                y = 40;
-                xlength = 46;
-                ylength = 45;
-            }
-            else if (i == 75)
-            {
-                cageNumber = "306";
-                x = 413;
-                y = 93;
-                xlength = 46;
-                ylength = 46;
-            }
-            else if (i == 76)
-            {
-                cageNumber = "307";
-                x = 428;
-                y = 174;
-                xlength = 46;
-                ylength = 45;
-            }
-            else if (i == 77)
-            {
-                cageNumber = "308";
-                x = 438;
-                y = 228;
-                xlength = 45;
-                ylength = 46;
-            }
-            else if (i == 78)
+            else if (i == 56)
             {
                 cageNumber = "229";
                 x = 521;
@@ -716,7 +539,7 @@ public class CageApplication extends JFrame
                 xlength = 44;
                 ylength = 45;
             }
-            else if (i == 79)
+            else if (i == 57)
             {
                 cageNumber = "230";
                 x = 523;
@@ -724,7 +547,7 @@ public class CageApplication extends JFrame
                 xlength = 44;
                 ylength = 45;
             }
-            else if (i == 80)
+            else if (i == 58)
             {
                 cageNumber = "231";
                 x = 524;
@@ -732,7 +555,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 44;
             }
-            else if (i == 81)
+            else if (i == 59)
             {
                 cageNumber = "232";
                 x = 527;
@@ -740,7 +563,71 @@ public class CageApplication extends JFrame
                 xlength = 44;
                 ylength = 45;
             }
-            else if (i == 82)
+            else if (i == 60)
+            {
+                cageNumber = "301";
+                x = 343;
+                y = 51;
+                xlength = 45;
+                ylength = 45;
+            }
+            else if (i == 61)
+            {
+                cageNumber = "302";
+                x = 352;
+                y = 105;
+                xlength = 45;
+                ylength = 44;
+            }
+            else if (i == 62)
+            {
+                cageNumber = "303";
+                x = 367;
+                y = 186;
+                xlength = 45;
+                ylength = 44;
+            }
+            else if (i == 63)
+            {
+                cageNumber = "304";
+                x = 375;
+                y = 240;
+                xlength = 47;
+                ylength = 45;
+            }
+            else if (i == 64)
+            {
+                cageNumber = "305";
+                x = 404;
+                y = 40;
+                xlength = 46;
+                ylength = 45;
+            }
+            else if (i == 65)
+            {
+                cageNumber = "306";
+                x = 413;
+                y = 93;
+                xlength = 46;
+                ylength = 46;
+            }
+            else if (i == 66)
+            {
+                cageNumber = "307";
+                x = 428;
+                y = 174;
+                xlength = 46;
+                ylength = 45;
+            }
+            else if (i == 67)
+            {
+                cageNumber = "308";
+                x = 438;
+                y = 228;
+                xlength = 45;
+                ylength = 46;
+            }
+            else if (i == 68)
             {
                 cageNumber = "309";
                 x = 467;
@@ -748,7 +635,7 @@ public class CageApplication extends JFrame
                 xlength = 44;
                 ylength = 45;
             }
-            else if (i == 83)
+            else if (i == 69)
             {
                 cageNumber = "310";
                 x = 476;
@@ -756,7 +643,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 44;
             }
-            else if (i == 84)
+            else if (i == 70)
             {
                 cageNumber = "311";
                 x = 491;
@@ -764,7 +651,7 @@ public class CageApplication extends JFrame
                 xlength = 44;
                 ylength = 44;
             }
-            else if (i == 85)
+            else if (i == 71)
             {
                 cageNumber = "312";
                 x = 516;
@@ -772,7 +659,7 @@ public class CageApplication extends JFrame
                 xlength = 44;
                 ylength = 46;
             }
-            else if (i == 86)
+            else if (i == 72)
             {
                 cageNumber = "313";
                 x = 526;
@@ -780,7 +667,7 @@ public class CageApplication extends JFrame
                 xlength = 43;
                 ylength = 45;
             }
-            else if (i == 87)
+            else if (i == 73)
             {
                 cageNumber = "314";
                 x = 542;
@@ -788,7 +675,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 45;
             }
-            else if (i == 88)
+            else if (i == 74)
             {
                 cageNumber = "315";
                 x = 542;
@@ -796,7 +683,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 45;
             }
-            else if (i == 89)
+            else if (i == 75)
             {
                 cageNumber = "316";
                 x = 543;
@@ -804,7 +691,7 @@ public class CageApplication extends JFrame
                 xlength = 44;
                 ylength = 45;
             }
-            else if (i == 90)
+            else if (i == 76)
             {
                 cageNumber = "317";
                 x = 543;
@@ -812,7 +699,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 45;
             }
-            else if (i == 91)
+            else if (i == 77)
             {
                 cageNumber = "318";
                 x = 591;
@@ -820,7 +707,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 45;
             }
-            else if (i == 92)
+            else if (i == 78)
             {
                 cageNumber = "319";
                 x = 591;
@@ -828,7 +715,7 @@ public class CageApplication extends JFrame
                 xlength = 46;
                 ylength = 46;
             }
-            else if (i == 93)
+            else if (i == 79)
             {
                 cageNumber = "320";
                 x = 593;
@@ -836,7 +723,7 @@ public class CageApplication extends JFrame
                 xlength = 44;
                 ylength = 45;
             }
-            else if (i == 94)
+            else if (i == 80)
             {
                 cageNumber = "321";
                 x = 593;
@@ -844,7 +731,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 46;
             }
-            else if (i == 95)
+            else if (i == 81)
             {
                 cageNumber = "322";
                 x = 594;
@@ -852,7 +739,7 @@ public class CageApplication extends JFrame
                 xlength = 44;
                 ylength = 46;
             }
-            else if (i == 96)
+            else if (i == 82)
             {
                 cageNumber = "323";
                 x = 594;
@@ -860,7 +747,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 46;
             }
-            else if (i == 97)
+            else if (i == 83)
             {
                 cageNumber = "324";
                 x = 594;
@@ -868,7 +755,7 @@ public class CageApplication extends JFrame
                 xlength = 46;
                 ylength = 46;
             }
-            else if (i == 98)
+            else if (i == 84)
             {
                 cageNumber = "325";
                 x = 595;
@@ -876,7 +763,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 46;
             }
-            else if (i == 99)
+            else if (i == 85)
             {
                 cageNumber = "326";
                 x = 595;
@@ -884,135 +771,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 44;
             }
-            else if (i == 100)
-            {
-                cageNumber = "801";
-                x = 384;
-                y = 317;
-                xlength = 29;
-                ylength = 29;
-            }
-            else if (i == 101)
-            {
-                cageNumber = "802";
-                x = 391;
-                y = 349;
-                xlength = 30;
-                ylength = 28;
-            }
-            else if (i == 102)
-            {
-                cageNumber = "803";
-                x = 397;
-                y = 382;
-                xlength = 29;
-                ylength = 27;
-            }
-            else if (i == 103)
-            {
-                cageNumber = "804";
-                x = 403;
-                y = 414;
-                xlength = 29;
-                ylength = 26;
-            }
-            else if (i == 104)
-            {
-                cageNumber = "805";
-                x = 418;
-                y = 312;
-                xlength = 30;
-                ylength = 27;
-            }
-            else if (i == 105)
-            {
-                cageNumber = "806";
-                x = 425;
-                y = 342;
-                xlength = 29;
-                ylength = 27;
-            }
-            else if (i == 106)
-            {
-                cageNumber = "807";
-                x = 432;
-                y = 376;
-                xlength = 28;
-                ylength = 27;
-            }
-            else if (i == 107)
-            {
-                cageNumber = "808";
-                x = 437;
-                y = 406;
-                xlength = 29;
-                ylength = 29;
-            }
-            else if (i == 108)
-            {
-                cageNumber = "809";
-                x = 454;
-                y = 312;
-                xlength = 31;
-                ylength = 29;
-            }
-            else if (i == 109)
-            {
-                cageNumber = "810";
-                x = 461;
-                y = 344;
-                xlength = 29;
-                ylength = 28;
-            }
-            else if (i == 110)
-            {
-                cageNumber = "811";
-                x = 467;
-                y = 377;
-                xlength = 29;
-                ylength = 27;
-            }
-            else if (i == 111)
-            {
-                cageNumber = "812";
-                x = 474;
-                y = 408;
-                xlength = 30;
-                ylength = 28;
-            }
-            else if (i == 112)
-            {
-                cageNumber = "813";
-                x = 490;
-                y = 307;
-                xlength = 28;
-                ylength = 27;
-            }
-            else if (i == 113)
-            {
-                cageNumber = "814";
-                x = 497;
-                y = 337;
-                xlength = 28;
-                ylength = 27;
-            }
-            else if (i == 114)
-            {
-                cageNumber = "815";
-                x = 502;
-                y = 371;
-                xlength = 29;
-                ylength = 28;
-            }
-            else if (i == 115)
-            {
-                cageNumber = "816";
-                x = 509;
-                y = 404;
-                xlength = 29;
-                ylength = 28;
-            }
-            else if (i == 116)
+            else if (i == 86)
             {
                 cageNumber = "401";
                 x = 654;
@@ -1020,7 +779,7 @@ public class CageApplication extends JFrame
                 xlength = 44;
                 ylength = 45;
             }
-            else if (i == 117)
+            else if (i == 87)
             {
                 cageNumber = "402";
                 x = 653;
@@ -1028,7 +787,7 @@ public class CageApplication extends JFrame
                 xlength = 46;
                 ylength = 45;
             }
-            else if (i == 118)
+            else if (i == 88)
             {
                 cageNumber = "403";
                 x = 655;
@@ -1036,7 +795,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 46;
             }
-            else if (i == 119)
+            else if (i == 89)
             {
                 cageNumber = "404";
                 x = 655;
@@ -1044,7 +803,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 46;
             }
-            else if (i == 120)
+            else if (i == 90)
             {
                 cageNumber = "405";
                 x = 656;
@@ -1052,7 +811,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 47;
             }
-            else if (i == 121)
+            else if (i == 91)
             {
                 cageNumber = "406";
                 x = 657;
@@ -1060,7 +819,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 46;
             }
-            else if (i == 122)
+            else if (i == 92)
             {
                 cageNumber = "407";
                 x = 657;
@@ -1068,7 +827,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 46;
             }
-            else if (i == 123)
+            else if (i == 93)
             {
                 cageNumber = "408";
                 x = 659;
@@ -1076,7 +835,7 @@ public class CageApplication extends JFrame
                 xlength = 43;
                 ylength = 46;
             }
-            else if (i == 124)
+            else if (i == 94)
             {
                 cageNumber = "409";
                 x = 658;
@@ -1084,7 +843,23 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 44;
             }
-            else if (i == 125)
+            else if (i == 95)
+            {
+                cageNumber = "410";
+                x = 713;
+                y = 526;
+                xlength = 46;
+                ylength = 47;
+            }
+            else if (i == 96)
+            {
+                cageNumber = "411";
+                x = 723;
+                y = 579;
+                xlength = 46;
+                ylength = 45;
+            }
+            else if (i == 97)
             {
                 cageNumber = "412";
                 x = 705;
@@ -1092,7 +867,7 @@ public class CageApplication extends JFrame
                 xlength = 44;
                 ylength = 45;
             }
-            else if (i == 126)
+            else if (i == 98)
             {
                 cageNumber = "413";
                 x = 705;
@@ -1100,7 +875,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 46;
             }
-            else if (i == 127)
+            else if (i == 99)
             {
                 cageNumber = "414";
                 x = 706;
@@ -1108,7 +883,7 @@ public class CageApplication extends JFrame
                 xlength = 44;
                 ylength = 46;
             }
-            else if (i == 128)
+            else if (i == 100)
             {
                 cageNumber = "415";
                 x = 707;
@@ -1116,7 +891,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 47;
             }
-            else if (i == 129)
+            else if (i == 101)
             {
                 cageNumber = "416";
                 x = 707;
@@ -1124,7 +899,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 47;
             }
-            else if (i == 130)
+            else if (i == 102)
             {
                 cageNumber = "417";
                 x = 708;
@@ -1132,7 +907,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 47;
             }
-            else if (i == 131)
+            else if (i == 103)
             {
                 cageNumber = "418";
                 x = 708;
@@ -1140,7 +915,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 47;
             }
-            else if (i == 132)
+            else if (i == 104)
             {
                 cageNumber = "419";
                 x = 708;
@@ -1148,7 +923,23 @@ public class CageApplication extends JFrame
                 xlength = 46;
                 ylength = 46;
             }
-            else if (i == 133)
+            else if (i == 105)
+            {
+                cageNumber = "420";
+                x = 772;
+                y = 513;
+                xlength = 46;
+                ylength = 47;
+            }
+            else if (i == 106)
+            {
+                cageNumber = "421";
+                x = 783;
+                y = 566;
+                xlength = 46;
+                ylength = 46;
+            }
+            else if (i == 107)
             {
                 cageNumber = "422";
                 x = 767;
@@ -1156,7 +947,7 @@ public class CageApplication extends JFrame
                 xlength = 46;
                 ylength = 46;
             }
-            else if (i == 134)
+            else if (i == 108)
             {
                 cageNumber = "423";
                 x = 768;
@@ -1164,7 +955,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 47;
             }
-            else if (i == 135)
+            else if (i == 109)
             {
                 cageNumber = "424";
                 x = 769;
@@ -1172,7 +963,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 46;
             }
-            else if (i == 136)
+            else if (i == 110)
             {
                 cageNumber = "425";
                 x = 768;
@@ -1180,7 +971,7 @@ public class CageApplication extends JFrame
                 xlength = 46;
                 ylength = 46;
             }
-            else if (i == 137)
+            else if (i == 111)
             {
                 cageNumber = "426";
                 x = 769;
@@ -1188,7 +979,7 @@ public class CageApplication extends JFrame
                 xlength = 47;
                 ylength = 47;
             }
-            else if (i == 138)
+            else if (i == 112)
             {
                 cageNumber = "427";
                 x = 770;
@@ -1196,7 +987,7 @@ public class CageApplication extends JFrame
                 xlength = 46;
                 ylength = 47;
             }
-            else if (i == 139)
+            else if (i == 113)
             {
                 cageNumber = "428";
                 x = 770;
@@ -1204,7 +995,7 @@ public class CageApplication extends JFrame
                 xlength = 47;
                 ylength = 47;
             }
-            else if (i == 140)
+            else if (i == 114)
             {
                 cageNumber = "429";
                 x = 772;
@@ -1212,7 +1003,7 @@ public class CageApplication extends JFrame
                 xlength = 46;
                 ylength = 47;
             }
-            else if (i == 141)
+            else if (i == 115)
             {
                 cageNumber = "430";
                 x = 818;
@@ -1220,7 +1011,7 @@ public class CageApplication extends JFrame
                 xlength = 46;
                 ylength = 47;
             }
-            else if (i == 142)
+            else if (i == 116)
             {
                 cageNumber = "431";
                 x = 819;
@@ -1228,7 +1019,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 47;
             }
-            else if (i == 143)
+            else if (i == 117)
             {
                 cageNumber = "432";
                 x = 819;
@@ -1236,7 +1027,7 @@ public class CageApplication extends JFrame
                 xlength = 46;
                 ylength = 46;
             }
-            else if (i == 144)
+            else if (i == 118)
             {
                 cageNumber = "433";
                 x = 820;
@@ -1244,7 +1035,7 @@ public class CageApplication extends JFrame
                 xlength = 44;
                 ylength = 46;
             }
-            else if (i == 145)
+            else if (i == 119)
             {
                 cageNumber = "434";
                 x = 820;
@@ -1252,7 +1043,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 46;
             }
-            else if (i == 146)
+            else if (i == 120)
             {
                 cageNumber = "435";
                 x = 821;
@@ -1260,7 +1051,7 @@ public class CageApplication extends JFrame
                 xlength = 46;
                 ylength = 46;
             }
-            else if (i == 147)
+            else if (i == 121)
             {
                 cageNumber = "436";
                 x = 822;
@@ -1268,7 +1059,7 @@ public class CageApplication extends JFrame
                 xlength = 45;
                 ylength = 46;
             }
-            else
+            else if (i == 122)
             {
                 cageNumber = "437";
                 x = 823;
@@ -1276,6 +1067,215 @@ public class CageApplication extends JFrame
                 xlength = 46;
                 ylength = 47;
             }
+            else if (i == 123)
+            {
+                cageNumber = "801";
+                x = 384;
+                y = 317;
+                xlength = 29;
+                ylength = 29;
+            }
+            else if (i == 124)
+            {
+                cageNumber = "802";
+                x = 391;
+                y = 349;
+                xlength = 30;
+                ylength = 28;
+            }
+            else if (i == 125)
+            {
+                cageNumber = "803";
+                x = 397;
+                y = 382;
+                xlength = 29;
+                ylength = 27;
+            }
+            else if (i == 126)
+            {
+                cageNumber = "804";
+                x = 403;
+                y = 414;
+                xlength = 29;
+                ylength = 26;
+            }
+            else if (i == 127)
+            {
+                cageNumber = "805";
+                x = 418;
+                y = 312;
+                xlength = 30;
+                ylength = 27;
+            }
+            else if (i == 128)
+            {
+                cageNumber = "806";
+                x = 425;
+                y = 342;
+                xlength = 29;
+                ylength = 27;
+            }
+            else if (i == 129)
+            {
+                cageNumber = "807";
+                x = 432;
+                y = 376;
+                xlength = 28;
+                ylength = 27;
+            }
+            else if (i == 130)
+            {
+                cageNumber = "808";
+                x = 437;
+                y = 406;
+                xlength = 29;
+                ylength = 29;
+            }
+            else if (i == 131)
+            {
+                cageNumber = "809";
+                x = 454;
+                y = 312;
+                xlength = 31;
+                ylength = 29;
+            }
+            else if (i == 132)
+            {
+                cageNumber = "810";
+                x = 461;
+                y = 344;
+                xlength = 29;
+                ylength = 28;
+            }
+            else if (i == 133)
+            {
+                cageNumber = "811";
+                x = 467;
+                y = 377;
+                xlength = 29;
+                ylength = 27;
+            }
+            else if (i == 134)
+            {
+                cageNumber = "812";
+                x = 474;
+                y = 408;
+                xlength = 30;
+                ylength = 28;
+            }
+            else if (i == 135)
+            {
+                cageNumber = "813";
+                x = 490;
+                y = 307;
+                xlength = 28;
+                ylength = 27;
+            }
+            else if (i == 136)
+            {
+                cageNumber = "814";
+                x = 497;
+                y = 337;
+                xlength = 28;
+                ylength = 27;
+            }
+            else if (i == 137)
+            {
+                cageNumber = "815";
+                x = 502;
+                y = 371;
+                xlength = 29;
+                ylength = 28;
+            }
+            else if (i == 138)
+            {
+                cageNumber = "816";
+                x = 509;
+                y = 404;
+                xlength = 29;
+                ylength = 28;
+            }
+            else if (i == 139)
+            {
+                cageNumber = "901";
+                x = 629;
+                y = 520;
+                xlength = 30;
+                ylength = 28;
+            }
+            else if (i == 140)
+            {
+                cageNumber = "902";
+                x = 636;
+                y = 552;
+                xlength = 29;
+                ylength = 27;
+            }
+            else if (i == 141)
+            {
+                cageNumber = "903";
+                x = 644;
+                y = 583;
+                xlength = 26;
+                ylength = 26;
+            }
+            else if (i == 142)
+            {
+                cageNumber = "904";
+                x = 650;
+                y = 612;
+                xlength = 28;
+                ylength = 27;
+            }
+            else if (i == 143)
+            {
+                cageNumber = "905";
+                x = 665;
+                y = 513;
+                xlength = 27;
+                ylength = 27;
+            }
+            else if (i == 144)
+            {
+                cageNumber = "906";
+                x = 672;
+                y = 545;
+                xlength = 27;
+                ylength = 26;
+            }
+            else if (i == 145)
+            {
+                cageNumber = "907";
+                x = 677;
+                y = 574;
+                xlength = 28;
+                ylength = 27;
+            }
+            else if (i == 146)
+            {
+                cageNumber = "908";
+                x = 683;
+                y = 604;
+                xlength = 28;
+                ylength = 27;
+            }
+            else if (i == 147)
+            {
+                cageNumber = "909";
+                x = 704;
+                y = 494;
+                xlength = 27;
+                ylength = 27;
+            }
+            else
+            {
+                cageNumber = "910";
+                x = 739;
+                y = 483;
+                xlength = 27;
+                ylength = 26;
+            }
+            
             button = new JButton(cageNumber);
             button.setBounds(x, y, xlength, ylength);
             button.setOpaque(false);
