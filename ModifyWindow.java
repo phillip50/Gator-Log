@@ -1,3 +1,11 @@
+/**
+ * For use with the CageApplication.java class
+ * When a cage is specified in that application, an object of this class if created to generate a window specific to that pen
+ * In this window, the user can modify attributes of the pen and view gators contained within it
+ * 
+ * @Phillip Dingler [phil50@ufl.edu]
+ */
+
 //TODO: finish commenting
 
 package test;
@@ -18,6 +26,7 @@ import java.util.*;
 
 public class ModifyWindow extends JFrame
 {
+        //"this" object
     private ModifyWindow frame;
     
         //screen size if the size of the monitor, size is the preferred size of interface components
@@ -93,11 +102,13 @@ public class ModifyWindow extends JFrame
     private final java.util.List<JLabel> classLabel;
     private final java.util.List<JLabel> commentLabel;
     
+    
+    
     public ModifyWindow(java.util.List<Row> inputRows, String penNumber)
     {
         super("View Pen " + penNumber);
         rows = inputRows;
-            
+        
             //get screen size and set component size to be fraction of it
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         width = screenSize.getWidth();
@@ -159,6 +170,9 @@ public class ModifyWindow extends JFrame
         commentLabel = new ArrayList<>();
     }
     
+    
+        //Add components to the interface
+        //can be called again to rewrite the components
     public void addComponents()
     {
         tabbedPanel.removeAll();
@@ -366,11 +380,13 @@ public class ModifyWindow extends JFrame
         add(tabbedPanel);
     }
     
+        //get "this" instance
     public void setFrame(ModifyWindow f)
     {
         frame = f;
     }
     
+        //helper method to check if a given string can be parsed as an integer
     public static boolean isInteger(String str)
     {
 	if (str == null)
@@ -402,18 +418,28 @@ public class ModifyWindow extends JFrame
 	return true;
     }
     
+        //define all components in the interface and add listeners
     public void Initialize()
     {
-        String[] temperatureList = new String[10];
-        for (int i = 0; i < 10; i++)
-        {
-            temperatureList[i] = "" + (i + 85);
-        }
+            //initialize lists to be used in the drop down menus
+        String[] temperatureList = {"85", "86", "87", "88", "89", "90", "91", "92", "93", "94"};
         String[] feedList = {"(R) - Regular", "(H) - Hatchling", "(I) - Intermediate"};
         String[] classList = {"Empty", "Hatchling", "Family", "15-18", "19-23", "24-28", "29-33", "34-36", "37-38", "39+"};
         
+        
         for (int i = 0; i < rows.size(); i++)
         {
+            
+                //declare each inner array in the 2d arrays
+            java.util.List<Row> tempGatorRow = new ArrayList();
+            gatorList.add(tempGatorRow);
+            java.util.List<String> tempTagRow = new ArrayList();
+            tagList.add(tempTagRow);
+            
+            
+                //Button used to enabled and disable the waterChangeDateField text entry
+                //if enabled, the new record's water change date will be whats entered in that field
+                //if disabled, the new record's water change date will be the date from the previous record
             JButton tempDoChange = new JButton("Didn't change");
             tempDoChange.setEnabled(true);
             tempDoChange.setPreferredSize(size);
@@ -443,6 +469,9 @@ public class ModifyWindow extends JFrame
             changeWater.add(false);
             waterChangeDates.add(rows.get(i).get("Water Change Date").toString());
             
+            
+                //text field to record the date of a water change, if the water has been changed
+                //if the doChange button has not been clicked, this field is disabled
             JTextField tempWaterChangeField = new JTextField(10);
             tempWaterChangeField.setFont(font);
             tempWaterChangeField.setText(currentDate);
@@ -476,6 +505,9 @@ public class ModifyWindow extends JFrame
             });
             waterChangeDateFields.add(tempWaterChangeField);
             
+            
+            
+                //drop down list to enter the temperature of the pen
             JComboBox tempTemperature = new JComboBox(temperatureList);
             tempTemperature.setEditable(false);
             tempTemperature.setPrototypeDisplayValue("Any Additional Commen");
@@ -512,6 +544,9 @@ public class ModifyWindow extends JFrame
             });
             temperatures.add(tempTemperature);
             
+            
+            
+                //drop down list to select the food type of the pen
             JComboBox tempFeed = new JComboBox(feedList);
             tempFeed.setEditable(false);
             tempFeed.setPrototypeDisplayValue("Any Additional Commen");
@@ -535,6 +570,8 @@ public class ModifyWindow extends JFrame
             
             feeds.add(tempFeed);
             
+            
+                //text field to enter the amount of food, in pounds
             JTextField tempAmount = new JTextField();
             tempAmount.setFont(font);
             tempAmount.setText(rows.get(i).get("Feed Amount").toString());
@@ -566,8 +603,12 @@ public class ModifyWindow extends JFrame
             });
             amounts.add(tempAmount);
             
+            
+                //boolean check to verify that the feed amount is an integer
             feedAmountValid.add(true);
             
+            
+                //drop down menu to select the size class of the pen
             JComboBox tempClass = new JComboBox(classList);
             tempClass.setEditable(false);
             tempClass.setPrototypeDisplayValue("Any Additional Commen");
@@ -604,15 +645,14 @@ public class ModifyWindow extends JFrame
             });
             classes.add(tempClass);
             
+            
+                //simple text field to add additional comments about the record
             JTextField tempComment = new JTextField(10);
             tempComment.setFont(font);
             comments.add(tempComment);
-            
-            java.util.List<Row> tempGatorRow = new ArrayList();
-            gatorList.add(tempGatorRow);
-            java.util.List<String> tempTagRow = new ArrayList();
-            tagList.add(tempTagRow);
         
+            
+                //when confirm is click, record the entry into the database and close the frame
             JButton tempConfirm = new JButton("Confirm");
             tempConfirm.setEnabled(true);
             tempConfirm.setPreferredSize(size);
@@ -631,6 +671,8 @@ public class ModifyWindow extends JFrame
             });
             confirm.add(tempConfirm);
             
+            
+                //when cancel is clicked, close the frame
             JButton tempCancel = new JButton("Cancel");
             tempCancel.setEnabled(true);
             tempCancel.setPreferredSize(size);
@@ -640,6 +682,8 @@ public class ModifyWindow extends JFrame
             });
             cancel.add(tempCancel);
             
+            
+                //initialize the labels for each components
             JLabel tempLabel1 = new JLabel("Pen: " + rows.get(i).get("Pen Number"));
             tempLabel1.setFont(font);
             penLabel.add(tempLabel1);
@@ -674,6 +718,8 @@ public class ModifyWindow extends JFrame
         }
     }
     
+        //add all unique gators in the specified pen to gatorList
+        //tagList is used as a check to verify that only the most recent entry in the gator database is used for each gator tag
     public void addGators()
     {
         try
