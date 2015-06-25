@@ -1,3 +1,5 @@
+//TODO: comment
+
 package test;
 
 import javax.swing.*;
@@ -38,7 +40,6 @@ public class CageApplication extends JFrame
         modifyFrame.setFrame(modifyFrame);
         modifyFrame.Initialize();
         modifyFrame.addGators();
-        modifyFrame.setLabels();
         modifyFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         Rectangle rect = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
         double length = rect.getHeight();

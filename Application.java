@@ -1,3 +1,5 @@
+//TODO: comment
+
 package test;
 
 import javax.swing.*; 
@@ -157,7 +159,7 @@ public class Application extends JFrame implements SerialPortEventListener
         isFormula = false;
         skipLength = false;
         skipWeight = false;
-        
+               
         int year = Integer.parseInt(currentDate.substring(6));
         for (int i = 0; i < 4; i++)
         {

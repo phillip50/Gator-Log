@@ -1,3 +1,5 @@
+//TODO: finish commenting
+
 package test;
 
 import javax.swing.*; 
@@ -17,72 +19,102 @@ import java.util.*;
 public class ModifyWindow extends JFrame
 {
     private ModifyWindow frame;
-    private java.util.List<Row> rows;
-    private File cageFile;
-    private Table cageTable;
-    private File gatorFile;
-    private Table gatorTable;
-    private final JTabbedPane tabbedPanel;
-    private final java.util.List<JButton> doChange;
-    private java.util.List<Boolean> changeWater;
-    private final java.util.List<String> waterChangeDates;
-    private final java.util.List<JTextField> waterChangeDateFields;
-    private final java.util.List<JComboBox> temperatures;
-    private final java.util.List<JComboBox> feeds;
-    private final java.util.List<JTextField> amounts;
-    private final java.util.List<JComboBox> classes;
-    private final java.util.List<JTextField> comments;
-    private final java.util.List<JButton> confirm;
-    private final java.util.List<JButton> cancel;
-    private final java.util.List<JLabel> label1;
-    private final java.util.List<JLabel> label2;
-    private final java.util.List<JLabel> label3;
-    private final java.util.List<JLabel> label4;
-    private final java.util.List<JLabel> label5;
-    private final java.util.List<JLabel> label6;
-    private final java.util.List<JLabel> label7;
-    private final java.util.List<JLabel> label8;
+    
+        //screen size if the size of the monitor, size is the preferred size of interface components
     private Dimension screenSize;
-    private java.util.List<Boolean> feedAmountValid;
     private Dimension size;
     private double width;
     private double height;
     private Font font;
-    private final java.util.List<java.util.List<Row>> gatorList;
-    private final java.util.List<java.util.List<String>> tagList;
-    private Row selectedGator;
+    
     private String currentDate;
+    
+        //list of input rows in the cage database
+    private java.util.List<Row> rows;
+    
+        //input databases
+    private File cageFile;
+    private Table cageTable;
+    private File gatorFile;
+    private Table gatorTable;
+    
+        //list of unique tags in database
+    private final java.util.List<java.util.List<String>> tagList;
+        //list of most recent entry in database for each tag
+    private final java.util.List<java.util.List<Row>> gatorList;
+        //specific gator tag selected in interface
+    private Row selectedGator;
+        
+        //components in interface contained in 3 panels:
+        //1. Modify panel to change attributes about the pen
+        //2. Gator panel to view all gators in the selected pen
+        //3. Gator History to view all entries in the gator database for a selected gator
+    private final JTabbedPane tabbedPanel;
+    
+        /*Change water option in the interface
+            Has 2 parts, a button to signify whether the water has been changed
+            And a text field to input a water change date
+            The text field is only enabled in the button has been pressed
+        */
+    private final java.util.List<JButton> doChange;
+    private final java.util.List<Boolean> changeWater;
+    private final java.util.List<String> waterChangeDates;
+    private final java.util.List<JTextField> waterChangeDateFields;
+    
+        //Temperature in pen
+    private final java.util.List<JComboBox> temperatures;
+    
+        //Type of food used in the pen
+    private final java.util.List<JComboBox> feeds;
+    
+        //Amount of food in the pen, in pounds
+        //boolean check to verify the entered String is a number
+    private final java.util.List<JTextField> amounts;
+    private final java.util.List<Boolean> feedAmountValid;
+    
+        //class range of the pen
+    private final java.util.List<JComboBox> classes;
+    
+        //additional comments
+    private final java.util.List<JTextField> comments;
+    
+        //confirm to record entry into database
+        //both options close the frame
+    private final java.util.List<JButton> confirm;
+    private final java.util.List<JButton> cancel;
+    
+        //labels for each component
+    private final java.util.List<JLabel> penLabel;
+    private final java.util.List<JLabel> countLabel;
+    private final java.util.List<JLabel> changeLabel;
+    private final java.util.List<JLabel> temperatureLabel;
+    private final java.util.List<JLabel> feedLabel;
+    private final java.util.List<JLabel> amountLabel;
+    private final java.util.List<JLabel> classLabel;
+    private final java.util.List<JLabel> commentLabel;
     
     public ModifyWindow(java.util.List<Row> inputRows, String penNumber)
     {
         super("View Pen " + penNumber);
         rows = inputRows;
-        tabbedPanel = new JTabbedPane();
+            
+            //get screen size and set component size to be fraction of it
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        feedAmountValid = new ArrayList<>();
-        changeWater = new ArrayList<>();
-        waterChangeDates = new ArrayList<>();
-        waterChangeDateFields = new ArrayList<>();
         width = screenSize.getWidth();
         height = screenSize.getHeight();
         font = new Font("Arial", Font.PLAIN, 25); 
         size = new Dimension((int)(width/6), (int)(height/4));
-        temperatures = new ArrayList<>();
-        feeds = new ArrayList<>();
-        amounts = new ArrayList<>();
-        classes = new ArrayList<>();
-        comments = new ArrayList<>();
-        doChange = new ArrayList<>();
-        confirm = new ArrayList<>();
-        cancel = new ArrayList<>();
         
-        gatorList = new ArrayList<>();
-        tagList = new ArrayList<>();
-        
+            //get current date
         DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
         Date date = new Date();
         currentDate = dateFormat.format(date); 
         
+            //declare 2d arraylists for the unique tags and gator entries
+        gatorList = new ArrayList<>();
+        tagList = new ArrayList<>();
+        
+            //open the databases
         try
         {
             cageFile = new File("CageDatabase.accdb");
@@ -95,14 +127,36 @@ public class ModifyWindow extends JFrame
                             
         }
         
-        label1 = new ArrayList<>();
-        label2 = new ArrayList<>();
-        label3 = new ArrayList<>();
-        label4 = new ArrayList<>();
-        label5 = new ArrayList<>();
-        label6 = new ArrayList<>();
-        label7 = new ArrayList<>();
-        label8 = new ArrayList<>();
+            //Declare the components
+        tabbedPanel = new JTabbedPane();
+        
+        doChange = new ArrayList<>();
+        changeWater = new ArrayList<>();
+        waterChangeDates = new ArrayList<>();
+        waterChangeDateFields = new ArrayList<>();
+        
+        temperatures = new ArrayList<>();
+        
+        feeds = new ArrayList<>();
+        
+        amounts = new ArrayList<>();
+        feedAmountValid = new ArrayList<>();
+        
+        classes = new ArrayList<>();
+        
+        comments = new ArrayList<>();
+        
+        confirm = new ArrayList<>();
+        cancel = new ArrayList<>();
+        
+        penLabel = new ArrayList<>();
+        countLabel = new ArrayList<>();
+        changeLabel = new ArrayList<>();
+        temperatureLabel = new ArrayList<>();
+        feedLabel = new ArrayList<>();
+        amountLabel = new ArrayList<>();
+        classLabel = new ArrayList<>();
+        commentLabel = new ArrayList<>();
     }
     
     public void addComponents()
@@ -120,18 +174,18 @@ public class ModifyWindow extends JFrame
         
             modc.gridx = 0;
             modc.gridy = 0;
-            modifyPanel.add(label1.get(i), modc);
+            modifyPanel.add(penLabel.get(i), modc);
         
             modc.anchor = GridBagConstraints.LINE_START;
             modc.gridx = 1;
             modc.gridy = 0;
-            modifyPanel.add(label2.get(i), modc);
+            modifyPanel.add(countLabel.get(i), modc);
         
             modc.insets = new Insets(50, 30, 10, 30);
         
             modc.gridx = 0;
             modc.gridy = 1;
-            modifyPanel.add(label3.get(i), modc);
+            modifyPanel.add(changeLabel.get(i), modc);
             modc.fill = GridBagConstraints.HORIZONTAL;
             modc.gridx = 1;
             modc.gridy = 1;
@@ -151,21 +205,21 @@ public class ModifyWindow extends JFrame
             modc.anchor = GridBagConstraints.LINE_START;
             modc.gridx = 0;
             modc.gridy = 3;
-            modifyPanel.add(label4.get(i), modc);
+            modifyPanel.add(temperatureLabel.get(i), modc);
             modc.gridx = 1;
             modc.gridy = 3;
             modifyPanel.add(temperatures.get(i), modc);
         
             modc.gridx = 0;
             modc.gridy = 4;
-            modifyPanel.add(label5.get(i), modc);
+            modifyPanel.add(feedLabel.get(i), modc);
             modc.gridx = 1;
             modc.gridy = 4;
             modifyPanel.add(feeds.get(i), modc);
         
             modc.gridx = 0;
             modc.gridy = 5;
-            modifyPanel.add(label6.get(i), modc);
+            modifyPanel.add(amountLabel.get(i), modc);
             modc.gridx = 1;
             modc.gridy = 5;
             modc.fill = GridBagConstraints.HORIZONTAL;
@@ -174,14 +228,14 @@ public class ModifyWindow extends JFrame
             modc.fill = GridBagConstraints.NONE;
             modc.gridx = 0;
             modc.gridy = 6;
-            modifyPanel.add(label7.get(i), modc);
+            modifyPanel.add(classLabel.get(i), modc);
             modc.gridx = 1;
             modc.gridy = 6;
             modifyPanel.add(classes.get(i), modc);
         
             modc.gridx = 0;
             modc.gridy = 7;
-            modifyPanel.add(label8.get(i), modc);
+            modifyPanel.add(commentLabel.get(i), modc);
             modc.gridx = 1;
             modc.gridy = 7;
             modc.fill = GridBagConstraints.BOTH;
@@ -585,6 +639,38 @@ public class ModifyWindow extends JFrame
                 frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
             });
             cancel.add(tempCancel);
+            
+            JLabel tempLabel1 = new JLabel("Pen: " + rows.get(i).get("Pen Number"));
+            tempLabel1.setFont(font);
+            penLabel.add(tempLabel1);
+            
+            JLabel tempLabel2 = new JLabel("Gator Count: " + gatorList.get(i).size());
+            tempLabel2.setFont(font);
+            countLabel.add(tempLabel2);
+            
+            JLabel tempLabel3 = new JLabel("Water Change Date: ");
+            tempLabel3.setFont(font);
+            changeLabel.add(tempLabel3);
+            
+            JLabel tempLabel4 = new JLabel("Water Temperature: ");
+            tempLabel4.setFont(font);
+            temperatureLabel.add(tempLabel4);
+            
+            JLabel tempLabel5 = new JLabel("Feed Type: ");
+            tempLabel5.setFont(font);
+            feedLabel.add(tempLabel5);
+            
+            JLabel tempLabel6 = new JLabel("Feed Amount (in lbs.): ");
+            tempLabel6.setFont(font);
+            amountLabel.add(tempLabel6);
+            
+            JLabel tempLabel7 = new JLabel("Size Class: ");
+            tempLabel7.setFont(font);
+            classLabel.add(tempLabel7);
+            
+            JLabel tempLabel8 = new JLabel("Any additional comments: ");
+            tempLabel8.setFont(font);
+            commentLabel.add(tempLabel8);
         }
     }
     
@@ -613,44 +699,6 @@ public class ModifyWindow extends JFrame
         catch (IOException e)
         {
             
-        }
-    }
-    
-    public void setLabels()
-    {
-        for (int i = 0; i < rows.size(); i++)
-        {
-            JLabel tempLabel1 = new JLabel("Pen: " + rows.get(i).get("Pen Number"));
-            tempLabel1.setFont(font);
-            label1.add(tempLabel1);
-            
-            JLabel tempLabel2 = new JLabel("Gator Count: " + gatorList.get(i).size());
-            tempLabel2.setFont(font);
-            label2.add(tempLabel2);
-            
-            JLabel tempLabel3 = new JLabel("Water Change Date: ");
-            tempLabel3.setFont(font);
-            label3.add(tempLabel3);
-            
-            JLabel tempLabel4 = new JLabel("Water Temperature: ");
-            tempLabel4.setFont(font);
-            label4.add(tempLabel4);
-            
-            JLabel tempLabel5 = new JLabel("Feed Type: ");
-            tempLabel5.setFont(font);
-            label5.add(tempLabel5);
-            
-            JLabel tempLabel6 = new JLabel("Feed Amount (in lbs.): ");
-            tempLabel6.setFont(font);
-            label6.add(tempLabel6);
-            
-            JLabel tempLabel7 = new JLabel("Size Class: ");
-            tempLabel7.setFont(font);
-            label7.add(tempLabel7);
-            
-            JLabel tempLabel8 = new JLabel("Any additional comments: ");
-            tempLabel8.setFont(font);
-            label8.add(tempLabel8);
         }
     }
 }
