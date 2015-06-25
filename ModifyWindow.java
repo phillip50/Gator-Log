@@ -24,8 +24,9 @@ public class ModifyWindow extends JFrame
     private Table gatorTable;
     private final JTabbedPane tabbedPanel;
     private final java.util.List<JButton> doChange;
-    private final java.util.List<JButton> doNotChange;
+    private java.util.List<Boolean> changeWater;
     private final java.util.List<String> waterChangeDates;
+    private final java.util.List<JTextField> waterChangeDateFields;
     private final java.util.List<JComboBox> temperatures;
     private final java.util.List<JComboBox> feeds;
     private final java.util.List<JTextField> amounts;
@@ -50,6 +51,7 @@ public class ModifyWindow extends JFrame
     private final java.util.List<java.util.List<Row>> gatorList;
     private final java.util.List<java.util.List<String>> tagList;
     private Row selectedGator;
+    private String currentDate;
     
     public ModifyWindow(java.util.List<Row> inputRows, String penNumber)
     {
@@ -58,7 +60,9 @@ public class ModifyWindow extends JFrame
         tabbedPanel = new JTabbedPane();
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         feedAmountValid = new ArrayList<>();
+        changeWater = new ArrayList<>();
         waterChangeDates = new ArrayList<>();
+        waterChangeDateFields = new ArrayList<>();
         width = screenSize.getWidth();
         height = screenSize.getHeight();
         font = new Font("Arial", Font.PLAIN, 25); 
@@ -69,12 +73,15 @@ public class ModifyWindow extends JFrame
         classes = new ArrayList<>();
         comments = new ArrayList<>();
         doChange = new ArrayList<>();
-        doNotChange = new ArrayList<>();
         confirm = new ArrayList<>();
         cancel = new ArrayList<>();
         
         gatorList = new ArrayList<>();
         tagList = new ArrayList<>();
+        
+        DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+        Date date = new Date();
+        currentDate = dateFormat.format(date); 
         
         try
         {
@@ -123,52 +130,60 @@ public class ModifyWindow extends JFrame
             modc.insets = new Insets(50, 30, 10, 30);
         
             modc.gridx = 0;
-            modc.gridy = 3;
+            modc.gridy = 1;
             modifyPanel.add(label3.get(i), modc);
+            modc.fill = GridBagConstraints.HORIZONTAL;
             modc.gridx = 1;
-            modc.gridy = 3;
-            modifyPanel.add(doNotChange.get(i), modc);
-            modc.anchor = GridBagConstraints.CENTER;
+            modc.gridy = 1;
             modifyPanel.add(doChange.get(i), modc);
-        
+            
             modc.insets = new Insets(10, 30, 10, 30);
+            
+            modc.gridx = 0;
+            modc.gridy = 2;
+            modifyPanel.add(new JLabel(""), modc);
+            modc.gridx = 1;
+            modc.gridy = 2;
+            modifyPanel.add(waterChangeDateFields.get(i), modc);
+        
+            modc.fill = GridBagConstraints.NONE;
         
             modc.anchor = GridBagConstraints.LINE_START;
             modc.gridx = 0;
-            modc.gridy = 4;
+            modc.gridy = 3;
             modifyPanel.add(label4.get(i), modc);
             modc.gridx = 1;
-            modc.gridy = 4;
+            modc.gridy = 3;
             modifyPanel.add(temperatures.get(i), modc);
         
             modc.gridx = 0;
-            modc.gridy = 5;
+            modc.gridy = 4;
             modifyPanel.add(label5.get(i), modc);
             modc.gridx = 1;
-            modc.gridy = 5;
+            modc.gridy = 4;
             modifyPanel.add(feeds.get(i), modc);
         
             modc.gridx = 0;
-            modc.gridy = 6;
+            modc.gridy = 5;
             modifyPanel.add(label6.get(i), modc);
             modc.gridx = 1;
-            modc.gridy = 6;
+            modc.gridy = 5;
             modc.fill = GridBagConstraints.HORIZONTAL;
             modifyPanel.add(amounts.get(i), modc);
         
             modc.fill = GridBagConstraints.NONE;
             modc.gridx = 0;
-            modc.gridy = 7;
+            modc.gridy = 6;
             modifyPanel.add(label7.get(i), modc);
             modc.gridx = 1;
-            modc.gridy = 7;
+            modc.gridy = 6;
             modifyPanel.add(classes.get(i), modc);
         
             modc.gridx = 0;
-            modc.gridy = 8;
+            modc.gridy = 7;
             modifyPanel.add(label8.get(i), modc);
             modc.gridx = 1;
-            modc.gridy = 8;
+            modc.gridy = 7;
             modc.fill = GridBagConstraints.BOTH;
             modifyPanel.add(comments.get(i), modc);
         
@@ -176,11 +191,11 @@ public class ModifyWindow extends JFrame
             modc.fill = GridBagConstraints.NONE;
             modc.anchor = GridBagConstraints.LINE_END;
             modc.gridx = 0;
-            modc.gridy = 9;
+            modc.gridy = 8;
             modifyPanel.add(confirm.get(i), modc);
             modc.anchor = GridBagConstraints.LINE_START;
             modc.gridx = 1;
-            modc.gridy = 9;
+            modc.gridy = 8;
             modifyPanel.add(cancel.get(i), modc);
             
             tabbedPanel.addTab("<html><body leftmargin=15 topmargin=8 marginwidth=30 marginheight=5>Modify Pen</body></html>", modifyPanel);
@@ -209,7 +224,8 @@ public class ModifyWindow extends JFrame
             
                 viewc.anchor = GridBagConstraints.LINE_END;
                 viewc.gridx = 1;
-                JButton tempButton = new JButton("test");
+                JButton tempButton = new JButton("View Gator History");
+                tempButton.setFont(font);
                 tempButton.addActionListener(e -> {
                     selectedGator = tempRow;
                     addComponents();
@@ -344,35 +360,67 @@ public class ModifyWindow extends JFrame
         
         for (int i = 0; i < rows.size(); i++)
         {
-            JButton tempDoChange = new JButton("Yes");
+            JButton tempDoChange = new JButton("Didn't change");
             tempDoChange.setEnabled(true);
             tempDoChange.setPreferredSize(size);
             tempDoChange.setFont(font);
             tempDoChange.addActionListener(e -> {
                 int j = tabbedPanel.getSelectedIndex();
-                doNotChange.get(j).setEnabled(true);
-                doChange.get(j).setEnabled(false);
-                DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
-                Date date = new Date();
-                waterChangeDates.remove(j);
-                waterChangeDates.add(j, dateFormat.format(date));   
+                boolean temp = changeWater.get(j);
+                changeWater.remove(j);
+                changeWater.add(j, !temp);
+                if (doChange.get(j).getText().equals("Didn't change"))
+                {
+                    doChange.get(j).setText("Did Change");
+                    waterChangeDateFields.get(j).setEnabled(true);
+                    waterChangeDates.remove(j);
+                    waterChangeDates.add(j, waterChangeDateFields.get(j).getText());
+                }
+                else
+                {
+                    doChange.get(j).setText("Didn't change");
+                    waterChangeDateFields.get(j).setEnabled(false);
+                    waterChangeDates.remove(j);
+                    waterChangeDates.add(j, rows.get(j).get("Water Change Date").toString());
+                }
             });
             doChange.add(tempDoChange);
             
-            JButton tempDoNotChange = new JButton("No");
-            tempDoNotChange.setEnabled(false);
-            tempDoNotChange.setPreferredSize(size);
-            tempDoNotChange.setFont(font);
-            tempDoNotChange.addActionListener(e -> {
-                int j = tabbedPanel.getSelectedIndex();
-                doNotChange.get(j).setEnabled(false);
-                doChange.get(j).setEnabled(true);
-                waterChangeDates.remove(j);
-                waterChangeDates.add(j, rows.get(j).get("Water Change Date").toString());  
-            });
-            doNotChange.add(tempDoNotChange);
-            
+            changeWater.add(false);
             waterChangeDates.add(rows.get(i).get("Water Change Date").toString());
+            
+            JTextField tempWaterChangeField = new JTextField(10);
+            tempWaterChangeField.setFont(font);
+            tempWaterChangeField.setText(currentDate);
+            tempWaterChangeField.setEnabled(false);
+            tempWaterChangeField.getDocument().addDocumentListener(new DocumentListener()
+            {
+                @Override
+                public void changedUpdate(DocumentEvent e)
+                {
+                    check();
+                }
+            
+                @Override
+                public void removeUpdate(DocumentEvent e)
+                {
+                    check();
+                }
+            
+                @Override
+                public void insertUpdate(DocumentEvent e)
+                {
+                    check();
+                }
+
+                public void check()
+                {
+                    int j = tabbedPanel.getSelectedIndex();
+                    waterChangeDates.remove(j);
+                    waterChangeDates.add(j, waterChangeDateFields.get(j).getText());
+                }
+            });
+            waterChangeDateFields.add(tempWaterChangeField);
             
             JComboBox tempTemperature = new JComboBox(temperatureList);
             tempTemperature.setEditable(false);
@@ -519,7 +567,7 @@ public class ModifyWindow extends JFrame
                 int j = tabbedPanel.getSelectedIndex();
                 try
                 {
-                    cageTable.addRow(0, rows.get(j).get("Pen Number"), rows.get(j).get("Pen Type"), rows.get(j).get("Square Footage"), rows.get(j).get("Gator Count"), waterChangeDates.get(j), temperatures.get(j).getSelectedItem().toString(), feeds.get(j).getSelectedItem().toString().charAt(1), amounts.get(j).getText(), classes.get(j).getSelectedItem().toString(), comments.get(j).getText());
+                    cageTable.addRow(0, rows.get(j).get("Pen Number"), rows.get(j).get("Pen Type"), rows.get(j).get("Square Footage"), waterChangeDates.get(j), temperatures.get(j).getSelectedItem().toString(), feeds.get(j).getSelectedItem().toString().charAt(1), amounts.get(j).getText(), classes.get(j).getSelectedItem().toString(), comments.get(j).getText());
                 }
                 catch (IOException e1)
                 {
