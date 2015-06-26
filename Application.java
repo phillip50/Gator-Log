@@ -1,5 +1,11 @@
+/**
+ * Gator Application
+ * Allows new gators to be placed in pens, existing gators to be transferred between pens, and gators to be harvested
+ * All events are reflected in a single database
+ * 
+ * @Phillip Dingler [phil50@ufl.edu]
+ */
 //TODO: comment
-
 package test;
 
 import javax.swing.*; 
@@ -93,11 +99,13 @@ public class Application extends JFrame implements SerialPortEventListener
     private BufferedReader serialInput;
     private String tag;
     private final JButton didVaccinate;
-    private final JButton didNotVaccinate;
+    private final JTextField vaccinateField;
     private boolean isVaccinated;
+    private String vaccinatedDate;
     private final JButton didFormula;
-    private final JButton didNotFormula;
+    private final JTextField formulaField;
     private boolean isFormula;
+    private String formulaDate;
     private final JTextField comments;
     private boolean skipLength;
     private boolean skipWeight;
@@ -156,6 +164,8 @@ public class Application extends JFrame implements SerialPortEventListener
         years = new String[4];
         tag = "";
         isVaccinated = false;
+        vaccinatedDate = "";
+        formulaDate = "";
         isFormula = false;
         skipLength = false;
         skipWeight = false;
@@ -239,12 +249,12 @@ public class Application extends JFrame implements SerialPortEventListener
         cancel = new JButton("Cancel");      
         confirm = new JButton("Confirm");
         didVaccinate = new JButton("Yes");            
-        didNotVaccinate = new JButton("No"); 
+        vaccinateField = new JTextField(10);
         didFormula = new JButton("Yes");     
-        didNotFormula = new JButton("No");
+        formulaField = new JTextField(10);
         
-        didNotVaccinate.setEnabled(false);
-        didNotFormula.setEnabled(false);
+        vaccinateField.setEnabled(false);
+        formulaField.setEnabled(false);
         
         cageList = new JComboBox(cages.toArray());
         cageList.setEditable(false);
@@ -472,12 +482,12 @@ public class Application extends JFrame implements SerialPortEventListener
         else if (harvestPage5)
         {
             panel.setLayout(new GridBagLayout());
-            GridBagConstraints cLeft = new GridBagConstraints();
-            cLeft.insets = new Insets(10, 30, 10, 30);
-            cLeft.anchor = GridBagConstraints.LINE_START;
             GridBagConstraints cRight = new GridBagConstraints();
             cRight.insets = new Insets(10, 30, 10, 30);
-            cRight.anchor = GridBagConstraints.LINE_END;
+            cRight.anchor = GridBagConstraints.LINE_START;
+            GridBagConstraints cLeft = new GridBagConstraints();
+            cLeft.insets = new Insets(10, 30, 10, 30);
+            cLeft.anchor = GridBagConstraints.LINE_END;
             Dimension size = new Dimension((int)(width/7), (int)(height/9));
             confirm.setPreferredSize(size);
             confirm.setFont(font1);
@@ -487,91 +497,91 @@ public class Application extends JFrame implements SerialPortEventListener
             
             JLabel tempLabel1 = new JLabel("Gator ID: ");
             tempLabel1.setFont(font1);
-            cRight.gridx = 0;
-            cRight.gridy = 0;
-            panel.add(tempLabel1, cRight);
+            cLeft.gridx = 0;
+            cLeft.gridy = 0;
+            panel.add(tempLabel1, cLeft);
 
             JLabel tempLabel2 = new JLabel(tag);
             tempLabel2.setFont(font1);
-            cLeft.gridx = 1;
-            cLeft.gridy = 0;
-            panel.add(tempLabel2, cLeft);
+            cRight.gridx = 1;
+            cRight.gridy = 0;
+            panel.add(tempLabel2, cRight);
             
             JLabel tempLabel3 = new JLabel("From Pen: ");
             tempLabel3.setFont(font1);
-            cRight.gridx = 0;
-            cRight.gridy = 1;
-            panel.add(tempLabel3, cRight);
+            cLeft.gridx = 0;
+            cLeft.gridy = 1;
+            panel.add(tempLabel3, cLeft);
             
             JLabel tempLabel4 = new JLabel("" + previousRow.get("To").toString());
             tempLabel4.setFont(font1);
-            cLeft.gridx = 1;
-            cLeft.gridy = 1;
-            panel.add(tempLabel4, cLeft);
+            cRight.gridx = 1;
+            cRight.gridy = 1;
+            panel.add(tempLabel4, cRight);
 
             JLabel tempLabel7 = new JLabel("Belly Size: ");
             tempLabel7.setFont(font1);
-            cRight.gridx = 0;
-            cRight.gridy = 2;
-            panel.add(tempLabel7, cRight);
+            cLeft.gridx = 0;
+            cLeft.gridy = 2;
+            panel.add(tempLabel7, cLeft);
             
             JLabel tempLabel8 = new JLabel("" + bellySize);
             tempLabel8.setFont(font1);
-            cLeft.gridx = 1;
-            cLeft.gridy = 2;
-            panel.add(tempLabel8, cLeft);
+            cRight.gridx = 1;
+            cRight.gridy = 2;
+            panel.add(tempLabel8, cRight);
             
             JLabel tempLabel9 = new JLabel("Length: ");
             tempLabel9.setFont(font1);
-            cRight.gridx = 0;
-            cRight.gridy = 3;
-            panel.add(tempLabel9, cRight);
+            cLeft.gridx = 0;
+            cLeft.gridy = 3;
+            panel.add(tempLabel9, cLeft);
             
             JLabel tempLabel10 = new JLabel("" + length);
             tempLabel10.setFont(font1);
-            cLeft.gridx = 1;
-            cLeft.gridy = 3;
-            panel.add(tempLabel10, cLeft);
+            cRight.gridx = 1;
+            cRight.gridy = 3;
+            panel.add(tempLabel10, cRight);
             
             JLabel tempLabel11 = new JLabel("Weight: ");
             tempLabel11.setFont(font1);
-            cRight.gridx = 0;
-            cRight.gridy = 4;
-            panel.add(tempLabel11, cRight);
+            cLeft.gridx = 0;
+            cLeft.gridy = 4;
+            panel.add(tempLabel11, cLeft);
             
             JLabel tempLabel12 = new JLabel("" + weight);
             tempLabel12.setFont(font1);
-            cLeft.gridx = 1;
-            cLeft.gridy = 4;
-            panel.add(tempLabel12, cLeft);
+            cRight.gridx = 1;
+            cRight.gridy = 4;
+            panel.add(tempLabel12, cRight);
             
             JLabel tempLabel15 = new JLabel("Experimental Code: ");
             tempLabel15.setFont(font1);
-            cRight.gridx = 0;
-            cRight.gridy = 5;
-            panel.add(tempLabel15, cRight);
-            
-            cLeft.gridx = 1;
+            cLeft.gridx = 0;
             cLeft.gridy = 5;
-            panel.add(experimentalCode, cLeft);
+            panel.add(tempLabel15, cLeft);
+            
+            cRight.gridx = 1;
+            cRight.gridy = 5;
+            panel.add(experimentalCode, cRight);
    
             JLabel tempLabel16 = new JLabel("Additional comments: ");
             tempLabel16.setFont(font1);
-            cRight.gridx = 0;
-            cRight.gridy = 6;
-            panel.add(tempLabel16, cRight);
-            
-            cLeft.gridx = 1;
+            cLeft.gridx = 0;
             cLeft.gridy = 6;
-            panel.add(comments, cLeft);
+            panel.add(tempLabel16, cLeft);
             
-            cRight.gridx = 0;
-            cRight.gridy = 7;
-            panel.add(cancel, cRight);
+            cRight.gridx = 1;
+            cRight.gridy = 6;
+            panel.add(comments, cRight);
             
-            cLeft.gridx = 1;
+            cLeft.gridx = 0;
             cLeft.gridy = 7;
-            panel.add(confirm, cLeft);
+            panel.add(cancel, cLeft);
+            
+            cRight.gridx = 1;
+            cRight.gridy = 7;
+            panel.add(confirm, cRight);
         }
         else if (transferStart)
         {
@@ -705,10 +715,8 @@ public class Application extends JFrame implements SerialPortEventListener
             
             isVaccinated = false;
             isFormula = false;
-            didVaccinate.setEnabled(true);
-            didNotVaccinate.setEnabled(false);
-            didFormula.setEnabled(true);
-            didNotFormula.setEnabled(false);
+            vaccinateField.setEnabled(false);
+            formulaField.setEnabled(false);
             comments.setText("");
             experimentalCode.setText("");
             skipLength = false;
@@ -845,12 +853,18 @@ public class Application extends JFrame implements SerialPortEventListener
         else if (addPage5)
         {
             panel.setLayout(new GridBagLayout());
-            GridBagConstraints cLeft = new GridBagConstraints();
-            cLeft.insets = new Insets(10, 30, 10, 30);
-            cLeft.anchor = GridBagConstraints.LINE_START;
             GridBagConstraints cRight = new GridBagConstraints();
             cRight.insets = new Insets(10, 30, 10, 30);
-            cRight.anchor = GridBagConstraints.LINE_END;
+            cRight.anchor = GridBagConstraints.LINE_START;
+            cRight.weightx = 0;
+            GridBagConstraints cLeft = new GridBagConstraints();
+            cLeft.insets = new Insets(10, 30, 10, 30);
+            cLeft.anchor = GridBagConstraints.LINE_END;
+            cLeft.weightx = 0.8;
+            GridBagConstraints cFarRight = new GridBagConstraints();
+            cFarRight.insets = new Insets(10, 30, 10, 30);
+            cFarRight.anchor = GridBagConstraints.LINE_START;
+            cFarRight.weightx = 0.5;
             Dimension size = new Dimension((int)(width/7), (int)(height/9));
             Dimension size2 = new Dimension((int)(width/17), (int)(height/16));
             confirm.setPreferredSize(size);
@@ -860,138 +874,143 @@ public class Application extends JFrame implements SerialPortEventListener
             cancel.setFont(font1);
             didVaccinate.setPreferredSize(size2);
             didVaccinate.setFont(font1);
-            didNotVaccinate.setPreferredSize(size2);
-            didNotVaccinate.setFont(font1);
+            vaccinateField.setPreferredSize(size2);
+            vaccinateField.setFont(font1);
+            vaccinateField.setText(currentDate);
             didFormula.setPreferredSize(size2);
             didFormula.setFont(font1);
-            didNotFormula.setPreferredSize(size2);
-            didNotFormula.setFont(font1);
+            formulaField.setPreferredSize(size2);
+            formulaField.setFont(font1);
+            formulaField.setText(currentDate);
             
             JLabel tempLabel1 = new JLabel("Gator ID: ");
             tempLabel1.setFont(font1);
-            cRight.gridx = 0;
-            cRight.gridy = 0;
-            panel.add(tempLabel1, cRight);
+            cLeft.gridx = 0;
+            cLeft.gridy = 0;
+            panel.add(tempLabel1, cLeft);
 
             JLabel tempLabel2 = new JLabel(tag);
             tempLabel2.setFont(font1);
-            cLeft.gridx = 1;
-            cLeft.gridy = 0;
-            panel.add(tempLabel2, cLeft);
+            cRight.gridx = 1;
+            cRight.gridy = 0;
+            panel.add(tempLabel2, cRight);
             
             JLabel tempLabel3 = new JLabel("From Pen: ");
             tempLabel3.setFont(font1);
-            cRight.gridx = 0;
-            cRight.gridy = 1;
-            panel.add(tempLabel3, cRight);
+            cLeft.gridx = 0;
+            cLeft.gridy = 1;
+            panel.add(tempLabel3, cLeft);
             
             JLabel tempLabel4 = new JLabel("" + previousRow.get("To").toString());
             tempLabel4.setFont(font1);
-            cLeft.gridx = 1;
-            cLeft.gridy = 1;
-            panel.add(tempLabel4, cLeft);
+            cRight.gridx = 1;
+            cRight.gridy = 1;
+            panel.add(tempLabel4, cRight);
             
             JLabel tempLabel5 = new JLabel("To Pen: ");
             tempLabel5.setFont(font1);
-            cRight.gridx = 0;
-            cRight.gridy = 2;
-            panel.add(tempLabel5, cRight);
+            cLeft.gridx = 0;
+            cLeft.gridy = 2;
+            panel.add(tempLabel5, cLeft);
             
             JLabel tempLabel6 = new JLabel("" + toCage);
             tempLabel6.setFont(font1);
-            cLeft.gridx = 1;
-            cLeft.gridy = 2;
-            panel.add(tempLabel6, cLeft);
+            cRight.gridx = 1;
+            cRight.gridy = 2;
+            panel.add(tempLabel6, cRight);
 
             JLabel tempLabel7 = new JLabel("Belly Size: ");
             tempLabel7.setFont(font1);
-            cRight.gridx = 0;
-            cRight.gridy = 3;
-            panel.add(tempLabel7, cRight);
+            cLeft.gridx = 0;
+            cLeft.gridy = 3;
+            panel.add(tempLabel7, cLeft);
             
             JLabel tempLabel8 = new JLabel("" + bellySize);
             tempLabel8.setFont(font1);
-            cLeft.gridx = 1;
-            cLeft.gridy = 3;
-            panel.add(tempLabel8, cLeft);
+            cRight.gridx = 1;
+            cRight.gridy = 3;
+            panel.add(tempLabel8, cRight);
             
             JLabel tempLabel9 = new JLabel("Length: ");
             tempLabel9.setFont(font1);
-            cRight.gridx = 0;
-            cRight.gridy = 4;
-            panel.add(tempLabel9, cRight);
+            cLeft.gridx = 0;
+            cLeft.gridy = 4;
+            panel.add(tempLabel9, cLeft);
             
             JLabel tempLabel10 = new JLabel("" + length);
             tempLabel10.setFont(font1);
-            cLeft.gridx = 1;
-            cLeft.gridy = 4;
-            panel.add(tempLabel10, cLeft);
+            cRight.gridx = 1;
+            cRight.gridy = 4;
+            panel.add(tempLabel10, cRight);
             
             JLabel tempLabel11 = new JLabel("Weight: ");
             tempLabel11.setFont(font1);
-            cRight.gridx = 0;
-            cRight.gridy = 5;
-            panel.add(tempLabel11, cRight);
+            cLeft.gridx = 0;
+            cLeft.gridy = 5;
+            panel.add(tempLabel11, cLeft);
             
             JLabel tempLabel12 = new JLabel("" + weight);
             tempLabel12.setFont(font1);
-            cLeft.gridx = 1;
-            cLeft.gridy = 5;
-            panel.add(tempLabel12, cLeft);
+            cRight.gridx = 1;
+            cRight.gridy = 5;
+            panel.add(tempLabel12, cRight);
             
             JLabel tempLabel13 = new JLabel("Vaccinated? ");
             tempLabel13.setFont(font1);
-            cRight.gridx = 0;
-            cRight.gridy = 6;
-            panel.add(tempLabel13, cRight);
-            
-            cLeft.gridx = 1;
+            cLeft.gridx = 0;
             cLeft.gridy = 6;
-            panel.add(didNotVaccinate, cLeft);
-            cLeft.anchor = GridBagConstraints.LINE_END;
-            panel.add(didVaccinate, cLeft);
-            cLeft.anchor = GridBagConstraints.LINE_START;
+            panel.add(tempLabel13, cLeft);
+            
+            cRight.gridx = 1;
+            cRight.gridy = 6;
+            panel.add(didVaccinate, cRight);
+            
+            cFarRight.gridx = 2;
+            cFarRight.gridy = 6;
+            panel.add(vaccinateField, cFarRight);
+            
             
             JLabel tempLabel14 = new JLabel("Did formula? ");
             tempLabel14.setFont(font1);
-            cRight.gridx = 0;
-            cRight.gridy = 7;
-            panel.add(tempLabel14, cRight);
-            
-            cLeft.gridx = 1;
+            cLeft.gridx = 0;
             cLeft.gridy = 7;
-            panel.add(didNotFormula, cLeft);
-            cLeft.anchor = GridBagConstraints.LINE_END;
-            panel.add(didFormula, cLeft);
-            cLeft.anchor = GridBagConstraints.LINE_START;
+            panel.add(tempLabel14, cLeft);
+            
+            cRight.gridx = 1;
+            cRight.gridy = 7;
+            panel.add(didFormula, cRight);
+            
+            cFarRight.gridx = 2;
+            cFarRight.gridy = 7;
+            panel.add(formulaField, cFarRight);
+            
             
             JLabel tempLabel15 = new JLabel("Experimental Code: ");
             tempLabel15.setFont(font1);
-            cRight.gridx = 0;
-            cRight.gridy = 8;
-            panel.add(tempLabel15, cRight);
-            
-            cLeft.gridx = 1;
+            cLeft.gridx = 0;
             cLeft.gridy = 8;
-            panel.add(experimentalCode, cLeft);
+            panel.add(tempLabel15, cLeft);
+            cRight.gridx = 1;
+            cRight.gridy = 8;
+            panel.add(experimentalCode, cRight);
    
             JLabel tempLabel16 = new JLabel("Additional comments: ");
             tempLabel16.setFont(font1);
-            cRight.gridx = 0;
-            cRight.gridy = 9;
-            panel.add(tempLabel16, cRight);
-            
-            cLeft.gridx = 1;
+            cLeft.gridx = 0;
             cLeft.gridy = 9;
-            panel.add(comments, cLeft);
+            panel.add(tempLabel16, cLeft);
             
-            cRight.gridx = 0;
-            cRight.gridy = 10;
-            panel.add(cancel, cRight);
+            cRight.gridx = 1;
+            cRight.gridy = 9;
+            panel.add(comments, cRight);
             
-            cLeft.gridx = 1;
+            cLeft.gridx = 0;
             cLeft.gridy = 10;
-            panel.add(confirm, cLeft);
+            panel.add(cancel, cLeft);
+            
+            cRight.gridx = 1;
+            cRight.gridy = 10;
+            panel.add(confirm, cRight);
         }
         else if (quit)
         {            
@@ -1518,14 +1537,14 @@ public class Application extends JFrame implements SerialPortEventListener
                         String lengthEntry = (skipLength) ? previousRow.get("Length").toString() : length;
                         String weightEntry = (skipWeight) ? previousRow.get("Weight").toString() : weight;
                             
-                        gatorTable.addRow(0, tag, previousRow.get("Egg Nest Location"), previousRow.get("Egg Nest Condition"), previousRow.get("Egg Collection Date"), previousRow.get("Hatch Year"), previousRow.get("Gender"), previousRow.get("Umbilical"), currentDate, previousRow.get("To"), toCage, bellySize, lengthEntry, weightEntry, isFormula, experimentalCode.getText(), isVaccinated, comments.getText(), "");
+                        gatorTable.addRow(0, tag, previousRow.get("Egg Nest Location"), previousRow.get("Egg Nest Condition"), previousRow.get("Egg Collection Date"), previousRow.get("Hatch Year"), previousRow.get("Gender"), previousRow.get("Umbilical"), currentDate, previousRow.get("To"), toCage, bellySize, lengthEntry, weightEntry, formulaDate, experimentalCode.getText(), vaccinatedDate, comments.getText(), "");
                     }
                     else
                     {
                         String lengthEntry = (skipLength) ? "" : length;
                         String weightEntry = (skipWeight) ? "" : weight;
                             
-                        gatorTable.addRow(0, tag, "", "", "", "", "", "", currentDate, previousRow.get("To"), toCage, bellySize, lengthEntry, weightEntry, isFormula, experimentalCode.getText(), isVaccinated, comments.getText(), "");
+                        gatorTable.addRow(0, tag, "", "", "", "", "", "", currentDate, previousRow.get("To"), toCage, bellySize, lengthEntry, weightEntry, formulaDate, experimentalCode.getText(), vaccinatedDate, comments.getText(), "");
                     }
                     IndexCursor cursor = CursorBuilder.createCursor(gatorTable.getIndex("IDIndex"));
                     cursor.beforeFirst();
@@ -1591,7 +1610,9 @@ public class Application extends JFrame implements SerialPortEventListener
                 try
                 {
                     gatorTable.addRow(0, tag, location.getText(), condition.getText(), collectionDate.getText(), currentDate.substring(6), gender.getSelectedItem().toString(), umbilical.getSelectedItem().toString(), currentDate, "", cageList.getSelectedItem().toString(), "", "", "", "", "", "", comments.getText(), "");
-                    for(Map<String,Object> row : CursorBuilder.createCursor(gatorTable.getIndex("IDIndex")))
+                    IndexCursor cursor = CursorBuilder.createCursor(gatorTable.getIndex("IDIndex"));
+                    cursor.beforeFirst();
+                    for(Map<String,Object> row : cursor)
                     {
  
                     }
@@ -1608,7 +1629,7 @@ public class Application extends JFrame implements SerialPortEventListener
                     String lengthEntry = (skipLength) ? previousRow.get("Length").toString() : length;
                     String weightEntry = (skipWeight) ? previousRow.get("Weight").toString() : weight;
                         
-                    gatorTable.addRow(0, tag, previousRow.get("Egg Nest Location"), previousRow.get("Egg Nest Condition"), previousRow.get("Egg Collection Date"), previousRow.get("Hatch Year"), previousRow.get("Gender"), previousRow.get("Umbilical"), currentDate, previousRow.get("To"), "", bellySize, lengthEntry, weightEntry, "", "", "", comments.getText(), "Yes");
+                    gatorTable.addRow(0, tag, previousRow.get("Egg Nest Location"), previousRow.get("Egg Nest Condition"), previousRow.get("Egg Collection Date"), previousRow.get("Hatch Year"), previousRow.get("Gender"), previousRow.get("Umbilical"), currentDate, previousRow.get("To"), "", bellySize, lengthEntry, weightEntry, previousRow.get("Special Recipe"), "", previousRow.get("Vaccinated"), comments.getText(), "Yes");
                     for(Map<String,Object> row : CursorBuilder.createCursor(gatorTable.getIndex("IDIndex")))
                     {
  
@@ -1752,27 +1773,84 @@ public class Application extends JFrame implements SerialPortEventListener
         });
         
         didVaccinate.addActionListener(e -> {
-            isVaccinated = true;
-            didVaccinate.setEnabled(false);
-            didNotVaccinate.setEnabled(true);
+            if (isVaccinated)
+            {
+                vaccinatedDate = previousRow.get("Vaccinated").toString();
+                System.out.println("Not vaccinated " + vaccinatedDate);
+            }
+            else
+            {
+                vaccinatedDate = vaccinateField.getText();
+                System.out.println("Vaccinated: " + vaccinatedDate);
+            }
+            isVaccinated = !isVaccinated;
+            vaccinateField.setEnabled(isVaccinated);     
         });
         
-        didNotVaccinate.addActionListener(e -> {
-            isVaccinated = false;
-            didVaccinate.setEnabled(true);
-            didNotVaccinate.setEnabled(false);
+        vaccinateField.getDocument().addDocumentListener(new DocumentListener()
+        {
+            @Override
+            public void changedUpdate(DocumentEvent e)
+            {
+                check();
+            }
+            
+            @Override
+            public void removeUpdate(DocumentEvent e)
+            {
+                check();
+            }
+            
+            @Override
+            public void insertUpdate(DocumentEvent e)
+            {
+                check();
+            }
+            public void check()
+            {
+                vaccinatedDate = vaccinateField.getText();
+            }
         });
+        
         
         didFormula.addActionListener(e -> {
-            isFormula = true;
-            didFormula.setEnabled(false);
-            didNotFormula.setEnabled(true);
+            if (isFormula)
+            {
+                formulaDate = previousRow.get("Special Recipe").toString();
+                System.out.println("Not formula " + formulaDate);
+            }
+            else
+            {
+                formulaDate = formulaField.getText();
+                System.out.println("Formula " + formulaDate);
+            }
+            isFormula = !isFormula;
+            formulaField.setEnabled(isFormula);
         });
         
-        didNotFormula.addActionListener(e -> {
-            isFormula = false;
-            didFormula.setEnabled(true);
-            didNotFormula.setEnabled(false);
+        formulaField.getDocument().addDocumentListener(new DocumentListener()
+        {
+            @Override
+            public void changedUpdate(DocumentEvent e)
+            {
+                check();
+            }
+            
+            @Override
+            public void removeUpdate(DocumentEvent e)
+            {
+                check();
+            }
+            
+            @Override
+            public void insertUpdate(DocumentEvent e)
+            {
+                check();
+            }
+            public void check()
+            {
+                formulaDate = formulaField.getText();
+            }
         });
     }
     
