@@ -149,7 +149,6 @@ public class Application extends JFrame implements SerialPortEventListener
     private boolean harvestPage4;
     private boolean harvestPage5;
     private boolean transferStart;
-    private boolean setUp;
     private boolean addTo;
     private boolean removeTo;
     private boolean addPage1;
@@ -163,28 +162,29 @@ public class Application extends JFrame implements SerialPortEventListener
     {
         super("Application");
         
-        start = true;
-        newGatorPage1 = false;
-        newGatorPage2 = false;
-        transferStart = false;
-        harvestPage1 = false;
-        harvestPage2 = false;
-        harvestPage3 = false;
-        harvestPage4 = false;
-        harvestPage5 = false;
-        setUp = false;
-        addTo = false;
-        removeTo = false;
-        addPage1 = false;
-        addPage2 = false;
-        addPage3 = false;
-        addPage4 = false;
-        addPage5 = false;
-        quit = false;
+            //initialize the fields
+        gatorFile = null;
+        gatorTable = null;
+        cageFile = null;
+        cageTable = null;
+        
+        years = new String[4];
+        
+        DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+        Date date = new Date();
+        currentDate = dateFormat.format(date);   
+        
+        screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        width = screenSize.getWidth();
+        height = screenSize.getHeight();
+        font1 = new Font("Arial", Font.PLAIN, 40);
+        font2 = new Font("Arial", Font.PLAIN, 25); 
+        
         toCage = "";
         bellySize = 0;
         length = "";
         weight = "";
+        
         toCages = new String[10];
         toUpperBounds = new int[10];
         toLowerBounds = new int[10];
@@ -196,29 +196,42 @@ public class Application extends JFrame implements SerialPortEventListener
         cagesAtCapacityAmount = new int[10];
         cagesAtCapacityRange = new String[10];
         cagesAtCapacityCounter = 0;
+        
         cageTaken = false;
         hasToCage = false;
-        gatorFile = null;
-        gatorTable = null;
-        cageFile = null;
-        cageTable = null;
-        DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
-        Date date = new Date();
-        currentDate = dateFormat.format(date);     
-        screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        width = screenSize.getWidth();
-        height = screenSize.getHeight();
-        font1 = new Font("Arial", Font.PLAIN, 40);
-        font2 = new Font("Arial", Font.PLAIN, 25); 
-        years = new String[4];
+        
+        start = true;
+        newGatorPage1 = false;
+        newGatorPage2 = false;
+        transferStart = false;
+        harvestPage1 = false;
+        harvestPage2 = false;
+        harvestPage3 = false;
+        harvestPage4 = false;
+        harvestPage5 = false;
+        addTo = false;
+        removeTo = false;
+        addPage1 = false;
+        addPage2 = false;
+        addPage3 = false;
+        addPage4 = false;
+        addPage5 = false;
+        quit = false;
+        
         tag = "";
-        isVaccinated = false;
+        toCage = "";
+        bellySize = 0;
+        length = "";
+        weight = "";
         vaccinatedDate = "";
         formulaDate = "";
-        isFormula = false;
         skipLength = false;
         skipWeight = false;
-               
+        
+        isVaccinated = false;
+        isFormula = false;
+        
+            //get the last 4 years
         int year = Integer.parseInt(currentDate.substring(6));
         for (int i = 0; i < 4; i++)
         {
@@ -226,6 +239,7 @@ public class Application extends JFrame implements SerialPortEventListener
             years[i] = "" + number;
         }
         
+            //List of pens on the farm
         cages = new ArrayList<>();
         for (int i = 101; i <= 127; i++)
         {
@@ -272,6 +286,7 @@ public class Application extends JFrame implements SerialPortEventListener
             cages.add("" + i);
         }
         
+            //read in the gator and cage databases
         try
         {
             gatorFile = new File("AnimalDatabase.accdb");
@@ -280,9 +295,11 @@ public class Application extends JFrame implements SerialPortEventListener
             cageTable = DatabaseBuilder.open(cageFile).getTable("Database");
         }
         catch (IOException e1)
-        {                   
-        }
+        {
+            
+        }     
         
+            //initialize all of the components
         contentPane = getContentPane();
         numbers = new JButton[201];
         
@@ -332,6 +349,7 @@ public class Application extends JFrame implements SerialPortEventListener
         umbilical.setEditable(false);
     }
     
+        //methods to place components onto the frame, depending on the page boolean values
     public void addComponents()
     {  
         contentPane.removeAll();
@@ -340,6 +358,7 @@ public class Application extends JFrame implements SerialPortEventListener
         
         JPanel panel = new JPanel();
         
+            //initial start screen
         if (start)
         {
             panel.setLayout(new FlowLayout());
@@ -360,6 +379,7 @@ public class Application extends JFrame implements SerialPortEventListener
             panel.add(harvestGator);
             panel.add(quitButton);
         }
+            //1st page when adding a new hatchling
         else if (newGatorPage1)
         {
             cageList.setSelectedIndex(0);
@@ -386,6 +406,7 @@ public class Application extends JFrame implements SerialPortEventListener
             panel.add(panel3, BorderLayout.NORTH);
             panel.add(panel2, BorderLayout.SOUTH);
         }
+            //2nd page of adding a new hatchling
         else if (newGatorPage2)
         {
             panel.setLayout(new GridBagLayout());
@@ -511,6 +532,7 @@ public class Application extends JFrame implements SerialPortEventListener
             cLeft.gridy = 9;
             panel.add(confirm, cLeft);
         }
+            //1st page of harvesting a gator
         else if (harvestPage1)
         {
             panel.setLayout(new BorderLayout());
@@ -528,6 +550,7 @@ public class Application extends JFrame implements SerialPortEventListener
             panel.add(panel3, BorderLayout.NORTH);
             panel.add(panel2, BorderLayout.SOUTH);
         }
+            //5th page of adding a new gator
         else if (harvestPage5)
         {
             panel.setLayout(new GridBagLayout());
@@ -632,6 +655,7 @@ public class Application extends JFrame implements SerialPortEventListener
             cRight.gridy = 7;
             panel.add(confirm, cRight);
         }
+            //start screen when transferring a gator
         else if (transferStart)
         {
             panel.setLayout(new FlowLayout());
@@ -654,6 +678,7 @@ public class Application extends JFrame implements SerialPortEventListener
             panel.add(removeToCage);
             panel.add(back);
         }
+            //page to add new "to" pen in transfer option
         else if (addTo)
         {
             Dimension size = new Dimension((int)(width/8), (int)(height/10));
@@ -688,6 +713,7 @@ public class Application extends JFrame implements SerialPortEventListener
             panel2.add(panel4, BorderLayout.SOUTH);
             panel.add(panel2, BorderLayout.SOUTH);
         }
+            //page to remove "to" pen in transfer option
         else if(removeTo)
         {
             Dimension size = new Dimension((int)(width/8), (int)(height/10));
@@ -756,6 +782,7 @@ public class Application extends JFrame implements SerialPortEventListener
             panel.add(box, BorderLayout.CENTER);
             panel.add(bottomPanel, BorderLayout.SOUTH);
         }
+            //1st transfer page
         else if (addPage1)
         {
             panel.setLayout(new BorderLayout());
@@ -783,6 +810,7 @@ public class Application extends JFrame implements SerialPortEventListener
             panel.add(panel2, BorderLayout.NORTH);
             panel.add(panel3, BorderLayout.SOUTH);
         }
+            //2nd transfer and harvest page
         else if (addPage2 || harvestPage2)
         {
             Dimension size = new Dimension((int)(width/7), (int)(height/9));
@@ -819,6 +847,7 @@ public class Application extends JFrame implements SerialPortEventListener
             panel.add(panel3, BorderLayout.CENTER);
             panel.add(panel6, BorderLayout.SOUTH);
         }
+            //3rd transfer and harvest page
         else if (addPage3 || harvestPage3)
         {
             Dimension size = new Dimension((int)(width/7), (int)(height/9));
@@ -859,6 +888,7 @@ public class Application extends JFrame implements SerialPortEventListener
             panel.add(panel3, BorderLayout.CENTER);
             panel.add(panel6, BorderLayout.SOUTH);
         }
+            //4th transfer and harvest page
         else if (addPage4 || harvestPage4)
         {
             Dimension size = new Dimension((int)(width/7), (int)(height/9));
@@ -899,6 +929,7 @@ public class Application extends JFrame implements SerialPortEventListener
             panel.add(panel3, BorderLayout.CENTER);
             panel.add(panel6, BorderLayout.SOUTH);
         }
+            //5th transfer page
         else if (addPage5)
         {
             panel.setLayout(new GridBagLayout());
@@ -1061,6 +1092,7 @@ public class Application extends JFrame implements SerialPortEventListener
             cRight.gridy = 10;
             panel.add(confirm, cRight);
         }
+            //quit page exits the application
         else if (quit)
         {            
                 //output file
@@ -1068,6 +1100,7 @@ public class Application extends JFrame implements SerialPortEventListener
             frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
             System.exit(0);
         }
+            //if its none of the other options, its the error window
         else
         {
             Dimension size = new Dimension((int)(width/8), (int)(height/10));
@@ -1088,7 +1121,6 @@ public class Application extends JFrame implements SerialPortEventListener
                 newGatorPage2 = false;
                 harvestPage1 = false;
                 harvestPage2 = false;
-                setUp = false;
                 addTo = false;
                 removeTo = false;
                 addPage1 = false;
@@ -1108,14 +1140,13 @@ public class Application extends JFrame implements SerialPortEventListener
             frame2.setVisible(true);   
         }
         
-        if (start || transferStart || newGatorPage1 || newGatorPage2 || harvestPage1 || harvestPage2 || harvestPage3 || harvestPage4 || harvestPage5 || setUp || addTo || removeTo || addPage1 || addPage2 || addPage3 || addPage4 || addPage5 || quit)
-        {
-            contentPane.add(panel);
-            validate();
-            setVisible(true);
-        }
+            //add the panel to the frame
+        contentPane.add(panel);
+        validate();
+        setVisible(true);
     }
     
+        //initialize the frame and its components
     public static void createAndShowGUI()
     {
         frame = new Application();
@@ -1139,6 +1170,7 @@ public class Application extends JFrame implements SerialPortEventListener
         createAndShowGUI();
     }
     
+        //helper method to remove null's from a string array and shifts the array left to fill those places occupied by null
     public static String[] stringShift(String[] input)
     {
         int j = 0;
@@ -1157,6 +1189,7 @@ public class Application extends JFrame implements SerialPortEventListener
         return temp;
     }
     
+        //helper method to remove 0's from an int array and shifts the array left to fill those places left by 0
     public static int[] intShift(int[] input)
     {
         int j = 0;
@@ -1175,6 +1208,7 @@ public class Application extends JFrame implements SerialPortEventListener
         return temp;
     }
     
+        //checks if a given string is an integer
     public static boolean isInteger(String str)
     {
 	if (str == null)
@@ -1206,6 +1240,7 @@ public class Application extends JFrame implements SerialPortEventListener
 	return true;
     }
     
+        //set up the serial stream
     public void initialize()
     {  
 	CommPortIdentifier portId = null;
@@ -1240,6 +1275,7 @@ public class Application extends JFrame implements SerialPortEventListener
         }
     }
     
+        //close the serial stream
     public synchronized void close()
     {
 	if (serialPort != null)
@@ -1249,6 +1285,7 @@ public class Application extends JFrame implements SerialPortEventListener
         }
     }
     
+        //event method thrown when new data is detected in the serial stream
     @Override
     public synchronized void serialEvent(SerialPortEvent oEvent)
     {
@@ -1257,9 +1294,11 @@ public class Application extends JFrame implements SerialPortEventListener
         {
             try
             {
+                    //in every case, read the information and flush the stream
                 temp = serialInput.readLine();
                 int index = temp.indexOf('.');
                 tag = temp.substring(0, index);
+                    //if on the 1st transfer page, read the tag, get the previous row in the gator database, and move to the next transfer page
                 if (addPage1)
                 {
                     IndexCursor cursor = CursorBuilder.createCursor(gatorTable.getIndex("TagIndex"));
@@ -1286,6 +1325,7 @@ public class Application extends JFrame implements SerialPortEventListener
                     addPage2 = true;
                     addComponents();
                 }
+                    //if on the 1st harvest page, read the tag, get the previous row in the gator database, and move to the next harvest page
                 else if (harvestPage1)
                 {
                     IndexCursor cursor = CursorBuilder.createCursor(gatorTable.getIndex("TagIndex"));
@@ -1312,12 +1352,14 @@ public class Application extends JFrame implements SerialPortEventListener
                     harvestPage2 = true;
                     addComponents();
                 }
+                    //if on the first new gator page, read the tag then move to the next new gator page
                 else if (newGatorPage1)
                 {
                     newGatorPage1 = false;
                     newGatorPage2 = true;
-                    addComponents();
+                    addComponents();                   
                 }
+                    //in every other case just ignore the event
             }
             catch (Exception e)
             {
@@ -1326,17 +1368,20 @@ public class Application extends JFrame implements SerialPortEventListener
         }
     }
     
+        //add event listeners to the components
     public void addListeners()
     {
+            //button to skip length and weight measurements
+            //page3 = length, page4 = weight
         skip.addActionListener(e -> {
-            if (addPage3)
+            if (addPage3 || harvestPage3)
             {
                 skipLength = true;
                 addPage4 = true;
                 addPage3 = false;
                 addComponents();
             }
-            else if (addPage4)
+            else if (addPage4 || harvestPage4)
             {
                 skipWeight = true;
                 addPage4 = false;
@@ -1345,6 +1390,7 @@ public class Application extends JFrame implements SerialPortEventListener
             }
         });
         
+            //button on the start screen that begins the new hatchling option
         addNewGator.addActionListener(e -> {
             start = false;
             newGatorPage1 = true;
@@ -1352,7 +1398,6 @@ public class Application extends JFrame implements SerialPortEventListener
             harvestPage1 = false;
             harvestPage2 = false;
             transferStart = false;
-            setUp = false;
             addTo = false;
             removeTo = false;
             addPage1 = false;
@@ -1361,6 +1406,7 @@ public class Application extends JFrame implements SerialPortEventListener
             addComponents();
         });
         
+            //button on the start screen that begins the transfer gator option
         transferGator.addActionListener(e -> {
             start = false;
             transferStart = true;
@@ -1368,7 +1414,6 @@ public class Application extends JFrame implements SerialPortEventListener
             newGatorPage2 = false;
             harvestPage1 = false;
             harvestPage2 = false;
-            setUp = false;
             addTo = false;
             removeTo = false;
             addPage1 = false;
@@ -1377,6 +1422,7 @@ public class Application extends JFrame implements SerialPortEventListener
             addComponents();
         });
         
+            //button on the start screen that begins the harvest gator option
         harvestGator.addActionListener(e -> {
             start = false;
             newGatorPage1 = false;
@@ -1384,7 +1430,6 @@ public class Application extends JFrame implements SerialPortEventListener
             transferStart = false;
             harvestPage1 = true;
             harvestPage2 = false;
-            setUp = false;
             addTo = false;
             removeTo = false;
             addPage1 = false;
@@ -1393,6 +1438,7 @@ public class Application extends JFrame implements SerialPortEventListener
             addComponents();
         });
         
+            //button on the start screen that closes the application
         quitButton.addActionListener(e -> {
             start = false;
             transferStart = false;
@@ -1400,7 +1446,6 @@ public class Application extends JFrame implements SerialPortEventListener
             newGatorPage2 = false;
             harvestPage1 = false;
             harvestPage2 = false;
-            setUp = false;
             addTo = false;
             removeTo = false;
             addPage1 = false;
@@ -1409,6 +1454,7 @@ public class Application extends JFrame implements SerialPortEventListener
             addComponents();
         });
         
+            //button in the transfer option that leads to the page that adds "to" pens
         addToCage.addActionListener(e -> {
             start = false;
             transferStart = false;
@@ -1416,7 +1462,6 @@ public class Application extends JFrame implements SerialPortEventListener
             newGatorPage2 = false;
             harvestPage1 = false;
             harvestPage2 = false;
-            setUp = false;
             addTo = true;
             removeTo = false;
             addPage1 = false;
@@ -1425,6 +1470,7 @@ public class Application extends JFrame implements SerialPortEventListener
             addComponents();
         });
         
+            //button in the transfer option that leads to the page that removes "to" pens
         removeToCage.addActionListener(e -> {
             start = false;
             transferStart = false;
@@ -1432,7 +1478,6 @@ public class Application extends JFrame implements SerialPortEventListener
             newGatorPage2 = false;
             harvestPage1 = false;
             harvestPage2 = false;
-            setUp = false;
             addTo = false;
             removeTo = true;
             addPage1 = false;
@@ -1441,6 +1486,7 @@ public class Application extends JFrame implements SerialPortEventListener
             addComponents();
         });
         
+            //button in the transfer option that leads to the page that begins the transfer procedure
         addEntry.addActionListener(e -> {
             start = false;
             transferStart = false;
@@ -1448,7 +1494,6 @@ public class Application extends JFrame implements SerialPortEventListener
             newGatorPage2 = false;
             harvestPage1 = false;
             harvestPage2 = false;
-            setUp = false;
             addTo = false;
             removeTo = false;
             addPage1 = true;
@@ -1457,6 +1502,7 @@ public class Application extends JFrame implements SerialPortEventListener
             addComponents();
         });
         
+            //button in each of the options that leads back to the start screen
         back.addActionListener(e -> {
             start = true;
             transferStart = false;
@@ -1464,7 +1510,6 @@ public class Application extends JFrame implements SerialPortEventListener
             newGatorPage2 = false;
             harvestPage1 = false;
             harvestPage2 = false;
-            setUp = false;
             addTo = false;
             removeTo = false;
             addPage1 = false;
@@ -1473,6 +1518,7 @@ public class Application extends JFrame implements SerialPortEventListener
             addComponents();
         });
         
+            //when transferring a gator, leads back to the transfer start screen
         cancel.addActionListener(e -> {
             start = false;
             transferStart = true;
@@ -1480,7 +1526,6 @@ public class Application extends JFrame implements SerialPortEventListener
             newGatorPage2 = false;
             harvestPage1 = false;
             harvestPage2 = false;
-            setUp = false;
             addTo = false;
             removeTo = false;
             addPage1 = false;
@@ -1492,6 +1537,11 @@ public class Application extends JFrame implements SerialPortEventListener
             addComponents();
         });
         
+            //button that is used on multiple  screens
+            //in the add "to" pen screen, add the currently-selected pen to application storage, return to the transfer start page
+            //in the last add new gator screen, add the new hatchling to gator database, return to the first new gator page
+            //in the last transfer screen, add the transfer entry to the gator database, return to the first transfer page
+            //in the last harvest screen, add the harvest entry to the gator database, return to the first harvest page
         confirm.addActionListener(e -> {
             errorMessage = "";  
             if (addTo)
@@ -1642,7 +1692,6 @@ public class Application extends JFrame implements SerialPortEventListener
                     newGatorPage1 = false;
                     newGatorPage2 = false;
                     transferStart = false;
-                    setUp = false;
                     addTo = false;
                     removeTo = false;
                     addPage1 = false;
@@ -1756,10 +1805,7 @@ public class Application extends JFrame implements SerialPortEventListener
             @Override
             public void popupMenuCanceled(PopupMenuEvent e)
             {
-                if (setUp)
-                {
-                }
-                else if (addTo)
+                if (addTo)
                 {
                     cageTaken = false;
                     for (int i = 0; i < toCounter; i++)
@@ -1777,10 +1823,7 @@ public class Application extends JFrame implements SerialPortEventListener
             @Override
             public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
             {
-                if (setUp)
-                {
-                }
-                else if (addTo)
+                if (addTo)
                 {
                     cageTaken = false;
                     for (int i = 0; i < toCounter; i++)
