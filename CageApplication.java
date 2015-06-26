@@ -6,8 +6,6 @@ import javax.swing.*;
 import java.awt.*;
 import com.healthmarketscience.jackcess.*;
 import java.io.*;
-import java.util.Collections;
-import java.awt.Graphics;
 import java.util.*;
 
 public class CageApplication extends JFrame

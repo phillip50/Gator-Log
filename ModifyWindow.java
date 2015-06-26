@@ -15,13 +15,8 @@ import java.awt.*;
 import java.awt.event.*;
 import com.healthmarketscience.jackcess.*;
 import java.io.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
+import java.text.*;
+import javax.swing.event.*;
 import java.util.*;
 
 public class ModifyWindow extends JFrame

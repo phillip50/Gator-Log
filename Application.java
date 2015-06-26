@@ -12,20 +12,108 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.awt.event.*;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
+import javax.swing.event.*;
 import com.healthmarketscience.jackcess.*;
 import gnu.io.*;
 import java.io.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import javax.swing.event.*;
+import java.text.*;
 
 public class Application extends JFrame implements SerialPortEventListener
 {
+        //"this" object
     private static Application frame;
+    
+        //Content pane that every conponent is place on
     private final Container contentPane;
+    
+        //Database files
+    private File gatorFile;
+    private Table gatorTable;
+    private File cageFile;
+    private Table cageTable;
+    
+        //The current day when the application is running
+    private String currentDate;
+    
+        //Array that stores the last 4 years
+    private String[] years;
+    
+        //current monitor's screen size, along with its width and height, to be used when sizing the components
+        //The fonts are also used when creating the components
+    private Dimension screenSize;
+    private double width;
+    private double height;
+    private Font font1;
+    private Font font2;
+    
+        //Ports for reading the microchips
+    private SerialPort serialPort;
+    private BufferedReader serialInput;
+    
+        //List of numbers when recording Belly Size, Length and Width
     private final JButton[] numbers;
+    
+        //List of all pens on the farm
+    private java.util.List<String> cages;
+    
+        //The value read in by the serial port and used to determine which gator was read
+    private String tag;
+    
+        //When transferring a gator, this value is a copy of the last entry in the gator database
+    private Row previousRow;
+    
+        //Determines whether the gator has been vaccinated and given special formula
+    private boolean isVaccinated;
+    private boolean isFormula;
+    
+    
+        //Date of last vaccination and special formula
+        //if the above booleans are false, it is the date recorded in the gator's previous row
+        //if true, it is a user-entered value
+    private String vaccinatedDate;
+    private String formulaDate;
+    
+        //When transferring gators, a "to" pen needs to be selected
+        //toCages refers to the selected pens, and their class size and ranges are stored
+        //Capacity is the amount of gators the pen can hold, with capacityCounters referring to how many have been transferred to that pen
+        //Each pen's information is stored at the same position in the array, which is reflected by the toCounter value
+        //When a pen reaches capacity, it is removed from the list and added to the cagesAtCapacity array, along wiht its corresponding information
+    private String[] toCages;
+    private int[] toUpperBounds;
+    private int[] toLowerBounds;
+    private String[] toClassSizes;
+    private int[] capacities;
+    private int[] capacityCounters;
+    private int toCounter;
+    private String[] cagesAtCapacity;
+    private int[] cagesAtCapacityAmount;
+    private String[] cagesAtCapacityRange;
+    private int cagesAtCapacityCounter;
+    
+        //Boolean checks when adding a "to" pen to the above arrays
+        //if there is atleast 1 "to" pen, hasToCage is true
+        //if the same pen has already been added to the array, cageTaken is false
+    private boolean hasToCage;
+    private boolean cageTaken;
+    
+        //Stores which pen the currently selected gator is being transferred to, along with its index in the arrays
+    private String toCage;
+    private int toCageIndex;
+    
+        //Measured values of the currently selected gator
+    private int bellySize;
+    private String length;
+    private String weight;
+    
+        //When measuring values, it is possible to not enter a length or width
+        //if that is the case, the corresponding boolean value is set true
+    private boolean skipLength;
+    private boolean skipWeight;
+    
+        //When an error has been encountered, display this message
+    private String errorMessage; 
+    
+        //Components in the frame
     private final JButton skip;
     private final JButton addToCage;
     private final JButton removeToCage;
@@ -43,8 +131,15 @@ public class Application extends JFrame implements SerialPortEventListener
     private final JTextField experimentalCode;
     private final JComboBox gender;
     private final JComboBox umbilical;
-    private java.util.List<String> cages;
-    private String[] years;
+    private final JButton confirm;
+    private final JButton cancel;    
+    private final JButton didVaccinate;
+    private final JTextField vaccinateField;
+    private final JButton didFormula;
+    private final JTextField formulaField;
+    private final JTextField comments;
+    
+        //Boolean values to determine which components to display
     private boolean start;
     private boolean newGatorPage1;
     private boolean newGatorPage2;
@@ -63,52 +158,6 @@ public class Application extends JFrame implements SerialPortEventListener
     private boolean addPage4;
     private boolean addPage5;
     private boolean quit;
-    private final JButton confirm;
-    private final JButton cancel;
-    private String toCage;
-    private int toCageIndex;
-    private int bellySize;
-    private String length;
-    private String weight;
-    private Row previousRow;
-    private String[] toCages;
-    private int[] toUpperBounds;
-    private int[] toLowerBounds;
-    private String[] toClassSizes;
-    private int[] capacities;
-    private int[] capacityCounters;
-    private int toCounter;
-    private String[] cagesAtCapacity;
-    private int[] cagesAtCapacityAmount;
-    private String[] cagesAtCapacityRange;
-    private int cagesAtCapacityCounter;
-    private boolean hasToCage;
-    private boolean cageTaken;
-    private File gatorFile;
-    private Table gatorTable;
-    private File cageFile;
-    private Table cageTable;
-    private String currentDate;
-    private Dimension screenSize;
-    private double width;
-    private double height;
-    private Font font1;
-    private Font font2;
-    private String errorMessage;
-    private SerialPort serialPort;
-    private BufferedReader serialInput;
-    private String tag;
-    private final JButton didVaccinate;
-    private final JTextField vaccinateField;
-    private boolean isVaccinated;
-    private String vaccinatedDate;
-    private final JButton didFormula;
-    private final JTextField formulaField;
-    private boolean isFormula;
-    private String formulaDate;
-    private final JTextField comments;
-    private boolean skipLength;
-    private boolean skipWeight;
     
     public Application()
     {
