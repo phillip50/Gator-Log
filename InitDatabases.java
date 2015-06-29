@@ -1,3 +1,9 @@
+/**
+ * Test method to set up the databases with dummy data
+ * 
+ * @Phillip Dingler [phil50@ufl.edu]
+ */
+
 package test;
 
 import com.healthmarketscience.jackcess.*;
@@ -13,6 +19,8 @@ public class InitDatabases
         File cageFile;
         Database cagedb;
         Table cageTable = null;
+        File classList;
+        File quarteredList;
         
         try
         {
@@ -66,10 +74,11 @@ public class InitDatabases
             
         }
         
-        initCageDatabase(cageTable);
+        InitCageDatabase(cageTable);
+        InitGatorDatabase(gatorTable);
     }
     
-    public static void initCageDatabase(Table cageTable)
+    public static void InitCageDatabase(Table cageTable)
     {
         try
         {
@@ -132,6 +141,153 @@ public class InitDatabases
             for (int i = 901; i <= 910; i++)
             {
                 cageTable.addRow(0, i, "Small", 200, "06-01-2015", "88", "H", "50", "Empty", "");
+            }
+        }
+        catch (IOException e)
+        {
+            
+        }
+    }
+    
+    public static void InitGatorDatabase(Table gatorTable)
+    {
+        try
+        {
+            String currentDate = "06-29-2015";
+            for (int i = 0; i < 200; i++)
+            {
+                gatorTable.addRow("", "" + i, "", "", "", "", "", "", currentDate, "", "101", "15", "25", "25", currentDate, "EG3", currentDate, "no comments", "");
+                System.out.println("" + i);
+            }
+            for (int i = 200; i < 400; i++)
+            {
+                gatorTable.addRow("", "" + i, "", "", "", "", "", "", currentDate, "", "102", "18", "30", "30", currentDate, "EG3", currentDate, "no comments", "");
+                System.out.println("" + i);
+            }
+            for (int i = 400; i < 600; i++)
+            {
+                gatorTable.addRow("", "" + i, "", "", "", "", "", "", currentDate, "", "103", "25", "40", "40", currentDate, "EG3", currentDate, "no comments", "");
+                System.out.println("" + i);
+            }
+            for (int i = 600; i < 800; i++)
+            {
+                gatorTable.addRow("", "" + i, "", "", "", "", "", "", currentDate, "", "104", "32", "50", "50", currentDate, "EG3", currentDate, "no comments", "");
+                System.out.println("" + i);
+            }
+            for (int i = 800; i < 1000; i++)
+            {
+                gatorTable.addRow("", "" + i, "", "", "", "", "", "", currentDate, "", "105", "18", "30", "30", currentDate, "EG3", currentDate, "no comments", "");
+                System.out.println("" + i);
+            }
+            for (int i = 1000; i < 1200; i++)
+            {
+                gatorTable.addRow("", "" + i, "", "", "", "", "", "", currentDate, "", "106", "18", "30", "30", currentDate, "EG3", currentDate, "no comments", "");
+                System.out.println("" + i);
+            }
+            for (int i = 1200; i < 1400; i++)
+            {
+                gatorTable.addRow("", "" + i, "", "", "", "", "", "", currentDate, "", "107", "18", "30", "30", currentDate, "EG3", currentDate, "no comments", "");
+                System.out.println("" + i);
+            }
+            for (int i = 1400; i < 1600; i++)
+            {
+                gatorTable.addRow("", "" + i, "", "", "", "", "", "", currentDate, "", "108", "18", "30", "30", currentDate, "EG3", currentDate, "no comments", "");
+                System.out.println("" + i);
+            }
+            for (int i = 1600; i < 1800; i++)
+            {
+                gatorTable.addRow("", "" + i, "", "", "", "", "", "", currentDate, "", "109", "18", "30", "30", currentDate, "EG3", currentDate, "no comments", "");
+                System.out.println("" + i);
+            }
+            for (int i = 1800; i < 2000; i++)
+            {
+                gatorTable.addRow("", "" + i, "", "", "", "", "", "", currentDate, "", "110", "18", "30", "30", currentDate, "EG3", currentDate, "no comments", "");
+                System.out.println("" + i);
+            }
+            for (int i = 2000; i < 2200; i++)
+            {
+                gatorTable.addRow("", "" + i, "", "", "", "", "", "", currentDate, "", "111", "18", "30", "30", currentDate, "EG3", currentDate, "no comments", "");
+                System.out.println("" + i);
+            }
+            for (int i = 2200; i < 2400; i++)
+            {
+                gatorTable.addRow("", "" + i, "", "", "", "", "", "", currentDate, "", "112", "18", "30", "30", currentDate, "EG3", currentDate, "no comments", "");
+                System.out.println("" + i);
+            }
+            for (int i = 2400; i < 2600; i++)
+            {
+                gatorTable.addRow("", "" + i, "", "", "", "", "", "", currentDate, "", "113", "18", "30", "30", currentDate, "EG3", currentDate, "no comments", "");
+                System.out.println("" + i);
+            }
+            for (int i = 2600; i < 2800; i++)
+            {
+                gatorTable.addRow("", "" + i, "", "", "", "", "", "", currentDate, "", "114", "18", "30", "30", currentDate, "EG3", currentDate, "no comments", "");
+                System.out.println("" + i);
+            }
+            for (int i = 2800; i < 3000; i++)
+            {
+                gatorTable.addRow("", "" + i, "", "", "", "", "", "", currentDate, "", "115", "18", "30", "30", currentDate, "EG3", currentDate, "no comments", "");
+                System.out.println("" + i);
+            }
+            for (int i = 3000; i < 3200; i++)
+            {
+                gatorTable.addRow("", "" + i, "", "", "", "", "", "", currentDate, "", "116", "18", "30", "30", currentDate, "EG3", currentDate, "no comments", "");
+                System.out.println("" + i);
+            }
+            for (int i = 3200; i < 3400; i++)
+            {
+                gatorTable.addRow("", "" + i, "", "", "", "", "", "", currentDate, "", "117", "18", "30", "30", currentDate, "EG3", currentDate, "no comments", "");
+                System.out.println("" + i);
+            }
+            for (int i = 3400; i < 3600; i++)
+            {
+                gatorTable.addRow("", "" + i, "", "", "", "", "", "", currentDate, "", "118", "18", "30", "30", currentDate, "EG3", currentDate, "no comments", "");
+                System.out.println("" + i);
+            }
+            for (int i = 3600; i < 3800; i++)
+            {
+                gatorTable.addRow("", "" + i, "", "", "", "", "", "", currentDate, "", "119", "18", "30", "30", currentDate, "EG3", currentDate, "no comments", "");
+                System.out.println("" + i);
+            }
+            for (int i = 3800; i < 4000; i++)
+            {
+                gatorTable.addRow("", "" + i, "", "", "", "", "", "", currentDate, "", "120", "18", "30", "30", currentDate, "EG3", currentDate, "no comments", "");
+                System.out.println("" + i);
+            }
+            for (int i = 4000; i < 4200; i++)
+            {
+                gatorTable.addRow("", "" + i, "", "", "", "", "", "", currentDate, "", "121", "18", "30", "30", currentDate, "EG3", currentDate, "no comments", "");
+                System.out.println("" + i);
+            }
+            for (int i = 4200; i < 4400; i++)
+            {
+                gatorTable.addRow("", "" + i, "", "", "", "", "", "", currentDate, "", "122", "18", "30", "30", currentDate, "EG3", currentDate, "no comments", "");
+                System.out.println("" + i);
+            }
+            for (int i = 4400; i < 4600; i++)
+            {
+                gatorTable.addRow("", "" + i, "", "", "", "", "", "", currentDate, "", "123", "18", "30", "30", currentDate, "EG3", currentDate, "no comments", "");
+                System.out.println("" + i);
+            }
+            for (int i = 4600; i < 4800; i++)
+            {
+                gatorTable.addRow("", "" + i, "", "", "", "", "", "", currentDate, "", "124", "18", "30", "30", currentDate, "EG3", currentDate, "no comments", "");
+                System.out.println("" + i);
+            }
+            for (int i = 4800; i < 5000; i++)
+            {
+                gatorTable.addRow("", "" + i, "", "", "", "", "", "", currentDate, "", "125", "18", "30", "30", currentDate, "EG3", currentDate, "no comments", "");
+                System.out.println("" + i);
+            }
+            for (int i = 5000; i < 5200; i++)
+            {
+                gatorTable.addRow("", "" + i, "", "", "", "", "", "", currentDate, "", "126", "18", "30", "30", currentDate, "EG3", currentDate, "no comments", "");
+                System.out.println("" + i);
+            }
+            for (int i = 5200; i < 5400; i++)
+            {
+                gatorTable.addRow("", "" + i, "", "", "", "", "", "", currentDate, "", "127", "18", "30", "30", currentDate, "EG3", currentDate, "no comments", "");
+                System.out.println("" + i);
             }
         }
         catch (IOException e)

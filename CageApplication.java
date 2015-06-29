@@ -1,3 +1,11 @@
+/**
+ * Cage Application
+ * Parses the cage database to view the current state of each pen on the farm
+ * From there, modifications can be made to the pen's attributes and the gators currently in the pen can be viewed as well
+ * 
+ * @Phillip Dingler [phil50@ufl.edu]
+ */
+
 //TODO: comment
 
 package test;
@@ -10,16 +18,24 @@ import java.util.*;
 
 public class CageApplication extends JFrame
 {
+        //"this" objest
     private static CageApplication frame;
+    
+        //list of JButtons which correspond to the pens on the farm
     private final JButton[] cages;
+    
+        //cage database files
     private File file;
     private Table table;
+    
+        //picture of the farm
     Image image;
     
     public CageApplication()
     {
-        super("Application");
+        super("Cage Application");
         
+            //read in the cage database file
         try
         {
             file = new File("CageDatabase.accdb");
@@ -28,16 +44,19 @@ public class CageApplication extends JFrame
         catch (IOException e)
         {
         }
-        
+            
+            //initialize the list buttons
         cages = new JButton[169];
     }
     
+        //when a pen button has been clicked, this method is called to create a new window
+        //this window displays more information about the pen that was clicked
     public void modifyWindow(java.util.List<Row> rows, String penNumber)
     {
         ModifyWindow modifyFrame = new ModifyWindow(rows, penNumber);
         modifyFrame.setFrame(modifyFrame);
-        modifyFrame.Initialize();
         modifyFrame.addGators();
+        modifyFrame.Initialize();
         modifyFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         Rectangle rect = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
         double length = rect.getHeight();
@@ -50,6 +69,7 @@ public class CageApplication extends JFrame
         modifyFrame.setVisible(true);
     }
 
+        //add the buttons to the frame
     public void addComponents()
     {
         for (JButton cage : cages)
@@ -84,13 +104,16 @@ public class CageApplication extends JFrame
         frame.setVisible(true);
     }
     
+        //method to initialize each pen button
+        //the buttons use absolute positioning, and are placed over top of their corresponding pens in the farm image file
+        //the buttons are then set invisible
     public void InitializeButtonArray()
     {
         for (int i = 1; i < 170; i++)
         {
             JButton button;
             String cageNumber;
-            int x, y, xlength, ylength;
+            int x, y, xlength, ylength; //x,y = corrdinates; xlength,ylength = length and width
             if (i == 1)
             {
                 cageNumber = "101";
@@ -1282,47 +1305,53 @@ public class CageApplication extends JFrame
             button.setContentAreaFilled(false);
             button.setBorderPainted(false);
             button.setForeground(new Color(0, 0, 0, 0));
-            button.setToolTipText("<html>"
-                        + "<center>Pen: " + cageNumber +"</center><br>"
-                        + "Click for expanded information and to modify pen"
-                        + "</html>");
+            button.setToolTipText("Click for expanded information and to modify pen");
             
             button.addActionListener(e -> {
-                IndexCursor cursor;
+                com.healthmarketscience.jackcess.Cursor cursor;
+                boolean isDone = false;
+                
+                    //ArrayList corresponds to the most recent record for the selected pen in the pen database
+                    //However, some pens are quartered, meaning that the pen has been divided into 4 smaller pens
+                    //For these pens, get the latest row for each of the 4 divided pens
                 java.util.List<Row> latestRows = new ArrayList<>();
+                
                 String penNumber = ((JButton) e.getSource()).getText();
                 try
                 {
-                    cursor = CursorBuilder.createCursor(table.getIndex("PenNumberIndex"));
-                    cursor.beforeFirst();
+                    cursor = CursorBuilder.createCursor(table);
+                        //quartered pens, find the lastest row for each of the four quarters
                     if (penNumber.equals("227") || penNumber.equals("232") || penNumber.equals("410") || penNumber.equals("411") || penNumber.equals("420") || penNumber.equals("421"))
                     {
                         for (int j = 1; j <= 4; j++)
                         {
-                            cursor.beforeFirst();
-                            cursor.findFirstRow(Collections.singletonMap("Pen Number", penNumber + "." + j));
-                            Row latestRow = cursor.getCurrentRow();                         
-                            while (cursor.findNextRow(Collections.singletonMap("Pen Number", penNumber + "." + j)))
+                            cursor.afterLast();
+                            Row latestRow = null;                      
+                            while (!isDone)
                             {
-                                Row row = cursor.getCurrentRow();
-                                if (row != null)
+                                Row row = cursor.getPreviousRow();
+                                if (row != null && row.get("Pen Number").toString().equals(penNumber + "." + j))
                                 {
                                     latestRow = row;
+                                    isDone = true;
                                 }
                             }
+                            isDone = false;
                             latestRows.add(latestRow);
                         }
                     }
+                        //regular pens
                     else
                     {
-                        cursor.findFirstRow(Collections.singletonMap("Pen Number", penNumber));
-                        Row latestRow = cursor.getCurrentRow();
-                        while (cursor.findNextRow(Collections.singletonMap("Pen Number", penNumber)))
+                        cursor.afterLast();
+                        Row latestRow = null;
+                        while (!isDone)
                         {
-                            Row row = cursor.getCurrentRow();
-                            if (row != null)
+                            Row row = cursor.getPreviousRow();
+                            if (row != null && row.get("Pen Number").toString().equals(penNumber))
                             {
                                 latestRow = row;
+                                isDone = true;
                             }
                         }
                         latestRows.add(latestRow);

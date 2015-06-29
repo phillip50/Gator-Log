@@ -716,11 +716,17 @@ public class ModifyWindow extends JFrame
         //add all unique gators in the specified pen to gatorList
         //tagList is used as a check to verify that only the most recent entry in the gator database is used for each gator tag
     public void addGators()
-    {
+    {        
         try
         {
             for (int i = 0; i < rows.size(); i++)
             {
+                    //declare each inner array in the 2d arrays
+                java.util.List<Row> tempGatorRow = new ArrayList();
+                gatorList.add(tempGatorRow);
+                java.util.List<String> tempTagRow = new ArrayList();
+                tagList.add(tempTagRow);
+
                 com.healthmarketscience.jackcess.Cursor cursor = CursorBuilder.createCursor(gatorTable);
                 cursor.afterLast();
                 while (cursor.moveToPreviousRow())
@@ -728,7 +734,7 @@ public class ModifyWindow extends JFrame
                     Row currentRow = cursor.getCurrentRow();
                     if (tagList.get(i).indexOf(currentRow.get("Tag Number").toString()) == -1)
                     {
-                        if (currentRow.get("To").toString().equals(rows.get(i).get("Pen Number").toString()))
+                        if (currentRow.get("To").toString().equals(rows.get(i).get("Pen Number").toString()) && !("Yes".equals(currentRow.get("Harvested?").toString())) )
                         {
                             gatorList.get(i).add(currentRow);
                         }
