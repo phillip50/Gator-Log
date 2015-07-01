@@ -109,6 +109,23 @@ public class CageApplication extends JFrame
         modifyFrame.setLocationRelativeTo(null);
         modifyFrame.setVisible(true);
     }
+    
+    public void modifyQuarters()
+    {
+        ModifyQuarters modifyFrame = new ModifyQuarters();
+        modifyFrame.setFrame(modifyFrame);
+        modifyFrame.initialize();
+        modifyFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        Rectangle rect = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+        double length = rect.getHeight();
+        double width = rect.getWidth();
+        Dimension screenSize = new Dimension((int)width, (int)length - 50);
+        modifyFrame.getContentPane().setPreferredSize(screenSize);
+        modifyFrame.addComponents();
+        modifyFrame.pack();
+        modifyFrame.setLocationRelativeTo(null);
+        modifyFrame.setVisible(true);
+    }
 
         //add the buttons to the frame
     public void addComponents()
@@ -159,7 +176,7 @@ public class CageApplication extends JFrame
         
         modifyQuarters.setBounds(550, 820, 200, 50);
         modifyQuarters.addActionListener(e -> {
-            
+            modifyQuarters();
         });
         
         for (int i = 1; i < 170; i++)

@@ -2,7 +2,7 @@ package test;
 
 import javax.swing.*; 
 import java.awt.*;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.util.*;
 import java.io.*;
 
@@ -173,7 +173,7 @@ public class ModifyClass extends JFrame
     public void initialize()
     {
         confirm.addActionListener(e -> {
-            BufferedWriter writer = null;
+            BufferedWriter writer;
             try
             {
                 writer = new BufferedWriter(new FileWriter("ClassSizes.txt", false));
@@ -181,10 +181,8 @@ public class ModifyClass extends JFrame
                 for (String temp : classes)
                 {
                     writer.write(temp + ",");
-                    System.out.println(temp + ",");
                 }
                 writer.write("" + start + "+");
-                System.out.println("" + start + "+");
                 
                 writer.close();
             }
