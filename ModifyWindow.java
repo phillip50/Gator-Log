@@ -419,19 +419,22 @@ public class ModifyWindow extends JFrame
             //initialize lists to be used in the drop down menus
         String[] temperatureList = {"85", "86", "87", "88", "89", "90", "91", "92", "93", "94"};
         String[] feedList = {"(R) - Regular", "(H) - Hatchling", "(I) - Intermediate"};
-        String[] classList = {"Empty", "Hatchling", "Family", "15-18", "19-23", "24-28", "29-33", "34-36", "37-38", "39+"};
+        String[] classList = null;
+        
+        try
+        {
+            BufferedReader reader = new BufferedReader(new FileReader("ClassSizes.txt"));
+            String temp = reader.readLine();
+            classList = temp.split(",");
+        }
+        catch (IOException e)
+        {
+            
+        }
         
         
         for (int i = 0; i < rows.size(); i++)
-        {
-            
-                //declare each inner array in the 2d arrays
-            java.util.List<Row> tempGatorRow = new ArrayList();
-            gatorList.add(tempGatorRow);
-            java.util.List<String> tempTagRow = new ArrayList();
-            tagList.add(tempTagRow);
-            
-            
+        {            
                 //Button used to enabled and disable the waterChangeDateField text entry
                 //if enabled, the new record's water change date will be whats entered in that field
                 //if disabled, the new record's water change date will be the date from the previous record

@@ -75,7 +75,7 @@ public class InitDatabases
         }
         
         InitCageDatabase(cageTable);
-        InitGatorDatabase(gatorTable);
+        //InitGatorDatabase(gatorTable);
     }
     
     public static void InitCageDatabase(Table cageTable)

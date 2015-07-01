@@ -24,9 +24,18 @@ public class CageApplication extends JFrame
         //list of JButtons which correspond to the pens on the farm
     private final JButton[] cages;
     
+    
+    private final JButton modifyClass;
+    
+    
+    private final JButton modifyQuarters;
+    
         //cage database files
     private File file;
     private Table table;
+    
+    
+    private final String[] quarteredPens;
     
         //picture of the farm
     Image image;
@@ -47,6 +56,21 @@ public class CageApplication extends JFrame
             
             //initialize the list buttons
         cages = new JButton[169];
+        
+        modifyClass = new JButton("Modify Class Sizes");
+        modifyQuarters = new JButton("Change Quartered Pens");
+        
+        String temp = "";      
+        try
+        {
+            BufferedReader reader = new BufferedReader(new FileReader("QuarteredPens.txt"));
+            temp = reader.readLine();
+        }
+        catch (IOException e)
+        {
+            
+        }
+        quarteredPens = temp.split(",");
     }
     
         //when a pen button has been clicked, this method is called to create a new window
@@ -68,6 +92,23 @@ public class CageApplication extends JFrame
         modifyFrame.setLocationRelativeTo(null);
         modifyFrame.setVisible(true);
     }
+    
+    public void modifyClass()
+    {
+        ModifyClass modifyFrame = new ModifyClass();
+        modifyFrame.setFrame(modifyFrame);
+        modifyFrame.initialize();
+        modifyFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        Rectangle rect = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+        double length = rect.getHeight();
+        double width = rect.getWidth();
+        Dimension screenSize = new Dimension((int)width, (int)length - 50);
+        modifyFrame.getContentPane().setPreferredSize(screenSize);
+        modifyFrame.addComponents();
+        modifyFrame.pack();
+        modifyFrame.setLocationRelativeTo(null);
+        modifyFrame.setVisible(true);
+    }
 
         //add the buttons to the frame
     public void addComponents()
@@ -76,6 +117,8 @@ public class CageApplication extends JFrame
         {
             frame.add(cage);
         }
+        frame.add(modifyClass);
+        frame.add(modifyQuarters);
         validate();
         setVisible(true);
     }
@@ -83,7 +126,7 @@ public class CageApplication extends JFrame
     public static void main(String[] args)
     {
         frame = new CageApplication();
-        frame.InitializeButtonArray();
+        frame.InitializeButtons();
         frame.setContentPane(new JPanel()
         {
             Image image = Toolkit.getDefaultToolkit().createImage("farm.jpg");
@@ -96,7 +139,7 @@ public class CageApplication extends JFrame
         });
         frame.setLayout(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Dimension screenSize = new Dimension(990, 801);
+        Dimension screenSize = new Dimension(990, 900);
         frame.getContentPane().setPreferredSize(screenSize);
         frame.addComponents();
         frame.pack();
@@ -107,8 +150,18 @@ public class CageApplication extends JFrame
         //method to initialize each pen button
         //the buttons use absolute positioning, and are placed over top of their corresponding pens in the farm image file
         //the buttons are then set invisible
-    public void InitializeButtonArray()
+    public void InitializeButtons()
     {
+        modifyClass.setBounds(250, 820, 200, 50);
+        modifyClass.addActionListener(e -> {
+            modifyClass();
+        });
+        
+        modifyQuarters.setBounds(550, 820, 200, 50);
+        modifyQuarters.addActionListener(e -> {
+            
+        });
+        
         for (int i = 1; i < 170; i++)
         {
             JButton button;
@@ -1320,8 +1373,20 @@ public class CageApplication extends JFrame
                 try
                 {
                     cursor = CursorBuilder.createCursor(table);
+                    
+                        //check if pen is quartered
+                    boolean isQuartered = false;
+                    for (String s : quarteredPens)
+                    {
+                        if (penNumber.equals(s))
+                        {
+                            isQuartered = true;
+                            break;
+                        }                       
+                    }
+                    
                         //quartered pens, find the lastest row for each of the four quarters
-                    if (penNumber.equals("227") || penNumber.equals("232") || penNumber.equals("410") || penNumber.equals("411") || penNumber.equals("420") || penNumber.equals("421"))
+                    if (isQuartered)
                     {
                         for (int j = 1; j <= 4; j++)
                         {
