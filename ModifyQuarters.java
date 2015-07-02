@@ -1,3 +1,12 @@
+/**
+ * For use with the CageApplication.java class
+ * When the option to change which pens are quartered in that application, an object of this class is created
+ * A list of current quartered pens is displayed, as well as a list of all pens on the farm
+ * The user can then specify which new pens they want quartered or which existing quartered pens they want not quartered
+ * 
+ * @Phillip Dingler [phil50@ufl.edu]
+ */
+
 package test;
 
 import javax.swing.*; 
@@ -9,24 +18,39 @@ import com.healthmarketscience.jackcess.*;
 
 public class ModifyQuarters extends JFrame
 {
+        //"this" object
     private ModifyQuarters frame;
-    private JComboBox penComboBox;
+    
+        //list of pens on the farm
     private String[] penList;
+    
+        //Old list of quartered pens
     private final java.util.List<String> previousQuarteredList;
+    
+        //new list of quartered pens
     private final java.util.List<String> quarteredList;
+    
+        //interface components
+    private JComboBox penComboBox;
     private JButton add;
     private JButton confirm;
     private JButton cancel;
+    
+        //font used by the components
     private final Font font;
+    
+        //database files
     private File penFile;
     private Table penTable;
     
     public ModifyQuarters()
     {
         super("Modify Quartered Pens");
-        
+            
+            //initialize font
         font = new Font("Arial", Font.PLAIN, 40);
         
+            //initialize static gui components
         add = new JButton("Add");
         add.setFont(font);
         confirm = new JButton("Confirm");
@@ -34,6 +58,7 @@ public class ModifyQuarters extends JFrame
         cancel = new JButton("Cancel");
         cancel.setFont(font);
         
+            //initialize with pen numbers
         penList = new String[149];
         int j = 0;
         for (int i = 101; i <= 127; i++)
@@ -67,6 +92,8 @@ public class ModifyQuarters extends JFrame
             j++;
         }
         
+            //setup the output storage file, which records the current quartered pen list
+            //as well as open the pen database
         BufferedReader reader;
         String temp = "";
         try
@@ -81,20 +108,25 @@ public class ModifyQuarters extends JFrame
         {
             
         }
+        
+            //initialize both quartered pen lists
+            //both are initially set to the old quartered pen list
         quarteredList = new ArrayList( Arrays.asList(temp.split(",")) );
         previousQuarteredList = new ArrayList( Arrays.asList(temp.split(",")) );
     }
     
+        //add interface components to the frame
     public void addComponents()
     {
+            //create a blank frame
         Container contentPane = frame.getContentPane();
         contentPane.removeAll();
         
         Panel panel = new Panel();
-        panel.setLayout(new GridBagLayout());
-        
+        panel.setLayout(new GridBagLayout());      
         GridBagConstraints c = new GridBagConstraints();
         
+            //create a list of pens which are not quartered
         String[] minusQuartered = new String[penList.length - quarteredList.size()];
         int j = 0;
         for (int i = 0; i < 149; i++)
@@ -164,14 +196,17 @@ public class ModifyQuarters extends JFrame
         frame = f;
     }
     
+        //add action listeners to buttons
     public void initialize()
     {
+            //when confirm is clicked: close the frame, write new quartered pen list to file, and add new pen entries to database designated the pens as quartered or not
         confirm.addActionListener(e -> {
             BufferedWriter writer;
             try
             {
                 writer = new BufferedWriter(new FileWriter("QuarteredPens.txt", false));
                 
+                    //write new quartered pen list to text file for storage
                 Iterator<String> it = quarteredList.iterator();
                 if (it.hasNext())
                 {
@@ -184,6 +219,8 @@ public class ModifyQuarters extends JFrame
                 
                 writer.close();
                 
+                    //get each pen in new quartered pen list and check if it was part of the old one
+                    //if it wasn't, designate it so in the database
                 for (String temp : quarteredList)
                 {
                     if (previousQuarteredList.indexOf(temp) == -1)
@@ -208,6 +245,8 @@ public class ModifyQuarters extends JFrame
                     }
                 }
             
+                    //get each pen in old quartered pen list and check if it is in the new quartered pen list
+                    //if it isn't, designate it not quartered in the database
                 for (String temp : previousQuarteredList)
                 {
                     if (quarteredList.indexOf(temp) == -1)
@@ -229,9 +268,6 @@ public class ModifyQuarters extends JFrame
                                 }
                             }
                         }
-                        
-                        System.out.println("Old: " + temp);
-                        //add normal row to database
                     }
                 }
             }
@@ -239,14 +275,16 @@ public class ModifyQuarters extends JFrame
             {
                 
             }
-            
+                //close the frame
             frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
         });
         
+            //close the frame when cancel is clicked and ignore all inputs
         cancel.addActionListener(e -> {
             frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
         });
         
+            //add selected pen to the quartered pen list when add is clicked
         add.addActionListener(e -> {
             quarteredList.add(penComboBox.getSelectedItem().toString());
             addComponents();
