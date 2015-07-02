@@ -303,9 +303,15 @@ public class ModifyWindow extends JFrame
             JLabel dummyLabel = new JLabel("");
             viewPanel.add(dummyLabel, viewc);
             
-            tabbedPanel.addTab("<html><body leftmargin=15 topmargin=8 marginwidth=30 marginheight=5>View Gators</body></html>", viewPanel);
+            JScrollPane viewScroll = new JScrollPane(viewPanel);
+            viewScroll.getVerticalScrollBar().setPreferredSize(new Dimension(20, 0));
+            viewScroll.getVerticalScrollBar().setUnitIncrement(15);
+            
+            tabbedPanel.addTab("<html><body leftmargin=15 topmargin=8 marginwidth=30 marginheight=5>View Gators</body></html>", viewScroll);
         }
+        
         tabbedPanel.setSelectedIndex(0);
+        
         if (selectedGator != null)
         {
             java.util.List<Row> allSelectedGatorEntries = new ArrayList<>();
@@ -333,15 +339,38 @@ public class ModifyWindow extends JFrame
             gatorc.insets = new Insets(10, 30, 10, 30);
             gatorc.weightx = 1;
             gatorc.weighty = 0;
-            int i = 0;
+            gatorc.anchor = GridBagConstraints.LINE_START;
+            
+            gatorc.gridx = 0;
+            gatorc.gridy = 0;
+            
+            JLabel topLabel1 = new JLabel("Entry");
+            topLabel1.setFont(font);
+            gatorPanel.add(topLabel1, gatorc);
+            
+            gatorc.gridx = 1;
+            JLabel topLabel2 = new JLabel("Date");
+            topLabel2.setFont(font);
+            gatorPanel.add(topLabel2, gatorc);
+            
+            gatorc.gridx = 2;
+            JLabel topLabel3 = new JLabel("From Pen");
+            topLabel3.setFont(font);
+            gatorPanel.add(topLabel3, gatorc);
+            
+            gatorc.gridx = 3;
+            JLabel topLabel4 = new JLabel("To Pen");
+            topLabel4.setFont(font);
+            gatorPanel.add(topLabel4, gatorc);
+            
+            int i = 1;
             
             for (Row tempRow : allSelectedGatorEntries)
             {           
                 gatorc.gridy = i;
                 
-                gatorc.anchor = GridBagConstraints.LINE_START;
                 gatorc.gridx = 0;
-                JLabel tempLabel = new JLabel("" + (i+1));
+                JLabel tempLabel = new JLabel("" + i);
                 tempLabel.setFont(font);
                 gatorPanel.add(tempLabel, gatorc);
                 
@@ -368,8 +397,12 @@ public class ModifyWindow extends JFrame
             JLabel dummyLabel2 = new JLabel("");
             gatorPanel.add(dummyLabel2, gatorc);
             
-            tabbedPanel.addTab("<html><body leftmargin=15 topmargin=8 marginwidth=30 marginheight=5>Gator " + selectedGator.get("Tag Number").toString() + "</body></html>", gatorPanel);
-            tabbedPanel.setSelectedComponent(gatorPanel);
+            JScrollPane gatorScroll = new JScrollPane(gatorPanel);
+            gatorScroll.getVerticalScrollBar().setPreferredSize(new Dimension(20, 0));
+            gatorScroll.getVerticalScrollBar().setUnitIncrement(15);
+            
+            tabbedPanel.addTab("<html><body leftmargin=15 topmargin=8 marginwidth=30 marginheight=5>Gator " + selectedGator.get("Tag Number").toString() + "</body></html>", gatorScroll);
+            tabbedPanel.setSelectedComponent(gatorScroll);
         }
         
         add(tabbedPanel);
