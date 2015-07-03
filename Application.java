@@ -77,10 +77,10 @@ public class Application extends JFrame implements SerialPortEventListener
     private String formulaDate;
     
         //When transferring gators, a "to" pen needs to be selected
-        //toCages refers to the selected pens, and their class size and ranges are stored
+        //toPens refers to the selected pens, and their class size and ranges are stored
         //Capacity is the amount of gators the pen can hold, with capacityCounters referring to how many have been transferred to that pen
         //Each pen's information is stored at the same position in the array, which is reflected by the toCounter value
-        //When a pen reaches capacity, it is removed from the list and added to the cagesAtCapacity array, along wiht its corresponding information
+        //When a pen reaches capacity, it is removed from the list and added to the pensAtCapacity array, along wiht its corresponding information
     private String[] toPens;
     private int[] toUpperBounds;
     private int[] toLowerBounds;
@@ -94,8 +94,8 @@ public class Application extends JFrame implements SerialPortEventListener
     private int pensAtCapacityCounter;
     
         //Boolean checks when adding a "to" pen to the above arrays
-        //if there is atleast 1 "to" pen, hasToCage is true
-        //if the same pen has already been added to the array, cageTaken is false
+        //if there is atleast 1 "to" pen, hasToPen is true
+        //if the same pen has already been added to the array, penTaken is false
     private boolean hasToPen;
     private boolean penTaken;
     
@@ -239,7 +239,7 @@ public class Application extends JFrame implements SerialPortEventListener
         {
             gatorFile = new File("AnimalDatabase.accdb");
             gatorTable = DatabaseBuilder.open(gatorFile).getTable("Database");
-            penFile = new File("CageDatabase.accdb");
+            penFile = new File("PenDatabase.accdb");
             penTable = DatabaseBuilder.open(penFile).getTable("Database");
             
             reader = new BufferedReader(new FileReader("QuarteredPens.txt"));
@@ -1826,7 +1826,7 @@ public class Application extends JFrame implements SerialPortEventListener
         
             //resize the scroll bar to make it more useable on a touchscreen
             //also when a pen that has already been selected when adding a "to" pen is selected again,
-            //throw cageTaken flag
+            //throw penTaken flag
         penList.addPopupMenuListener(new PopupMenuListener()
         {
             @Override

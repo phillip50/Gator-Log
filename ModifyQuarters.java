@@ -1,5 +1,5 @@
 /**
- * For use with the CageApplication.java class
+ * For use with the PenApplication.java class
  * When the option to change which pens are quartered in that application, an object of this class is created
  * A list of current quartered pens is displayed, as well as a list of all pens on the farm
  * The user can then specify which new pens they want quartered or which existing quartered pens they want not quartered
@@ -101,7 +101,7 @@ public class ModifyQuarters extends JFrame
             reader = new BufferedReader(new FileReader("QuarteredPens.txt"));
             temp = reader.readLine();
             
-            penFile = new File("CageDatabase.accdb");
+            penFile = new File("PenDatabase.accdb");
             penTable = DatabaseBuilder.open(penFile).getTable("Database");
         }
         catch (IOException e)

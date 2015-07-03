@@ -1,6 +1,6 @@
 /**
- * For use with the CageApplication.java class
- * When a cage is specified in that application, an object of this class if created to generate a window specific to that pen
+ * For use with the PenApplication.java class
+ * When a pen is specified in that application, an object of this class if created to generate a window specific to that pen
  * In this window, the user can modify attributes of the pen and view gators contained within it
  * If a single gator is selected, all previous entries of the gator in the database are displayed
  * 
@@ -32,12 +32,12 @@ public class ModifyWindow extends JFrame
     
     private String currentDate;
     
-        //list of input rows in the cage database
+        //list of input rows in the pen database
     private java.util.List<Row> rows;
     
         //input databases
-    private File cageFile;
-    private Table cageTable;
+    private File penFile;
+    private Table penTable;
     private File gatorFile;
     private Table gatorTable;
     
@@ -122,8 +122,8 @@ public class ModifyWindow extends JFrame
             //open the databases
         try
         {
-            cageFile = new File("CageDatabase.accdb");
-            cageTable = DatabaseBuilder.open(cageFile).getTable("Database");
+            penFile = new File("PenDatabase.accdb");
+            penTable = DatabaseBuilder.open(penFile).getTable("Database");
             gatorFile = new File("AnimalDatabase.accdb");
             gatorTable = DatabaseBuilder.open(gatorFile).getTable("Database");
         }
@@ -691,7 +691,7 @@ public class ModifyWindow extends JFrame
                 int j = tabbedPanel.getSelectedIndex();
                 try
                 {
-                    cageTable.addRow(0, rows.get(j).get("Pen Number"), rows.get(j).get("Pen Type"), rows.get(j).get("Square Footage"), waterChangeDates.get(j), temperatures.get(j).getSelectedItem().toString(), feeds.get(j).getSelectedItem().toString().charAt(1), amounts.get(j).getText(), classes.get(j).getSelectedItem().toString(), comments.get(j).getText());
+                    penTable.addRow(0, rows.get(j).get("Pen Number"), rows.get(j).get("Pen Type"), rows.get(j).get("Square Footage"), waterChangeDates.get(j), temperatures.get(j).getSelectedItem().toString(), feeds.get(j).getSelectedItem().toString().charAt(1), amounts.get(j).getText(), classes.get(j).getSelectedItem().toString(), comments.get(j).getText());
                 }
                 catch (IOException e1)
                 {

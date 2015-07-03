@@ -16,9 +16,9 @@ public class InitDatabases
         File gatorFile;
         Database gatordb;
         Table gatorTable = null;
-        File cageFile;
-        Database cagedb;
-        Table cageTable = null;
+        File penFile;
+        Database pendb;
+        Table penTable = null;
         File classList;
         File quarteredList;
         
@@ -52,9 +52,9 @@ public class InitDatabases
                 .addColumn(new ColumnBuilder("Harvested?", DataType.TEXT))
                 .toTable(gatordb);
             
-            cageFile = new File("CageDatabase.accdb");
-            cagedb = new DatabaseBuilder(cageFile).setFileFormat(Database.FileFormat.V2000).create();
-            cageTable = new TableBuilder("Database")
+            penFile = new File("PenDatabase.accdb");
+            pendb = new DatabaseBuilder(penFile).setFileFormat(Database.FileFormat.V2000).create();
+            penTable = new TableBuilder("Database")
                 .addColumn(new ColumnBuilder("ID", DataType.LONG).setAutoNumber(true))
                 .addIndex(new IndexBuilder(IndexBuilder.PRIMARY_KEY_NAME).addColumns("ID").setPrimaryKey())
                 .addColumn(new ColumnBuilder("Pen Number", DataType.TEXT))
@@ -67,80 +67,80 @@ public class InitDatabases
                 .addColumn(new ColumnBuilder("Feed Amount", DataType.TEXT))
                 .addColumn(new ColumnBuilder("Size Class", DataType.TEXT))
                 .addColumn(new ColumnBuilder("Comments", DataType.TEXT))
-                .toTable(cagedb);
+                .toTable(pendb);
         }
         catch (IOException e)
         {
             
         }
         
-        InitCageDatabase(cageTable);
-        //InitGatorDatabase(gatorTable);
+        InitPenDatabase(penTable);
+        InitGatorDatabase(gatorTable);
     }
     
-    public static void InitCageDatabase(Table cageTable)
+    public static void InitPenDatabase(Table penTable)
     {
         try
         {
             for (int i = 101; i <= 127; i++)
             {
-                cageTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "39+", "");
+                penTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "39+", "");
             }
             for (int i = 201; i <= 226; i++)
             {
-                cageTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "15-18", "");
+                penTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "15-18", "");
             }
             for (int i = 1; i <= 4; i++)
             {
-                cageTable.addRow(0, "227." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "");
+                penTable.addRow(0, "227." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "");
             }
             for (int i = 228; i <= 231; i++)
             {
-                cageTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "19-23", "");
+                penTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "19-23", "");
             }
             for (int i = 1; i <= 4; i++)
             {
-                cageTable.addRow(0, "232." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "");
+                penTable.addRow(0, "232." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "");
             }
             for (int i = 301; i <= 326; i++)
             {
-                cageTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "24-28", "");
+                penTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "24-28", "");
             }
             for (int i = 401; i <= 409; i++)
             {
-                cageTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "29-33", "");
+                penTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "29-33", "");
             }
             for (int i = 1; i <= 4; i++)
             {
-                cageTable.addRow(0, "410." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "");
+                penTable.addRow(0, "410." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "");
             }
             for (int i = 1; i <= 4; i++)
             {
-                cageTable.addRow(0, "411." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "");
+                penTable.addRow(0, "411." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "");
             }
             for (int i = 412; i <= 419; i++)
             {
-                cageTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "34-36", "");
+                penTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "34-36", "");
             }
             for (int i = 1; i <= 4; i++)
             {
-                cageTable.addRow(0, "420." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "");
+                penTable.addRow(0, "420." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "");
             }
             for (int i = 1; i <= 4; i++)
             {
-                cageTable.addRow(0, "421." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "");
+                penTable.addRow(0, "421." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "");
             }
             for (int i = 422; i <= 437; i++)
             {
-                cageTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "37-38", "");
+                penTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "37-38", "");
             }
             for (int i = 801; i <= 816; i++)
             {
-                cageTable.addRow(0, i, "Small", 200, "06-01-2015", "88", "H", "50", "Family", "");
+                penTable.addRow(0, i, "Small", 200, "06-01-2015", "88", "H", "50", "Family", "");
             }
             for (int i = 901; i <= 910; i++)
             {
-                cageTable.addRow(0, i, "Small", 200, "06-01-2015", "88", "H", "50", "Empty", "");
+                penTable.addRow(0, i, "Small", 200, "06-01-2015", "88", "H", "50", "Empty", "");
             }
         }
         catch (IOException e)
