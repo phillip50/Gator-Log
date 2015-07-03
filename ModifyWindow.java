@@ -2,11 +2,10 @@
  * For use with the CageApplication.java class
  * When a cage is specified in that application, an object of this class if created to generate a window specific to that pen
  * In this window, the user can modify attributes of the pen and view gators contained within it
+ * If a single gator is selected, all previous entries of the gator in the database are displayed
  * 
  * @Phillip Dingler [phil50@ufl.edu]
  */
-
-//TODO: finish commenting
 
 package test;
 
@@ -261,7 +260,7 @@ public class ModifyWindow extends JFrame
             modc.gridy = 8;
             modifyPanel.add(cancel.get(i), modc);
             
-            tabbedPanel.addTab("<html><body leftmargin=15 topmargin=8 marginwidth=30 marginheight=5>Modify Pen</body></html>", modifyPanel);
+            tabbedPanel.addTab("<html><body leftmargin=15 topmargin=8 marginwidth=30 marginheight=5>Modify Pen " + rows.get(i).get("Pen Number") + "</body></html>", modifyPanel);
         }
         
         //view gators panel
@@ -307,7 +306,7 @@ public class ModifyWindow extends JFrame
             viewScroll.getVerticalScrollBar().setPreferredSize(new Dimension(20, 0));
             viewScroll.getVerticalScrollBar().setUnitIncrement(15);
             
-            tabbedPanel.addTab("<html><body leftmargin=15 topmargin=8 marginwidth=30 marginheight=5>View Gators</body></html>", viewScroll);
+            tabbedPanel.addTab("<html><body leftmargin=15 topmargin=8 marginwidth=30 marginheight=5>View Gators in " + rows.get(i).get("Pen Number") + "</body></html>", viewScroll);
         }
         
         tabbedPanel.setSelectedIndex(0);

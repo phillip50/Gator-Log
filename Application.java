@@ -23,14 +23,14 @@ public class Application extends JFrame implements SerialPortEventListener
         //"this" object
     private static Application frame;
     
-        //Content pane that every conponent is place on
+        //Panel that every conponent is place on
     private final Container contentPane;
     
         //Database files
     private File gatorFile;
     private Table gatorTable;
-    private File cageFile;
-    private Table cageTable;
+    private File penFile;
+    private Table penTable;
     
         //The current day when the application is running
     private String currentDate;
@@ -54,7 +54,10 @@ public class Application extends JFrame implements SerialPortEventListener
     private final JButton[] numbers;
     
         //List of all pens on the farm
-    private java.util.List<String> cages;
+    private final java.util.List<String> pens;
+    
+        //List of quartered pens on the farm
+    private final java.util.List<String> quarteredPens;
     
         //The value read in by the serial port and used to determine which gator was read
     private String tag;
@@ -78,27 +81,27 @@ public class Application extends JFrame implements SerialPortEventListener
         //Capacity is the amount of gators the pen can hold, with capacityCounters referring to how many have been transferred to that pen
         //Each pen's information is stored at the same position in the array, which is reflected by the toCounter value
         //When a pen reaches capacity, it is removed from the list and added to the cagesAtCapacity array, along wiht its corresponding information
-    private String[] toCages;
+    private String[] toPens;
     private int[] toUpperBounds;
     private int[] toLowerBounds;
     private String[] toClassSizes;
     private int[] capacities;
     private int[] capacityCounters;
     private int toCounter;
-    private String[] cagesAtCapacity;
-    private int[] cagesAtCapacityAmount;
-    private String[] cagesAtCapacityRange;
-    private int cagesAtCapacityCounter;
+    private String[] pensAtCapacity;
+    private int[] pensAtCapacityAmount;
+    private String[] pensAtCapacityRange;
+    private int pensAtCapacityCounter;
     
         //Boolean checks when adding a "to" pen to the above arrays
         //if there is atleast 1 "to" pen, hasToCage is true
         //if the same pen has already been added to the array, cageTaken is false
-    private boolean hasToCage;
-    private boolean cageTaken;
+    private boolean hasToPen;
+    private boolean penTaken;
     
         //Stores which pen the currently selected gator is being transferred to, along with its index in the arrays
-    private String toCage;
-    private int toCageIndex;
+    private String toPen;
+    private int toPenIndex;
     
         //Measured values of the currently selected gator
     private int bellySize;
@@ -115,15 +118,15 @@ public class Application extends JFrame implements SerialPortEventListener
     
         //Components in the frame
     private final JButton skip;
-    private final JButton addToCage;
-    private final JButton removeToCage;
+    private final JButton addToPen;
+    private final JButton removeToPen;
     private final JButton addEntry;
     private final JButton back;
     private final JButton addNewGator;
     private final JButton transferGator;
     private final JButton harvestGator;
     private final JButton quitButton;
-    private final JComboBox cageList;
+    private final JComboBox penList;
     private final JTextField capacityInput;
     private final JTextField location;
     private final JTextField condition;
@@ -165,8 +168,8 @@ public class Application extends JFrame implements SerialPortEventListener
             //initialize the fields
         gatorFile = null;
         gatorTable = null;
-        cageFile = null;
-        cageTable = null;
+        penFile = null;
+        penTable = null;
         
         years = new String[4];
         
@@ -180,26 +183,36 @@ public class Application extends JFrame implements SerialPortEventListener
         font1 = new Font("Arial", Font.PLAIN, 40);
         font2 = new Font("Arial", Font.PLAIN, 25); 
         
-        toCage = "";
+        tag = "";
+        toPen = "";
         bellySize = 0;
         length = "";
         weight = "";
+        vaccinatedDate = "";
+        formulaDate = "";
+        skipLength = false;
+        skipWeight = false;
         
-        toCages = new String[10];
+        isVaccinated = false;
+        isFormula = false;
+        
+        toPens = new String[10];
         toUpperBounds = new int[10];
         toLowerBounds = new int[10];
         toClassSizes = new String[10];
         capacities = new int[10];
         capacityCounters = new int[10];
         toCounter = 0;
-        cagesAtCapacity = new String[10];
-        cagesAtCapacityAmount = new int[10];
-        cagesAtCapacityRange = new String[10];
-        cagesAtCapacityCounter = 0;
+        pensAtCapacity = new String[10];
+        pensAtCapacityAmount = new int[10];
+        pensAtCapacityRange = new String[10];
+        pensAtCapacityCounter = 0;
         
-        cageTaken = false;
-        hasToCage = false;
+        penTaken = false;
+        hasToPen = false;
         
+        
+            //initially display the start page
         start = true;
         newGatorPage1 = false;
         newGatorPage2 = false;
@@ -217,19 +230,28 @@ public class Application extends JFrame implements SerialPortEventListener
         transferPage4 = false;
         transferPage5 = false;
         quit = false;
+              
+        BufferedReader reader;
+        String temp = "";
         
-        tag = "";
-        toCage = "";
-        bellySize = 0;
-        length = "";
-        weight = "";
-        vaccinatedDate = "";
-        formulaDate = "";
-        skipLength = false;
-        skipWeight = false;
+            //read in the gator and pen databases and the list of quartered pens
+        try
+        {
+            gatorFile = new File("AnimalDatabase.accdb");
+            gatorTable = DatabaseBuilder.open(gatorFile).getTable("Database");
+            penFile = new File("CageDatabase.accdb");
+            penTable = DatabaseBuilder.open(penFile).getTable("Database");
+            
+            reader = new BufferedReader(new FileReader("QuarteredPens.txt"));
+            temp = reader.readLine();
+        }
+        catch (IOException e1)
+        {
+            
+        }
         
-        isVaccinated = false;
-        isFormula = false;
+            //format of text file is comma-separated elements
+        quarteredPens = new ArrayList( Arrays.asList(temp.split(",")) );
         
             //get the last 4 years
         int year = Integer.parseInt(currentDate.substring(6));
@@ -240,64 +262,74 @@ public class Application extends JFrame implements SerialPortEventListener
         }
         
             //List of pens on the farm
-        cages = new ArrayList<>();
+            //For quartered pens, add each of the 4 quarters
+        pens = new ArrayList<>();
         for (int i = 101; i <= 127; i++)
         {
-            cages.add("" + i);
-        }
-        for (int i = 201; i <= 232; i++)
-        {
-            if (i == 227 || i == 232)
+            if (quarteredPens.indexOf("" + i) != -1)
             {
                 for (int j = 1; j <= 4; j++)
                 {
-                    cages.add("" + i + "." + j);
+                    pens.add("" + i + "." + j);
                 }
             }
             else
             {
-                cages.add("" + i);
+                pens.add("" + i);
+            }
+        }
+        for (int i = 201; i <= 232; i++)
+        {
+            if (quarteredPens.indexOf("" + i) != -1)
+            {
+                for (int j = 1; j <= 4; j++)
+                {
+                    pens.add("" + i + "." + j);
+                }
+            }
+            else
+            {
+                pens.add("" + i);
             }
         }
         for (int i = 301; i <= 326; i++)
         {
-            cages.add("" + i);
-        }
-        for (int i = 401; i <= 437; i++)
-        {
-            if (i == 410 || i == 411 || i == 420 || i == 421)
+            if (quarteredPens.indexOf("" + i) != -1)
             {
                 for (int j = 1; j <= 4; j++)
                 {
-                    cages.add("" + i + "." + j);
+                    pens.add("" + i + "." + j);
                 }
             }
             else
             {
-                cages.add("" + i);
+                pens.add("" + i);
             }
         }
+        for (int i = 401; i <= 437; i++)
+        {
+            if (quarteredPens.indexOf("" + i) != -1)
+            {
+                for (int j = 1; j <= 4; j++)
+                {
+                    pens.add("" + i + "." + j);
+                }
+            }
+            else
+            {
+                pens.add("" + i);
+            }
+        }
+            //Small pens can't be quartered, no need to check
         for (int i = 801; i <= 816; i++)
         {
-            cages.add("" + i);
+            pens.add("" + i);
         }
         for (int i = 901; i <= 910; i++)
         {
-            cages.add("" + i);
+            pens.add("" + i);
         }
-        
-            //read in the gator and cage databases
-        try
-        {
-            gatorFile = new File("AnimalDatabase.accdb");
-            gatorTable = DatabaseBuilder.open(gatorFile).getTable("Database");
-            cageFile = new File("CageDatabase.accdb");
-            cageTable = DatabaseBuilder.open(cageFile).getTable("Database");
-        }
-        catch (IOException e1)
-        {
-            
-        }     
+   
         
             //initialize all of the components
         contentPane = getContentPane();
@@ -308,8 +340,8 @@ public class Application extends JFrame implements SerialPortEventListener
         transferGator = new JButton("Transfer Gator");      
         harvestGator = new JButton("Harvest Gator");       
         quitButton = new JButton("Quit");      
-        addToCage = new JButton("Add To Pen");      
-        removeToCage = new JButton("Remove To Pen");       
+        addToPen = new JButton("Add To Pen");      
+        removeToPen = new JButton("Remove To Pen");       
         addEntry = new JButton("Add Entry");            
         back = new JButton("Back");       
         cancel = new JButton("Cancel");      
@@ -322,8 +354,8 @@ public class Application extends JFrame implements SerialPortEventListener
         vaccinateField.setEnabled(false);
         formulaField.setEnabled(false);
         
-        cageList = new JComboBox(cages.toArray());
-        cageList.setEditable(false);
+        penList = new JComboBox(pens.toArray());
+        penList.setEditable(false);
         
         capacityInput = new JTextField(10);      
         location = new JTextField(10);       
@@ -354,7 +386,7 @@ public class Application extends JFrame implements SerialPortEventListener
     {  
             //reset the frame and components
         contentPane.removeAll();
-        cageList.setSelectedIndex(0);
+        penList.setSelectedIndex(0);
         capacityInput.setText("");
         
         JPanel panel = new JPanel();
@@ -383,7 +415,7 @@ public class Application extends JFrame implements SerialPortEventListener
             //1st page when adding a new hatchling
         else if (newGatorPage1)
         {
-            cageList.setSelectedIndex(0);
+            penList.setSelectedIndex(0);
             gender.setSelectedIndex(0);
             umbilical.setSelectedIndex(0);
             location.setText("");
@@ -448,7 +480,7 @@ public class Application extends JFrame implements SerialPortEventListener
             confirm.setFont(font1);
             back.setPreferredSize(size);
             back.setFont(font1);
-            cageList.setFont(font1);
+            penList.setFont(font1);
             gender.setFont(font1);
             umbilical.setFont(font1);
             
@@ -514,7 +546,7 @@ public class Application extends JFrame implements SerialPortEventListener
             
             cLeft.gridx = 1;
             cLeft.gridy = 7;
-            panel.add(cageList, cLeft);
+            panel.add(penList, cLeft);
             
             cRight.gridx = 0;
             cRight.gridy = 8;
@@ -661,22 +693,22 @@ public class Application extends JFrame implements SerialPortEventListener
         {
             panel.setLayout(new FlowLayout());
             
-            addEntry.setEnabled(hasToCage);
-            addToCage.setFont(font2);
-            removeToCage.setFont(font2);
+            addEntry.setEnabled(hasToPen);
+            addToPen.setFont(font2);
+            removeToPen.setFont(font2);
             addEntry.setFont(font2);
             back.setFont(font2);
             
             Dimension size = new Dimension((int)(width/6), (int)(height/4));
             
-            addToCage.setPreferredSize(size);
-            removeToCage.setPreferredSize(size);
+            addToPen.setPreferredSize(size);
+            removeToPen.setPreferredSize(size);
             addEntry.setPreferredSize(size);
             back.setPreferredSize(size);
             
             panel.add(addEntry);
-            panel.add(addToCage);
-            panel.add(removeToCage);
+            panel.add(addToPen);
+            panel.add(removeToPen);
             panel.add(back);
         }
             //page to add new "to" pen in transfer option
@@ -690,11 +722,11 @@ public class Application extends JFrame implements SerialPortEventListener
             Panel panel5 = new Panel(new FlowLayout());
             Panel panel7 = new Panel(new FlowLayout());
 
-            cageList.setPreferredSize(size);
-            cageList.setFont(font1);
+            penList.setPreferredSize(size);
+            penList.setFont(font1);
             confirm.setPreferredSize(size);
             confirm.setFont(font1);
-            confirm.setEnabled(!cageTaken && isInteger(capacityInput.getText()) && Integer.parseInt(capacityInput.getText()) > 0);
+            confirm.setEnabled(!penTaken && isInteger(capacityInput.getText()) && Integer.parseInt(capacityInput.getText()) > 0);
             cancel.setPreferredSize(size);
             cancel.setFont(font1);
             capacityInput.setPreferredSize(size);
@@ -704,7 +736,7 @@ public class Application extends JFrame implements SerialPortEventListener
             JLabel label5 = new JLabel("Capacity: ");
             label5.setFont(font1);
             panel5.add(label4);
-            panel5.add(cageList);
+            panel5.add(penList);
             panel7.add(label5);
             panel7.add(capacityInput);
             panel4.add(cancel);
@@ -729,33 +761,33 @@ public class Application extends JFrame implements SerialPortEventListener
             {
                 panel2 = new Panel(new FlowLayout());
                 
-                JLabel label = new JLabel("Pen " + toCages[i] + ": " + toClassSizes[i] + ", Capacity: " + capacities[i]);
+                JLabel label = new JLabel("Pen " + toPens[i] + ": " + toClassSizes[i] + ", Capacity: " + capacities[i]);
                 label.setFont(font1);
                 panel2.add(label);
                 
-                button = new JButton("Remove Pen " + toCages[i]);
+                button = new JButton("Remove Pen " + toPens[i]);
                 button.addActionListener(e -> {
                     String temp = ((JButton) e.getSource()).getText();
                     int index = temp.indexOf(' ');
                     int index2 = temp.indexOf(" ", index+1);
-                    String cage = temp.substring(index2+1);
+                    String pen = temp.substring(index2+1);
                     for (int j = 0; j < toCounter; j++)
                     {
-                        if (cage.equals(toCages[j]))
+                        if (pen.equals(toPens[j]))
                         {
                             index = j;
                             j = toCounter;
                         }
                     }
                         
-                    toCages[index] = null;
+                    toPens[index] = null;
                     toLowerBounds[index] = 0;
                     toUpperBounds[index] = 0;
                     toClassSizes[index] = null;
                     capacities[index] = 0;
                     capacityCounters[index] = 0;
                             
-                    toCages = stringShift(toCages);
+                    toPens = stringShift(toPens);
                     toLowerBounds = intShift(toLowerBounds);
                     toUpperBounds = intShift(toUpperBounds);
                     toClassSizes= stringShift(toClassSizes);
@@ -765,7 +797,7 @@ public class Application extends JFrame implements SerialPortEventListener
                     toCounter--;
                     if (toCounter == 0)
                     {
-                        hasToCage = false;
+                        hasToPen = false;
                     }
                     addComponents();
                 });
@@ -994,7 +1026,7 @@ public class Application extends JFrame implements SerialPortEventListener
             cLeft.gridy = 2;
             panel.add(tempLabel5, cLeft);
             
-            JLabel tempLabel6 = new JLabel("" + toCage);
+            JLabel tempLabel6 = new JLabel("" + toPen);
             tempLabel6.setFont(font1);
             cRight.gridx = 1;
             cRight.gridy = 2;
@@ -1462,7 +1494,7 @@ public class Application extends JFrame implements SerialPortEventListener
         });
         
             //button in the transfer option that leads to the page that adds "to" pens
-        addToCage.addActionListener(e -> {
+        addToPen.addActionListener(e -> {
             start = false;
             transferStart = false;
             newGatorPage1 = false;
@@ -1478,7 +1510,7 @@ public class Application extends JFrame implements SerialPortEventListener
         });
         
             //button in the transfer option that leads to the page that removes "to" pens
-        removeToCage.addActionListener(e -> {
+        removeToPen.addActionListener(e -> {
             start = false;
             transferStart = false;
             newGatorPage1 = false;
@@ -1553,27 +1585,27 @@ public class Application extends JFrame implements SerialPortEventListener
             errorMessage = "";  
             if (addTo)
             {
-                cageTaken = false;
+                penTaken = false;
                 for (int i = 0; i < toCounter; i++)
                 {
-                    if (cageList.getSelectedItem().toString().equals(toCages[i]))
+                    if (penList.getSelectedItem().toString().equals(toPens[i]))
                     {
-                        cageTaken = true;
+                        penTaken = true;
                         i = toCounter;
                     }
                 }
-                if (cageTaken)
+                if (penTaken)
                 {
                     errorMessage = "Pen taken";
                 }
                 else
                 {
-                    String pen = cageList.getSelectedItem().toString();
+                    String pen = penList.getSelectedItem().toString();
                     String classSize = "";
                         
                     try
                     {
-                        IndexCursor cursor = CursorBuilder.createCursor(cageTable.getIndex("PenNumberIndex"));                            
+                        IndexCursor cursor = CursorBuilder.createCursor(penTable.getIndex("PenNumberIndex"));                            
                         cursor.beforeFirst();
                         cursor.findFirstRow(Collections.singletonMap("Pen Number", pen));
                         Row latestRow = cursor.getCurrentRow();
@@ -1599,36 +1631,36 @@ public class Application extends JFrame implements SerialPortEventListener
                             
                         case "Hatchling":
                         case "Family":  
-                            toCages[toCounter] = pen;
+                            toPens[toCounter] = pen;
                             toLowerBounds[toCounter] = 0;
                             toUpperBounds[toCounter] = 0;
                             toClassSizes[toCounter] = classSize;
                             capacities[toCounter] = Integer.parseInt(capacityInput.getText());
                             capacityCounters[toCounter] = 0;
-                            hasToCage = true;
+                            hasToPen = true;
                             toCounter++;
                             break;
                             
                         case "39+":     
-                            toCages[toCounter] = pen;
+                            toPens[toCounter] = pen;
                             toLowerBounds[toCounter] = 39;
                             toUpperBounds[toCounter] = 46;
                             toClassSizes[toCounter] = classSize;
                             capacities[toCounter] = Integer.parseInt(capacityInput.getText());
                             capacityCounters[toCounter] = 0;
-                            hasToCage = true;
+                            hasToPen = true;
                             toCounter++;
                             break;
                             
                         default:        
                             int index = classSize.indexOf('-');
-                            toCages[toCounter] = pen;
+                            toPens[toCounter] = pen;
                             toLowerBounds[toCounter] = Integer.parseInt(classSize.substring(0, index));
                             toUpperBounds[toCounter] = Integer.parseInt(classSize.substring(index+1));
                             toClassSizes[toCounter] = classSize;
                             capacities[toCounter] = Integer.parseInt(capacityInput.getText());
                             capacityCounters[toCounter] = 0;
-                            hasToCage = true;
+                            hasToPen = true;
                             toCounter++;
                             break;
                     }
@@ -1643,14 +1675,14 @@ public class Application extends JFrame implements SerialPortEventListener
                         String lengthEntry = (skipLength) ? previousRow.get("Length").toString() : length;
                         String weightEntry = (skipWeight) ? previousRow.get("Weight").toString() : weight;
                             
-                        gatorTable.addRow(0, tag, previousRow.get("Egg Nest Location"), previousRow.get("Egg Nest Condition"), previousRow.get("Egg Collection Date"), previousRow.get("Hatch Year"), previousRow.get("Gender"), previousRow.get("Umbilical"), currentDate, previousRow.get("To"), toCage, bellySize, lengthEntry, weightEntry, formulaDate, experimentalCode.getText(), vaccinatedDate, comments.getText(), "");
+                        gatorTable.addRow(0, tag, previousRow.get("Egg Nest Location"), previousRow.get("Egg Nest Condition"), previousRow.get("Egg Collection Date"), previousRow.get("Hatch Year"), previousRow.get("Gender"), previousRow.get("Umbilical"), currentDate, previousRow.get("To"), toPen, bellySize, lengthEntry, weightEntry, formulaDate, experimentalCode.getText(), vaccinatedDate, comments.getText(), "");
                     }
                     else
                     {
                         String lengthEntry = (skipLength) ? "" : length;
                         String weightEntry = (skipWeight) ? "" : weight;
                             
-                        gatorTable.addRow(0, tag, "", "", "", "", "", "", currentDate, previousRow.get("To"), toCage, bellySize, lengthEntry, weightEntry, formulaDate, experimentalCode.getText(), vaccinatedDate, comments.getText(), "");
+                        gatorTable.addRow(0, tag, "", "", "", "", "", "", currentDate, previousRow.get("To"), toPen, bellySize, lengthEntry, weightEntry, formulaDate, experimentalCode.getText(), vaccinatedDate, comments.getText(), "");
                     }
                     IndexCursor cursor = CursorBuilder.createCursor(gatorTable.getIndex("IDIndex"));
                     cursor.beforeFirst();
@@ -1662,24 +1694,24 @@ public class Application extends JFrame implements SerialPortEventListener
                 catch (IOException e1)
                 {    
                 }
-                if (toCageIndex != -1)
+                if (toPenIndex != -1)
                 {
-                    capacityCounters[toCageIndex]++;
+                    capacityCounters[toPenIndex]++;
                 }
-                if(toCageIndex != -1 && capacities[toCageIndex] == capacityCounters[toCageIndex])
+                if(toPenIndex != -1 && capacities[toPenIndex] == capacityCounters[toPenIndex])
                 {
-                    cagesAtCapacity[cagesAtCapacityCounter] = toCages[toCageIndex];
-                    cagesAtCapacityAmount[cagesAtCapacityCounter] = capacities[toCageIndex];
-                    cagesAtCapacityRange[cagesAtCapacityCounter] = toLowerBounds[toCageIndex] + "-" + toUpperBounds[toCageIndex];
-                    cagesAtCapacityCounter++;
-                    toCages[toCageIndex] = null;
-                    toLowerBounds[toCageIndex] = 0;
-                    toUpperBounds[toCageIndex] = 0;
-                    toClassSizes[toCageIndex] = null;
-                    capacities[toCageIndex] = 0;
-                    capacityCounters[toCageIndex] = 0;
+                    pensAtCapacity[pensAtCapacityCounter] = toPens[toPenIndex];
+                    pensAtCapacityAmount[pensAtCapacityCounter] = capacities[toPenIndex];
+                    pensAtCapacityRange[pensAtCapacityCounter] = toLowerBounds[toPenIndex] + "-" + toUpperBounds[toPenIndex];
+                    pensAtCapacityCounter++;
+                    toPens[toPenIndex] = null;
+                    toLowerBounds[toPenIndex] = 0;
+                    toUpperBounds[toPenIndex] = 0;
+                    toClassSizes[toPenIndex] = null;
+                    capacities[toPenIndex] = 0;
+                    capacityCounters[toPenIndex] = 0;
                             
-                    toCages = stringShift(toCages);
+                    toPens = stringShift(toPens);
                     toLowerBounds = intShift(toLowerBounds);
                     toUpperBounds = intShift(toUpperBounds);
                     toClassSizes = stringShift(toClassSizes);
@@ -1689,10 +1721,10 @@ public class Application extends JFrame implements SerialPortEventListener
                     toCounter--;
                     if (toCounter == 0)
                     {
-                        hasToCage = false;
+                        hasToPen = false;
                     }
                             
-                    errorMessage = "Capacity reached on Pen " + toCage;
+                    errorMessage = "Capacity reached on Pen " + toPen;
                     start = false;
                     harvestPage1 = false;
                     harvestPage2 = false;
@@ -1707,14 +1739,14 @@ public class Application extends JFrame implements SerialPortEventListener
                     addComponents();
                 }
                     
-                toCage = "";
-                toCageIndex = -1;
+                toPen = "";
+                toPenIndex = -1;
             }
             else if (newGatorPage2)
             {
                 try
                 {
-                    gatorTable.addRow(0, tag, location.getText(), condition.getText(), collectionDate.getText(), currentDate.substring(6), gender.getSelectedItem().toString(), umbilical.getSelectedItem().toString(), currentDate, "", cageList.getSelectedItem().toString(), "", "", "", "", "", "", comments.getText(), "");
+                    gatorTable.addRow(0, tag, location.getText(), condition.getText(), collectionDate.getText(), currentDate.substring(6), gender.getSelectedItem().toString(), umbilical.getSelectedItem().toString(), currentDate, "", penList.getSelectedItem().toString(), "", "", "", "", "", "", comments.getText(), "");
                     IndexCursor cursor = CursorBuilder.createCursor(gatorTable.getIndex("IDIndex"));
                     cursor.beforeFirst();
                     for(Map<String,Object> row : cursor)
@@ -1795,7 +1827,7 @@ public class Application extends JFrame implements SerialPortEventListener
             //resize the scroll bar to make it more useable on a touchscreen
             //also when a pen that has already been selected when adding a "to" pen is selected again,
             //throw cageTaken flag
-        cageList.addPopupMenuListener(new PopupMenuListener()
+        penList.addPopupMenuListener(new PopupMenuListener()
         {
             @Override
             public void popupMenuWillBecomeVisible(PopupMenuEvent e)
@@ -1817,16 +1849,16 @@ public class Application extends JFrame implements SerialPortEventListener
             {
                 if (addTo)
                 {
-                    cageTaken = false;
+                    penTaken = false;
                     for (int i = 0; i < toCounter; i++)
                     {
-                        if (cageList.getSelectedItem().toString().equals(toCages[i]))
+                        if (penList.getSelectedItem().toString().equals(toPens[i]))
                         {
-                            cageTaken = true;
+                            penTaken = true;
                             i = toCounter;
                         }
                     }
-                    confirm.setEnabled(!cageTaken && isInteger(capacityInput.getText()) && Integer.parseInt(capacityInput.getText()) > 0);
+                    confirm.setEnabled(!penTaken && isInteger(capacityInput.getText()) && Integer.parseInt(capacityInput.getText()) > 0);
                 }
             }
             
@@ -1835,16 +1867,16 @@ public class Application extends JFrame implements SerialPortEventListener
             {
                 if (addTo)
                 {
-                    cageTaken = false;
+                    penTaken = false;
                     for (int i = 0; i < toCounter; i++)
                     {
-                        if (cageList.getSelectedItem().toString().equals(toCages[i]))
+                        if (penList.getSelectedItem().toString().equals(toPens[i]))
                         {
-                            cageTaken = true;
+                            penTaken = true;
                             i = toCounter;
                         }
                     }
-                    confirm.setEnabled(!cageTaken && isInteger(capacityInput.getText()) && Integer.parseInt(capacityInput.getText()) > 0);
+                    confirm.setEnabled(!penTaken && isInteger(capacityInput.getText()) && Integer.parseInt(capacityInput.getText()) > 0);
                 }
             }
         });
@@ -1871,7 +1903,7 @@ public class Application extends JFrame implements SerialPortEventListener
             }
             public void check()
             {
-                confirm.setEnabled(!cageTaken && isInteger(capacityInput.getText()) && Integer.parseInt(capacityInput.getText()) > 0);
+                confirm.setEnabled(!penTaken && isInteger(capacityInput.getText()) && Integer.parseInt(capacityInput.getText()) > 0);
             }
         });
         
@@ -1978,11 +2010,11 @@ public class Application extends JFrame implements SerialPortEventListener
                     {
                         try
                         {
-                            IndexCursor cursor = CursorBuilder.createCursor(cageTable.getIndex("PenNumberIndex"));                            
+                            IndexCursor cursor = CursorBuilder.createCursor(penTable.getIndex("PenNumberIndex"));                            
                             cursor.beforeFirst();
-                            cursor.findFirstRow(Collections.singletonMap("Pen Number", toCages[j]));
+                            cursor.findFirstRow(Collections.singletonMap("Pen Number", toPens[j]));
                             Row latestRow = cursor.getCurrentRow();
-                            while (cursor.findNextRow(Collections.singletonMap("Pen Number", toCages[j])))
+                            while (cursor.findNextRow(Collections.singletonMap("Pen Number", toPens[j])))
                             {
                                 Row row = cursor.getCurrentRow();
                                 if (row != null)
@@ -1998,8 +2030,8 @@ public class Application extends JFrame implements SerialPortEventListener
                         
                         if (classSize.equals("Family") || (number >= toLowerBounds[j] && number <= toUpperBounds[j]) || (entry.equals("Hatchling") && classSize.equals("Hatchling")))
                         {
-                            toCage = toCages[j];
-                            toCageIndex = j;
+                            toPen = toPens[j];
+                            toPenIndex = j;
                             j = toCounter;
                         }
                     }
