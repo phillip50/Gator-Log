@@ -118,14 +118,22 @@ public class ModifyClass extends JFrame
                 //Display the rest on the second
             for (int i = 9; i < classes.size(); i++)
             {
-                JLabel topLabel2 = new JLabel("" + classes.get(i) + ", ");
+                JLabel topLabel2 = new JLabel();
                 topLabel2.setFont(font);
+                if (i == classes.size() - 1 && start == 47)
+                {
+                    topLabel2.setText("" + classes.get(i));
+                }
+                else if (i == classes.size() - 1)
+                {
+                    topLabel2.setText("" + classes.get(i) + ", " + start + "+");
+                }
+                else
+                {
+                    topLabel2.setText("" + classes.get(i) + ", ");
+                }
                 topPanel2.add(topLabel2);
             }
-                //The last element is every belly size larger than the next unused belly size
-            JLabel topLabel3 = new JLabel("" + start + "+");
-            topLabel3.setFont(font);
-            topPanel2.add(topLabel3);
             
             
                 //Add the 2 lines to the panel
@@ -147,15 +155,26 @@ public class ModifyClass extends JFrame
             JLabel topLabel1 = new JLabel("Classes: ");
             topLabel1.setFont(font);
             topPanel.add(topLabel1);
+            int i = 1;
             for (String temp : classes)
             {
-                JLabel topLabel2 = new JLabel("" + temp + ", ");
+                JLabel topLabel2 = new JLabel();
                 topLabel2.setFont(font);
+                if (i == classes.size() && start == 47)
+                {
+                    topLabel2.setText("" + temp);
+                }
+                else if (i == classes.size())
+                {
+                    topLabel2.setText("" + temp + ", " + start + "+");
+                }
+                else
+                {
+                    topLabel2.setText("" + temp + ", ");
+                }
+                i = i + 1;
                 topPanel.add(topLabel2);
             }
-            JLabel topLabel3 = new JLabel("" + start + "+");
-            topLabel3.setFont(font);
-            topPanel.add(topLabel3);
             
                 //Add the line to the panel
             c.gridx = 0;
@@ -170,7 +189,7 @@ public class ModifyClass extends JFrame
         Panel middlePanel = new Panel();
         middlePanel.setLayout(new FlowLayout());
         
-        if (start == 47)
+        if (start == 47 || start == 46)
         {
             
         }
@@ -236,11 +255,23 @@ public class ModifyClass extends JFrame
             {
                 writer = new BufferedWriter(new FileWriter("ClassSizes.txt", false));
                 
+                int i = 1;
                 for (String temp : classes)
                 {
-                    writer.write(temp + ",");
+                    if (i == classes.size() && start == 47)
+                    {
+                        writer.write("" + temp);
+                    }
+                    else if (i == classes.size())
+                    {
+                        writer.write("" + temp + "," + start + "+");
+                    }
+                    else
+                    {
+                        writer.write("" + temp + ",");
+                    }
+                    i = i + 1;
                 }
-                writer.write("" + start + "+");
                 
                 writer.close();
             }

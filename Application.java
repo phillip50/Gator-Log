@@ -1623,6 +1623,46 @@ public class Application extends JFrame implements SerialPortEventListener
                     {      
                         
                     }
+                    
+                    if ("Empty".equals(classSize))
+                    {
+                        errorMessage = "Cannot transfer to designated empty pen";
+                    }
+                    else if ("Hatchling".equals(classSize) || "Family".equals(classSize))
+                    {
+                        toPens[toCounter] = pen;
+                        toLowerBounds[toCounter] = -1;
+                        toUpperBounds[toCounter] = -1;
+                        toClassSizes[toCounter] = classSize;
+                        capacities[toCounter] = Integer.parseInt(capacityInput.getText());
+                        capacityCounters[toCounter] = 0;
+                        hasToPen = true;
+                        toCounter++;
+                    }
+                    else if (classSize.indexOf("+") != -1)
+                    {
+                        toPens[toCounter] = pen;
+                        toLowerBounds[toCounter] = Integer.parseInt(classSize.substring(0, 2));
+                        toUpperBounds[toCounter] = 46;
+                        toClassSizes[toCounter] = classSize;
+                        capacities[toCounter] = Integer.parseInt(capacityInput.getText());
+                        capacityCounters[toCounter] = 0;
+                        hasToPen = true;
+                        toCounter++;
+                    }
+                    else
+                    {
+                        int index = classSize.indexOf('-');
+                        toPens[toCounter] = pen;
+                        toLowerBounds[toCounter] = Integer.parseInt(classSize.substring(0, index));
+                        toUpperBounds[toCounter] = Integer.parseInt(classSize.substring(index+1));
+                        toClassSizes[toCounter] = classSize;
+                        capacities[toCounter] = Integer.parseInt(capacityInput.getText());
+                        capacityCounters[toCounter] = 0;
+                        hasToPen = true;
+                        toCounter++;
+                    }
+                    /*
                     switch (classSize)
                     {
                         case "Empty":   
@@ -1632,8 +1672,8 @@ public class Application extends JFrame implements SerialPortEventListener
                         case "Hatchling":
                         case "Family":  
                             toPens[toCounter] = pen;
-                            toLowerBounds[toCounter] = 0;
-                            toUpperBounds[toCounter] = 0;
+                            toLowerBounds[toCounter] = -1;
+                            toUpperBounds[toCounter] = -1;
                             toClassSizes[toCounter] = classSize;
                             capacities[toCounter] = Integer.parseInt(capacityInput.getText());
                             capacityCounters[toCounter] = 0;
@@ -1663,7 +1703,7 @@ public class Application extends JFrame implements SerialPortEventListener
                             hasToPen = true;
                             toCounter++;
                             break;
-                    }
+                    }*/
                 }   
             }
             else if (transferPage5)
