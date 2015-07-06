@@ -118,10 +118,11 @@ public class ModifyQuarters extends JFrame
         //add interface components to the frame
     public void addComponents()
     {
-            //create a blank frame
+            //Remove all components from current frame
         Container contentPane = frame.getContentPane();
         contentPane.removeAll();
         
+            //Create a new panel to be placed on the frame
         Panel panel = new Panel();
         panel.setLayout(new GridBagLayout());      
         GridBagConstraints c = new GridBagConstraints();
@@ -225,7 +226,6 @@ public class ModifyQuarters extends JFrame
                 {
                     if (previousQuarteredList.indexOf(temp) == -1)
                     {
-                        System.out.println("New: " + temp);
                         com.healthmarketscience.jackcess.Cursor cursor = CursorBuilder.createCursor(penTable);
                         cursor.afterLast();
                         boolean isDone = false;

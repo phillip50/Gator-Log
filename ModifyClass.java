@@ -81,7 +81,7 @@ public class ModifyClass extends JFrame
         //Add gui components to interface
     public void addComponents()
     {
-            //remove all previous components on the frame
+            //remove all components on current frame
         Container contentPane = frame.getContentPane();
         contentPane.removeAll();
         
@@ -91,7 +91,7 @@ public class ModifyClass extends JFrame
         GridBagConstraints c = new GridBagConstraints();
         
             //represents the gridy variable in GridBagConstraints
-            //increments everytime a components is added to the frame
+            //increments everytime a component is added to the frame
         int yPos = 0;
         
             //Display list of current classes in the class sizes arraylist to the user
@@ -115,14 +115,14 @@ public class ModifyClass extends JFrame
                 topLabel2.setFont(font);
                 topPanel1.add(topLabel2);
             }
-                //Display the rets on the second
+                //Display the rest on the second
             for (int i = 9; i < classes.size(); i++)
             {
                 JLabel topLabel2 = new JLabel("" + classes.get(i) + ", ");
                 topLabel2.setFont(font);
                 topPanel2.add(topLabel2);
             }
-                //The last element is the every belly size larger than the next unused belly size
+                //The last element is every belly size larger than the next unused belly size
             JLabel topLabel3 = new JLabel("" + start + "+");
             topLabel3.setFont(font);
             topPanel2.add(topLabel3);
