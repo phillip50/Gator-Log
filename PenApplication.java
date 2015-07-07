@@ -6,7 +6,7 @@
  * @Phillip Dingler [phil50@ufl.edu]
  */
 
-//TODO: comment
+//TODO: load all rows at begininng of application
 
 package test;
 
@@ -26,13 +26,17 @@ public class PenApplication extends JFrame
     
     
     private final JButton modifyClass;
-    
-    
     private final JButton modifyQuarters;
     
+    
+    private final java.util.List<Gator> gatorRows;
+    
         //pen database files
-    private File file;
-    private Table table;
+    private File penFile;
+    private Table penTable;
+    
+    private File gatorFile;
+    private Table gatorTable;
     
     
     private final String[] quarteredPens;
@@ -47,8 +51,11 @@ public class PenApplication extends JFrame
             //read in the pen database file
         try
         {
-            file = new File("PenDatabase.accdb");
-            table = DatabaseBuilder.open(file).getTable("Database");
+            penFile = new File("PenDatabase.accdb");
+            penTable = DatabaseBuilder.open(penFile).getTable("Database");
+            
+            gatorFile = new File("AnimalDatabase.accdb");
+            gatorTable = DatabaseBuilder.open(gatorFile).getTable("Database");
         }
         catch (IOException e)
         {
@@ -71,13 +78,53 @@ public class PenApplication extends JFrame
             
         }
         quarteredPens = temp.split(",");
+        
+        gatorRows = new ArrayList<>();
+        try
+        {
+            com.healthmarketscience.jackcess.Cursor cursor = CursorBuilder.createCursor(gatorTable);
+            
+            cursor.beforeFirst();
+            while (cursor.moveToNextRow())
+            {
+                Row currentRow = cursor.getCurrentRow();
+                
+                Gator gator = new Gator();
+                gator.ID = currentRow.get("ID").toString();
+                gator.tagNumber = currentRow.get("Tag Number").toString();
+                gator.eggNestLocation = currentRow.get("Egg Nest Location").toString();
+                gator.eggNestCondition = currentRow.get("Egg Nest Condition").toString();
+                gator.eggCollectionDate = currentRow.get("Egg Collection Date").toString();
+                gator.hatchYear = currentRow.get("Hatch Year").toString();
+                gator.gender = currentRow.get("Gender").toString();
+                gator.umbilical = currentRow.get("Umbilical").toString();
+                gator.date = currentRow.get("Date").toString();
+                gator.from = currentRow.get("From").toString();
+                gator.to = currentRow.get("To").toString();
+                gator.bellySize = currentRow.get("Belly Size").toString();
+                gator.length = currentRow.get("Length").toString();
+                gator.weight = currentRow.get("Weight").toString();
+                gator.recipe = currentRow.get("Special Recipe").toString();
+                gator.code = currentRow.get("Experiment Code").toString();
+                gator.vaccinate = currentRow.get("Vaccinated").toString();
+                gator.comments = currentRow.get("Comments").toString();
+                gator.harvested = currentRow.get("Harvested?").toString();
+                
+                gatorRows.add(gator);
+                System.out.println(gator.ID);
+            }
+        }
+        catch (IOException e)
+        {
+            
+        }
     }
     
         //when a pen button has been clicked, this method is called to create a new window
         //this window displays more information about the pen that was clicked
-    public void modifyWindow(java.util.List<Row> rows, String penNumber)
+    public void modifyWindow(java.util.List<Row> penRows, String penNumber)
     {
-        ModifyWindow modifyFrame = new ModifyWindow(rows, penNumber);
+        ModifyWindow modifyFrame = new ModifyWindow(penRows, penNumber, gatorRows);
         modifyFrame.setFrame(modifyFrame);
         modifyFrame.addGators();
         modifyFrame.Initialize();
@@ -1389,7 +1436,7 @@ public class PenApplication extends JFrame
                 String pen = ((JButton) e.getSource()).getText();
                 try
                 {
-                    cursor = CursorBuilder.createCursor(table);
+                    cursor = CursorBuilder.createCursor(penTable);
                     
                         //check if pen is quartered
                     boolean isQuartered = false;
