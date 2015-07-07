@@ -7,6 +7,8 @@
  * @Phillip Dingler [phil50@ufl.edu]
  */
 
+//TODO: Load all rows at beginning of application
+
 package test;
 
 import javax.swing.*; 
@@ -33,7 +35,9 @@ public class ModifyWindow extends JFrame
     private String currentDate;
     
         //list of input rows in the pen database
-    private java.util.List<Row> rows;
+    private java.util.List<Row> penRows;
+    
+    private java.util.List<Gator> gatorRows;
     
         //input databases
     private File penFile;
@@ -44,9 +48,9 @@ public class ModifyWindow extends JFrame
         //list of unique tags in database
     private final java.util.List<java.util.List<String>> tagList;
         //list of most recent entry in database for each tag
-    private final java.util.List<java.util.List<Row>> gatorList;
+    private final java.util.List<java.util.List<Gator>> gatorList;
         //specific gator tag selected in interface
-    private Row selectedGator;
+    private Gator selectedGator;
         
         //components in interface contained in 3 panels:
         //1. Modify panel to change attributes about the pen
@@ -98,10 +102,11 @@ public class ModifyWindow extends JFrame
     
     
     
-    public ModifyWindow(java.util.List<Row> inputRows, String penNumber)
+    public ModifyWindow(java.util.List<Row> inputPenRows, String penNumber, java.util.List<Gator> inputGatorRows)
     {
         super("View Pen " + penNumber);
-        rows = inputRows;
+        penRows = inputPenRows;
+        gatorRows = inputGatorRows;
         
             //get screen size and set component size to be fraction of it
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -172,7 +177,7 @@ public class ModifyWindow extends JFrame
         tabbedPanel.removeAll();
         
         //modify panel(s)
-        for (int i = 0; i < rows.size(); i++)
+        for (int i = 0; i < penRows.size(); i++)
         {
             JComponent modifyPanel = new JPanel();
             modifyPanel.setLayout(new GridBagLayout());
@@ -260,11 +265,11 @@ public class ModifyWindow extends JFrame
             modc.gridy = 8;
             modifyPanel.add(cancel.get(i), modc);
             
-            tabbedPanel.addTab("<html><body leftmargin=15 topmargin=8 marginwidth=30 marginheight=5>Modify Pen " + rows.get(i).get("Pen Number") + "</body></html>", modifyPanel);
+            tabbedPanel.addTab("<html><body leftmargin=15 topmargin=8 marginwidth=30 marginheight=5>Modify Pen " + penRows.get(i).get("Pen Number") + "</body></html>", modifyPanel);
         }
         
         //view gators panel
-        for (int i = 0; i < rows.size(); i++)
+        for (int i = 0; i < penRows.size(); i++)
         {
             JComponent viewPanel = new JPanel();
             viewPanel.setLayout(new GridBagLayout());
@@ -274,13 +279,13 @@ public class ModifyWindow extends JFrame
             viewc.weighty = 0;
             int j = 0;
         
-            for (Row tempRow : gatorList.get(i))
+            for (Gator gator : gatorList.get(i))
             {
             
                 viewc.gridy = j;
                 viewc.anchor = GridBagConstraints.LINE_START;
                 viewc.gridx = 0;
-                JLabel tempLabel = new JLabel("Gator ID: " + tempRow.get("Tag Number").toString());
+                JLabel tempLabel = new JLabel("Gator ID: " + gator.tagNumber);
                 tempLabel.setFont(font);
                 viewPanel.add(tempLabel, viewc);
             
@@ -289,7 +294,7 @@ public class ModifyWindow extends JFrame
                 JButton tempButton = new JButton("View Gator History");
                 tempButton.setFont(font);
                 tempButton.addActionListener(e -> {
-                    selectedGator = tempRow;
+                    selectedGator = gator;
                     addComponents();
                 });
                 viewPanel.add(tempButton, viewc);
@@ -306,16 +311,17 @@ public class ModifyWindow extends JFrame
             viewScroll.getVerticalScrollBar().setPreferredSize(new Dimension(20, 0));
             viewScroll.getVerticalScrollBar().setUnitIncrement(15);
             
-            tabbedPanel.addTab("<html><body leftmargin=15 topmargin=8 marginwidth=30 marginheight=5>View Gators in " + rows.get(i).get("Pen Number") + "</body></html>", viewScroll);
+            tabbedPanel.addTab("<html><body leftmargin=15 topmargin=8 marginwidth=30 marginheight=5>View Gators in " + penRows.get(i).get("Pen Number") + "</body></html>", viewScroll);
         }
         
         tabbedPanel.setSelectedIndex(0);
         
         if (selectedGator != null)
         {
-            java.util.List<Row> allSelectedGatorEntries = new ArrayList<>();
-            try
-            {
+            java.util.List<Gator> allSelectedGatorEntries = new ArrayList<>();
+            //try
+            //{
+                /*
                 com.healthmarketscience.jackcess.Cursor cursor = CursorBuilder.createCursor(gatorTable);
                 cursor.beforeFirst();
                 while (cursor.moveToNextRow())
@@ -326,11 +332,19 @@ public class ModifyWindow extends JFrame
                         allSelectedGatorEntries.add(currentRow);
                     }
                 }
-            }
-            catch (IOException e)
-            {
+                        */
+                for (Gator gator : gatorRows)
+                {
+                    if (gator.tagNumber.equals(selectedGator.tagNumber))
+                    {
+                        allSelectedGatorEntries.add(gator);
+                    }
+                }
+            //}
+            //catch (IOException e)
+            //{
             
-            }
+            //}
             
             JComponent gatorPanel = new JPanel();
             gatorPanel.setLayout(new GridBagLayout());
@@ -364,7 +378,7 @@ public class ModifyWindow extends JFrame
             
             int i = 1;
             
-            for (Row tempRow : allSelectedGatorEntries)
+            for (Gator gator : allSelectedGatorEntries)
             {           
                 gatorc.gridy = i;
                 
@@ -374,17 +388,17 @@ public class ModifyWindow extends JFrame
                 gatorPanel.add(tempLabel, gatorc);
                 
                 gatorc.gridx = 1;
-                JLabel tempLabel2 = new JLabel(tempRow.get("Date").toString());
+                JLabel tempLabel2 = new JLabel(gator.date);
                 tempLabel2.setFont(font);
                 gatorPanel.add(tempLabel2, gatorc);
             
                 gatorc.gridx = 2;
-                JLabel tempLabel3 = new JLabel(tempRow.get("From").toString());
+                JLabel tempLabel3 = new JLabel(gator.from);
                 tempLabel3.setFont(font);
                 gatorPanel.add(tempLabel3, gatorc);
                 
                 gatorc.gridx = 3;
-                JLabel tempLabel4 = new JLabel(tempRow.get("To").toString());
+                JLabel tempLabel4 = new JLabel(gator.to);
                 tempLabel4.setFont(font);
                 gatorPanel.add(tempLabel4, gatorc);
             
@@ -400,7 +414,7 @@ public class ModifyWindow extends JFrame
             gatorScroll.getVerticalScrollBar().setPreferredSize(new Dimension(20, 0));
             gatorScroll.getVerticalScrollBar().setUnitIncrement(15);
             
-            tabbedPanel.addTab("<html><body leftmargin=15 topmargin=8 marginwidth=30 marginheight=5>Gator " + selectedGator.get("Tag Number").toString() + "</body></html>", gatorScroll);
+            tabbedPanel.addTab("<html><body leftmargin=15 topmargin=8 marginwidth=30 marginheight=5>Gator " + selectedGator.tagNumber + "</body></html>", gatorScroll);
             tabbedPanel.setSelectedComponent(gatorScroll);
         }
         
@@ -465,7 +479,7 @@ public class ModifyWindow extends JFrame
         }
         
         
-        for (int i = 0; i < rows.size(); i++)
+        for (int i = 0; i < penRows.size(); i++)
         {            
                 //Button used to enabled and disable the waterChangeDateField text entry
                 //if enabled, the new record's water change date will be whats entered in that field
@@ -491,13 +505,13 @@ public class ModifyWindow extends JFrame
                     doChange.get(j).setText("Didn't change");
                     waterChangeDateFields.get(j).setEnabled(false);
                     waterChangeDates.remove(j);
-                    waterChangeDates.add(j, rows.get(j).get("Water Change Date").toString());
+                    waterChangeDates.add(j, penRows.get(j).get("Water Change Date").toString());
                 }
             });
             doChange.add(tempDoChange);
             
             changeWater.add(false);
-            waterChangeDates.add(rows.get(i).get("Water Change Date").toString());
+            waterChangeDates.add(penRows.get(i).get("Water Change Date").toString());
             
             
                 //text field to record the date of a water change, if the water has been changed
@@ -542,7 +556,7 @@ public class ModifyWindow extends JFrame
             tempTemperature.setEditable(false);
             tempTemperature.setPrototypeDisplayValue("Any Additional Commen");
             tempTemperature.setFont(font);
-            tempTemperature.setSelectedItem(rows.get(i).get("Water Temperature"));
+            tempTemperature.setSelectedItem(penRows.get(i).get("Water Temperature"));
             tempTemperature.addPopupMenuListener(new PopupMenuListener()
             {
                 @Override
@@ -583,7 +597,7 @@ public class ModifyWindow extends JFrame
             tempFeed.setPreferredSize(size);
             tempFeed.setFont(font);
             
-            switch (rows.get(i).get("Feed Type").toString())
+            switch (penRows.get(i).get("Feed Type").toString())
             {
                 case "R":   
                     tempFeed.setSelectedItem("(R) - Regular");
@@ -604,7 +618,7 @@ public class ModifyWindow extends JFrame
                 //text field to enter the amount of food, in pounds
             JTextField tempAmount = new JTextField();
             tempAmount.setFont(font);
-            tempAmount.setText(rows.get(i).get("Feed Amount").toString());
+            tempAmount.setText(penRows.get(i).get("Feed Amount").toString());
             tempAmount.getDocument().addDocumentListener(new DocumentListener()
             {
                 @Override
@@ -643,7 +657,7 @@ public class ModifyWindow extends JFrame
             tempClass.setEditable(false);
             tempClass.setPrototypeDisplayValue("Any Additional Commen");
             tempClass.setFont(font);
-            tempClass.setSelectedItem(rows.get(i).get("Size Class"));
+            tempClass.setSelectedItem(penRows.get(i).get("Size Class"));
             tempClass.addPopupMenuListener(new PopupMenuListener()
             {
                 @Override
@@ -691,7 +705,7 @@ public class ModifyWindow extends JFrame
                 int j = tabbedPanel.getSelectedIndex();
                 try
                 {
-                    penTable.addRow(0, rows.get(j).get("Pen Number"), rows.get(j).get("Pen Type"), rows.get(j).get("Square Footage"), waterChangeDates.get(j), temperatures.get(j).getSelectedItem().toString(), feeds.get(j).getSelectedItem().toString().charAt(1), amounts.get(j).getText(), classes.get(j).getSelectedItem().toString(), comments.get(j).getText());
+                    penTable.addRow(0, penRows.get(j).get("Pen Number"), penRows.get(j).get("Pen Type"), penRows.get(j).get("Square Footage"), waterChangeDates.get(j), temperatures.get(j).getSelectedItem().toString(), feeds.get(j).getSelectedItem().toString().charAt(1), amounts.get(j).getText(), classes.get(j).getSelectedItem().toString(), comments.get(j).getText());
                 }
                 catch (IOException e1)
                 {
@@ -714,7 +728,7 @@ public class ModifyWindow extends JFrame
             
             
                 //initialize the labels for each components
-            JLabel tempLabel1 = new JLabel("Pen: " + rows.get(i).get("Pen Number"));
+            JLabel tempLabel1 = new JLabel("Pen: " + penRows.get(i).get("Pen Number"));
             tempLabel1.setFont(font);
             penLabel.add(tempLabel1);
             
@@ -752,16 +766,17 @@ public class ModifyWindow extends JFrame
         //tagList is used as a check to verify that only the most recent entry in the gator database is used for each gator tag
     public void addGators()
     {        
-        try
-        {
-            for (int i = 0; i < rows.size(); i++)
+        //try
+        //{
+            for (int i = 0; i < penRows.size(); i++)
             {
                     //declare each inner array in the 2d arrays
-                java.util.List<Row> tempGatorRow = new ArrayList();
+                java.util.List<Gator> tempGatorRow = new ArrayList();
                 gatorList.add(tempGatorRow);
                 java.util.List<String> tempTagRow = new ArrayList();
                 tagList.add(tempTagRow);
 
+                /*
                 com.healthmarketscience.jackcess.Cursor cursor = CursorBuilder.createCursor(gatorTable);
                 cursor.afterLast();
                 while (cursor.moveToPreviousRow())
@@ -769,18 +784,32 @@ public class ModifyWindow extends JFrame
                     Row currentRow = cursor.getCurrentRow();
                     if (tagList.get(i).indexOf(currentRow.get("Tag Number").toString()) == -1)
                     {
-                        if (currentRow.get("To").toString().equals(rows.get(i).get("Pen Number").toString()) && !("Yes".equals(currentRow.get("Harvested?").toString())) )
+                        if (currentRow.get("To").toString().equals(penRows.get(i).get("Pen Number").toString()) && !("Yes".equals(currentRow.get("Harvested?").toString())) )
                         {
                             gatorList.get(i).add(currentRow);
                         }
                         tagList.get(i).add(currentRow.get("Tag Number").toString());
                     }
                 }
+                        */
+                
+                for (int j = gatorRows.size() - 1; j >= 0; j--)
+                {
+                    Gator gator = gatorRows.get(j);
+                    if (tagList.get(i).indexOf(gator.tagNumber) == -1)
+                    {
+                        if (gator.to.equals(penRows.get(i).get("Pen Number").toString()) && !("Yes".equals(gator.harvested)) )
+                        {
+                            gatorList.get(i).add(gator);
+                        }
+                        tagList.get(i).add(gator.tagNumber);
+                    }
+                }
             }
-        }
-        catch (IOException e)
-        {
+        //}
+        //catch (IOException e)
+        //{
             
-        }
+        //}
     }
 }
