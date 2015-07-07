@@ -1639,7 +1639,7 @@ public class Application extends JFrame implements SerialPortEventListener
                         hasToPen = true;
                         toCounter++;
                     }
-                    else if (classSize.indexOf("+") != -1)
+                    else if (classSize.contains("+"))
                     {
                         toPens[toCounter] = pen;
                         toLowerBounds[toCounter] = Integer.parseInt(classSize.substring(0, 2));
