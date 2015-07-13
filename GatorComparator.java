@@ -1,3 +1,10 @@
+/**
+ * Compares 2 input Gator objects according to their tag number first
+ * If they are equal, compares the ID number next
+ * 
+ * @Phillip Dingler [phil50@ufl.edu]
+ */
+
 package test;
 
 import java.util.*;

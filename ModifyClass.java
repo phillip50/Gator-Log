@@ -1,4 +1,4 @@
-/*
+/**
  * For use with the PenApplication.java class
  * When the option to select new class sizes is slected in that class, an object of this class is created
  * "Empty", "Hatching" and "Family" are the default classes included in every list

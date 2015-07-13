@@ -82,12 +82,17 @@ public class PenApplication extends JFrame
         gatorRows = new ArrayList<>();
         try
         {
+            int i = 0;
             com.healthmarketscience.jackcess.Cursor cursor = CursorBuilder.createCursor(gatorTable);
-            
             cursor.beforeFirst();
             while (cursor.moveToNextRow())
             {
                 Row currentRow = cursor.getCurrentRow();
+                
+                if (currentRow.get("ID") == null)
+                {
+                    System.out.println("" + i);
+                }
                 
                 Gator gator = new Gator();
                 gator.ID = Integer.parseInt( currentRow.get("ID").toString() );
@@ -111,7 +116,10 @@ public class PenApplication extends JFrame
                 gator.harvested = currentRow.get("Harvested?").toString();
                 
                 gatorRows.add(gator);
+                
+                i++;
             }
+                //sort the array using a custom comparator
             Collections.sort(gatorRows, new GatorComparator());
         }
         catch (IOException e)

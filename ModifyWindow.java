@@ -7,8 +7,6 @@
  * @Phillip Dingler [phil50@ufl.edu]
  */
 
-//TODO: Load all rows at beginning of application
-
 package test;
 
 import javax.swing.*; 
@@ -331,13 +329,67 @@ public class ModifyWindow extends JFrame
             JComponent gatorPanel = new JPanel();
             gatorPanel.setLayout(new GridBagLayout());
             GridBagConstraints gatorc = new GridBagConstraints();
+            System.out.println(gatorc.insets);
             gatorc.insets = new Insets(10, 30, 10, 30);
             gatorc.weightx = 1;
             gatorc.weighty = 0;
-            gatorc.anchor = GridBagConstraints.LINE_START;
+            gatorc.anchor = GridBagConstraints.CENTER;
+            gatorc.gridwidth = 7;
             
             gatorc.gridx = 0;
             gatorc.gridy = 0;
+            
+            JLabel headerLabel1 = new JLabel("Gator #" + selectedGator.tagNumber);
+            headerLabel1.setFont(font);
+            gatorPanel.add(headerLabel1, gatorc);
+            
+            gatorc.gridy = 1;
+            
+            String gender = selectedGator.gender;
+            if ("".equals(gender))
+            {
+                gender = "(Not provided)";
+            }
+            
+            String umbilical = selectedGator.umbilical;
+            if ("".equals(umbilical))
+            {
+                umbilical = "(Not provided)";
+            }
+            
+            JLabel headerLabel2 = new JLabel("Gender: " + gender + "       Umbilical: " + umbilical);
+            headerLabel2.setFont(font);
+            gatorPanel.add(headerLabel2, gatorc);
+            
+            gatorc.gridy = 2;
+            gatorc.insets = new Insets(10, 30, 50, 30);
+            
+            String location = selectedGator.eggNestLocation;
+            if ("".equals(location))
+            {
+                location = "(Not provided)";
+            }
+            
+            String condition = selectedGator.eggNestCondition;
+            if ("".equals(condition))
+            {
+                condition = "(Not provided)";
+            }
+            
+            String collectionDate = selectedGator.eggCollectionDate;
+            if ("".equals(collectionDate))
+            {
+                collectionDate = "(Not provided)";
+            }
+            
+            JLabel headerLabel3 = new JLabel("Nest Location: " + location + "       Nest Condition: " + condition + "       Collection Date: " + collectionDate);
+            headerLabel3.setFont(font);
+            gatorPanel.add(headerLabel3, gatorc);
+            
+            gatorc.gridy = 3;
+            gatorc.anchor = GridBagConstraints.LINE_START;
+            gatorc.gridwidth = 1;
+            gatorc.insets = new Insets(10, 30, 10, 30);
             
             JLabel topLabel1 = new JLabel("Entry");
             topLabel1.setFont(font);
@@ -358,14 +410,29 @@ public class ModifyWindow extends JFrame
             topLabel4.setFont(font);
             gatorPanel.add(topLabel4, gatorc);
             
-            int i = 1;
+            gatorc.gridx = 4;
+            JLabel topLabel5 = new JLabel("Belly Size");
+            topLabel5.setFont(font);
+            gatorPanel.add(topLabel5, gatorc);
+            
+            gatorc.gridx = 5;
+            JLabel topLabel6 = new JLabel("Length");
+            topLabel6.setFont(font);
+            gatorPanel.add(topLabel6, gatorc);
+            
+            gatorc.gridx = 6;
+            JLabel topLabel7 = new JLabel("Weight");
+            topLabel7.setFont(font);
+            gatorPanel.add(topLabel7, gatorc);
+            
+            int i = 4;
             
             for (Gator gator : allSelectedGatorEntries)
             {           
                 gatorc.gridy = i;
                 
                 gatorc.gridx = 0;
-                JLabel tempLabel = new JLabel("" + i);
+                JLabel tempLabel = new JLabel("" + (i - 3));
                 tempLabel.setFont(font);
                 gatorPanel.add(tempLabel, gatorc);
                 
@@ -383,6 +450,21 @@ public class ModifyWindow extends JFrame
                 JLabel tempLabel4 = new JLabel(gator.to);
                 tempLabel4.setFont(font);
                 gatorPanel.add(tempLabel4, gatorc);
+                
+                gatorc.gridx = 4;
+                JLabel tempLabel5 = new JLabel(gator.bellySize);
+                tempLabel5.setFont(font);
+                gatorPanel.add(tempLabel5, gatorc);
+                
+                gatorc.gridx = 5;
+                JLabel tempLabel6 = new JLabel(gator.length);
+                tempLabel6.setFont(font);
+                gatorPanel.add(tempLabel6, gatorc);
+                
+                gatorc.gridx = 6;
+                JLabel tempLabel7 = new JLabel(gator.weight);
+                tempLabel7.setFont(font);
+                gatorPanel.add(tempLabel7, gatorc);
             
                 i++;
             }

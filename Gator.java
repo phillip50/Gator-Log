@@ -1,5 +1,10 @@
-package test;
+/**
+ * Gator object to replicate entries in the gator database
+ * 
+ * @Phillip Dingler [phil50@ufl.edu]
+ */
 
+package test;
 
 public class Gator
 {
