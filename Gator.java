@@ -3,8 +3,8 @@ package test;
 
 public class Gator
 {
-    public String ID;
-    public String tagNumber;
+    public int ID;
+    public int tagNumber;
     public String eggNestLocation;
     public String eggNestCondition;
     public String eggCollectionDate;
@@ -26,5 +26,11 @@ public class Gator
     public Gator()
     {
         
+    }
+    
+    @Override
+    public String toString()
+    {
+        return "Entry Number: " + this.ID + ", Tag: " + this.tagNumber + ", Date: " + this.date;
     }
 }

@@ -90,8 +90,8 @@ public class PenApplication extends JFrame
                 Row currentRow = cursor.getCurrentRow();
                 
                 Gator gator = new Gator();
-                gator.ID = currentRow.get("ID").toString();
-                gator.tagNumber = currentRow.get("Tag Number").toString();
+                gator.ID = Integer.parseInt( currentRow.get("ID").toString() );
+                gator.tagNumber = Integer.parseInt( currentRow.get("Tag Number").toString() );
                 gator.eggNestLocation = currentRow.get("Egg Nest Location").toString();
                 gator.eggNestCondition = currentRow.get("Egg Nest Condition").toString();
                 gator.eggCollectionDate = currentRow.get("Egg Collection Date").toString();
@@ -111,8 +111,8 @@ public class PenApplication extends JFrame
                 gator.harvested = currentRow.get("Harvested?").toString();
                 
                 gatorRows.add(gator);
-                System.out.println(gator.ID);
             }
+            Collections.sort(gatorRows, new GatorComparator());
         }
         catch (IOException e)
         {
@@ -126,7 +126,7 @@ public class PenApplication extends JFrame
     {
         ModifyWindow modifyFrame = new ModifyWindow(penRows, penNumber, gatorRows);
         modifyFrame.setFrame(modifyFrame);
-        modifyFrame.addGators();
+        modifyFrame.addGators(); 
         modifyFrame.Initialize();
         modifyFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         Rectangle rect = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();

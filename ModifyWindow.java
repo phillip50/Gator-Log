@@ -319,32 +319,14 @@ public class ModifyWindow extends JFrame
         if (selectedGator != null)
         {
             java.util.List<Gator> allSelectedGatorEntries = new ArrayList<>();
-            //try
-            //{
-                /*
-                com.healthmarketscience.jackcess.Cursor cursor = CursorBuilder.createCursor(gatorTable);
-                cursor.beforeFirst();
-                while (cursor.moveToNextRow())
+
+            for (Gator gator : gatorRows)
+            {
+                if (gator.tagNumber - selectedGator.tagNumber == 0)
                 {
-                    Row currentRow = cursor.getCurrentRow();
-                    if (currentRow.get("Tag Number").toString().equals(selectedGator.get("Tag Number").toString()))
-                    {
-                        allSelectedGatorEntries.add(currentRow);
-                    }
+                    allSelectedGatorEntries.add(gator);
                 }
-                        */
-                for (Gator gator : gatorRows)
-                {
-                    if (gator.tagNumber.equals(selectedGator.tagNumber))
-                    {
-                        allSelectedGatorEntries.add(gator);
-                    }
-                }
-            //}
-            //catch (IOException e)
-            //{
-            
-            //}
+            }
             
             JComponent gatorPanel = new JPanel();
             gatorPanel.setLayout(new GridBagLayout());
@@ -766,50 +748,41 @@ public class ModifyWindow extends JFrame
         //tagList is used as a check to verify that only the most recent entry in the gator database is used for each gator tag
     public void addGators()
     {        
-        //try
-        //{
-            for (int i = 0; i < penRows.size(); i++)
-            {
-                    //declare each inner array in the 2d arrays
-                java.util.List<Gator> tempGatorRow = new ArrayList();
-                gatorList.add(tempGatorRow);
-                java.util.List<String> tempTagRow = new ArrayList();
-                tagList.add(tempTagRow);
-
-                /*
-                com.healthmarketscience.jackcess.Cursor cursor = CursorBuilder.createCursor(gatorTable);
-                cursor.afterLast();
-                while (cursor.moveToPreviousRow())
-                {
-                    Row currentRow = cursor.getCurrentRow();
-                    if (tagList.get(i).indexOf(currentRow.get("Tag Number").toString()) == -1)
-                    {
-                        if (currentRow.get("To").toString().equals(penRows.get(i).get("Pen Number").toString()) && !("Yes".equals(currentRow.get("Harvested?").toString())) )
-                        {
-                            gatorList.get(i).add(currentRow);
-                        }
-                        tagList.get(i).add(currentRow.get("Tag Number").toString());
-                    }
-                }
-                        */
+        for (int i = 0; i < penRows.size(); i++)
+        {
+                //declare each inner array in the 2d arrays
+            java.util.List<Gator> tempGatorRow = new ArrayList();
+            gatorList.add(tempGatorRow);
+            java.util.List<String> tempTagRow = new ArrayList();
+            tagList.add(tempTagRow);
                 
-                for (int j = gatorRows.size() - 1; j >= 0; j--)
+            /*for (int j = gatorRows.size() - 1; j >= 0; j--)
+            {
+                Gator gator = gatorRows.get(j);
+                if (tagList.get(i).indexOf(gator.tagNumber) == -1)
                 {
-                    Gator gator = gatorRows.get(j);
-                    if (tagList.get(i).indexOf(gator.tagNumber) == -1)
+                    if (gator.to.equals(penRows.get(i).get("Pen Number").toString()) && !("Yes".equals(gator.harvested)) )
                     {
-                        if (gator.to.equals(penRows.get(i).get("Pen Number").toString()) && !("Yes".equals(gator.harvested)) )
-                        {
-                            gatorList.get(i).add(gator);
-                        }
-                        tagList.get(i).add(gator.tagNumber);
+                        gatorList.get(i).add(gator);
+                    }
+                    tagList.get(i).add("" + gator.tagNumber);
+                }
+            }*/
+            int lastTag = -1;
+            for (int j = gatorRows.size() - 1; j >= 0; j--)
+            {
+                Gator gator = gatorRows.get(j);
+                int thisTag = gator.tagNumber;
+                
+                if (thisTag - lastTag != 0)
+                {
+                    if ( gator.to.equals(penRows.get(i).get("Pen Number").toString()) && !("Yes".equals(gator.harvested)) )
+                    {
+                        gatorList.get(i).add(gator);
                     }
                 }
+                lastTag = thisTag;
             }
-        //}
-        //catch (IOException e)
-        //{
-            
-        //}
+        }
     }
 }
