@@ -128,9 +128,11 @@ public class Application extends JFrame implements SerialPortEventListener
     private final JButton quitButton;
     private final JComboBox penList;
     private final JTextField capacityInput;
-    private final JTextField location;
-    private final JTextField condition;
     private final JTextField collectionDate;
+    private final JTextField eggLocation;
+    private final JTextField eggNumber;
+    private final JTextField eggLength;
+    private final JTextField eggWeight;
     private final JTextField experimentalCode;
     private final JComboBox gender;
     private final JComboBox umbilical;
@@ -357,17 +359,21 @@ public class Application extends JFrame implements SerialPortEventListener
         penList = new JComboBox(pens.toArray());
         penList.setEditable(false);
         
-        capacityInput = new JTextField(10);      
-        location = new JTextField(10);       
-        condition = new JTextField(10);      
-        collectionDate = new JTextField(10);       
+        capacityInput = new JTextField(10);                
+        collectionDate = new JTextField(10);
+        eggLocation = new JTextField(10);
+        eggNumber = new JTextField(10);
+        eggLength = new JTextField(10);
+        eggWeight = new JTextField(10);
         experimentalCode = new JTextField(10);
         comments = new JTextField(10);
         
         capacityInput.setFont(font1);
-        location.setFont(font1);
-        condition.setFont(font1);
         collectionDate.setFont(font1);
+        eggLocation.setFont(font1);
+        eggNumber.setFont(font1);
+        eggLength.setFont(font1);
+        eggWeight.setFont(font1);
         experimentalCode.setFont(font1);
         comments.setFont(font1);
         
@@ -418,9 +424,11 @@ public class Application extends JFrame implements SerialPortEventListener
             penList.setSelectedIndex(0);
             gender.setSelectedIndex(0);
             umbilical.setSelectedIndex(0);
-            location.setText("");
-            condition.setText("");
             collectionDate.setText("");
+            eggLocation.setText("");
+            eggNumber.setText("");
+            eggLength.setText("");
+            eggWeight.setText("");
             comments.setText("");
             confirm.setEnabled(true);
             
@@ -457,12 +465,16 @@ public class Application extends JFrame implements SerialPortEventListener
             gatorLabel1.setFont(font1);
             JLabel gatorLabel2 = new JLabel(tag);
             gatorLabel2.setFont(font1);
+            JLabel collectionDateLabel = new JLabel("Egg Collection Date: ");
+            collectionDateLabel.setFont(font1);
             JLabel locationLabel = new JLabel("Egg Nest Location: ");
             locationLabel.setFont(font1);
-            JLabel conditionLabel = new JLabel("Egg Nest Condition: ");
-            conditionLabel.setFont(font1);
-            JLabel collectionDateLabel = new JLabel("Egg Condition Date: ");
-            collectionDateLabel.setFont(font1);
+            JLabel numberLabel = new JLabel("Egg Number: ");
+            numberLabel.setFont(font1);
+            JLabel lengthLabel = new JLabel("Egg Length: ");
+            lengthLabel.setFont(font1);
+            JLabel weightLabel = new JLabel("Egg Weight: ");
+            weightLabel.setFont(font1);
             JLabel hatchYear1 = new JLabel("Hatch Year: ");
             hatchYear1.setFont(font1);
             JLabel hatchYear2 = new JLabel(currentDate.substring(6));
@@ -494,75 +506,91 @@ public class Application extends JFrame implements SerialPortEventListener
             
             cRight.gridx = 0;
             cRight.gridy = 1;
-            panel.add(locationLabel, cRight);
-            
-            cLeft.gridx = 1;
-            cLeft.gridy = 1;
-            panel.add(location, cLeft);
-            
-            cRight.gridx = 0;
-            cRight.gridy = 2;
-            panel.add(conditionLabel, cRight);
-            
-            cLeft.gridx = 1;
-            cLeft.gridy = 2;
-            panel.add(condition, cLeft);
-            
-            cRight.gridx = 0;
-            cRight.gridy = 3;
             panel.add(collectionDateLabel, cRight);
             
             cLeft.gridx = 1;
-            cLeft.gridy = 3;
+            cLeft.gridy = 1;
             panel.add(collectionDate, cLeft);
             
             cRight.gridx = 0;
+            cRight.gridy = 2;
+            panel.add(locationLabel, cRight);
+            
+            cLeft.gridx = 1;
+            cLeft.gridy = 2;
+            panel.add(eggLocation, cLeft);
+            
+            cRight.gridx = 0;
+            cRight.gridy = 3;
+            panel.add(numberLabel, cRight);
+            
+            cLeft.gridx = 1;
+            cLeft.gridy = 3;
+            panel.add(eggNumber, cLeft);
+            
+            cRight.gridx = 0;
             cRight.gridy = 4;
-            panel.add(hatchYear1, cRight);
+            panel.add(lengthLabel, cRight);
             
             cLeft.gridx = 1;
             cLeft.gridy = 4;
-            panel.add(hatchYear2, cLeft);
+            panel.add(eggLength, cLeft);
             
             cRight.gridx = 0;
             cRight.gridy = 5;
-            panel.add(genderLabel, cRight);
+            panel.add(weightLabel, cRight);
             
             cLeft.gridx = 1;
             cLeft.gridy = 5;
-            panel.add(gender, cLeft);
+            panel.add(eggWeight, cLeft);
             
             cRight.gridx = 0;
             cRight.gridy = 6;
-            panel.add(umbilicalLabel, cRight);
+            panel.add(hatchYear1, cRight);
             
             cLeft.gridx = 1;
             cLeft.gridy = 6;
-            panel.add(umbilical, cLeft);
+            panel.add(hatchYear2, cLeft);
             
             cRight.gridx = 0;
             cRight.gridy = 7;
-            panel.add(penLabel, cRight);
+            panel.add(genderLabel, cRight);
             
             cLeft.gridx = 1;
             cLeft.gridy = 7;
-            panel.add(penList, cLeft);
+            panel.add(gender, cLeft);
             
             cRight.gridx = 0;
             cRight.gridy = 8;
-            panel.add(commentsLabel, cRight);
+            panel.add(umbilicalLabel, cRight);
             
             cLeft.gridx = 1;
             cLeft.gridy = 8;
-            panel.add(comments, cLeft);
+            panel.add(umbilical, cLeft);
             
             cRight.gridx = 0;
             cRight.gridy = 9;
+            panel.add(penLabel, cRight);
+            
+            cLeft.gridx = 1;
+            cLeft.gridy = 9;
+            panel.add(penList, cLeft);
+            
+            cRight.gridx = 0;
+            cRight.gridy = 10;
+            panel.add(commentsLabel, cRight);
+            
+            cLeft.gridx = 1;
+            cLeft.gridy = 10;
+            panel.add(comments, cLeft);
+            
+            cRight.gridx = 0;
+            cRight.gridy = 11;
             panel.add(back, cRight);
             
             cLeft.fill = GridBagConstraints.NONE;
             cLeft.gridx = 1;
-            cLeft.gridy = 9;
+            cLeft.gridy = 11;
             panel.add(confirm, cLeft);
         }
             //1st page of harvesting a gator
@@ -1786,7 +1814,7 @@ public class Application extends JFrame implements SerialPortEventListener
             {
                 try
                 {
-                    gatorTable.addRow(0, tag, location.getText(), condition.getText(), collectionDate.getText(), currentDate.substring(6), gender.getSelectedItem().toString(), umbilical.getSelectedItem().toString(), currentDate, "", penList.getSelectedItem().toString(), "", "", "", "", "", "", comments.getText(), "");
+                    gatorTable.addRow(0, tag, collectionDate.getText(), eggLocation.getText(), eggNumber.getText(), eggLength.getText(), eggWeight.getText(), currentDate.substring(6), gender.getSelectedItem().toString(), umbilical.getSelectedItem().toString(), currentDate, "", penList.getSelectedItem().toString(), "", "", "", "", "", "", comments.getText(), "");
                     IndexCursor cursor = CursorBuilder.createCursor(gatorTable.getIndex("IDIndex"));
                     cursor.beforeFirst();
                     for(Map<String,Object> row : cursor)

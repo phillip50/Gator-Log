@@ -96,10 +96,12 @@ public class PenApplication extends JFrame
                 
                 Gator gator = new Gator();
                 gator.ID = Integer.parseInt( currentRow.get("ID").toString() );
-                gator.tagNumber = Integer.parseInt( currentRow.get("Tag Number").toString() );
+                gator.tagNumber = currentRow.get("Tag Number").toString();
                 gator.eggNestLocation = currentRow.get("Egg Nest Location").toString();
-                gator.eggNestCondition = currentRow.get("Egg Nest Condition").toString();
                 gator.eggCollectionDate = currentRow.get("Egg Collection Date").toString();
+                gator.eggNumber = currentRow.get("Egg Number").toString();
+                gator.eggLength = currentRow.get("Egg Length").toString();
+                gator.eggWeight = currentRow.get("Egg Weight").toString();
                 gator.hatchYear = currentRow.get("Hatch Year").toString();
                 gator.gender = currentRow.get("Gender").toString();
                 gator.umbilical = currentRow.get("Umbilical").toString();

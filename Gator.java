@@ -9,10 +9,12 @@ package test;
 public class Gator
 {
     public int ID;
-    public int tagNumber;
+    public String tagNumber;
     public String eggNestLocation;
-    public String eggNestCondition;
     public String eggCollectionDate;
+    public String eggNumber;
+    public String eggLength;
+    public String eggWeight;
     public String hatchYear;
     public String gender;
     public String umbilical;

@@ -59,7 +59,7 @@ public class ModifyWindow extends JFrame
         /*Change water option in the interface
             Has 2 parts, a button to signify whether the water has been changed
             And a text field to input a water change date
-            The text field is only enabled in the button has been pressed
+            The text field is only enabled when the button has been pressed
         */
     private final java.util.List<JButton> doChange;
     private final java.util.List<Boolean> changeWater;
@@ -169,14 +169,17 @@ public class ModifyWindow extends JFrame
     
     
         //Add components to the interface
-        //can be called again to rewrite the components
+        //Can be called again to rewrite the components
     public void addComponents()
     {
         tabbedPanel.removeAll();
         
-        //modify panel(s)
+            //Panel to modify a pen
+            //In the case of quartered pens, display different panels for all 4 quarters
         for (int i = 0; i < penRows.size(); i++)
         {
+                //Create a new panel, placing the components into a standard format
+                //with labels on the left and the corresponding input components on the right
             JComponent modifyPanel = new JPanel();
             modifyPanel.setLayout(new GridBagLayout());
             GridBagConstraints modc = new GridBagConstraints();
@@ -263,10 +266,12 @@ public class ModifyWindow extends JFrame
             modc.gridy = 8;
             modifyPanel.add(cancel.get(i), modc);
             
+                //add the panel to the frame
             tabbedPanel.addTab("<html><body leftmargin=15 topmargin=8 marginwidth=30 marginheight=5>Modify Pen " + penRows.get(i).get("Pen Number") + "</body></html>", modifyPanel);
         }
         
-        //view gators panel
+            //Panel to display all gators in the selected pen
+            //iterate over penRows for quartered pens
         for (int i = 0; i < penRows.size(); i++)
         {
             JComponent viewPanel = new JPanel();
@@ -276,10 +281,11 @@ public class ModifyWindow extends JFrame
             viewc.weightx = 1;
             viewc.weighty = 0;
             int j = 0;
-        
-            for (Gator gator : gatorList.get(i))
-            {
             
+                //get every gator in the current pen
+            for (Gator gator : gatorList.get(i))
+            {       
+                    //display the tag number, as well as a button to vuew more information about that gator
                 viewc.gridy = j;
                 viewc.anchor = GridBagConstraints.LINE_START;
                 viewc.gridx = 0;
@@ -299,46 +305,54 @@ public class ModifyWindow extends JFrame
             
                 j++;
             }
-        
+                
+                //place an empty label at the bottom to take all of the empty space in the panel and push it to the bottom
+                //for formatting
             viewc.gridy = j;
             viewc.weighty = 1;
             JLabel dummyLabel = new JLabel("");
             viewPanel.add(dummyLabel, viewc);
             
+                //Place the panel into a scrolling panel, so that it supports a large number of entries
             JScrollPane viewScroll = new JScrollPane(viewPanel);
             viewScroll.getVerticalScrollBar().setPreferredSize(new Dimension(20, 0));
             viewScroll.getVerticalScrollBar().setUnitIncrement(15);
             
+                //place the scroll panel onto the tabbed panel
             tabbedPanel.addTab("<html><body leftmargin=15 topmargin=8 marginwidth=30 marginheight=5>View Gators in " + penRows.get(i).get("Pen Number") + "</body></html>", viewScroll);
         }
         
         tabbedPanel.setSelectedIndex(0);
         
+            //display all entries in the database with the selected tag
         if (selectedGator != null)
         {
             java.util.List<Gator> allSelectedGatorEntries = new ArrayList<>();
 
+                //find all entries with the selected tag
             for (Gator gator : gatorRows)
             {
-                if (gator.tagNumber - selectedGator.tagNumber == 0)
+                if (gator.tagNumber.equals(selectedGator.tagNumber))
                 {
                     allSelectedGatorEntries.add(gator);
                 }
             }
             
+                //create a panel and display all relevant information about the entries
             JComponent gatorPanel = new JPanel();
             gatorPanel.setLayout(new GridBagLayout());
             GridBagConstraints gatorc = new GridBagConstraints();
-            System.out.println(gatorc.insets);
             gatorc.insets = new Insets(10, 30, 10, 30);
             gatorc.weightx = 1;
             gatorc.weighty = 0;
             gatorc.anchor = GridBagConstraints.CENTER;
-            gatorc.gridwidth = 7;
+            gatorc.gridwidth = 8;
             
             gatorc.gridx = 0;
             gatorc.gridy = 0;
             
+            
+                //display static information relating to all entries first
             JLabel headerLabel1 = new JLabel("Gator #" + selectedGator.tagNumber);
             headerLabel1.setFont(font);
             gatorPanel.add(headerLabel1, gatorc);
@@ -364,28 +378,42 @@ public class ModifyWindow extends JFrame
             gatorc.gridy = 2;
             gatorc.insets = new Insets(10, 30, 50, 30);
             
-            String location = selectedGator.eggNestLocation;
-            if ("".equals(location))
-            {
-                location = "(Not provided)";
-            }
-            
-            String condition = selectedGator.eggNestCondition;
-            if ("".equals(condition))
-            {
-                condition = "(Not provided)";
-            }
-            
             String collectionDate = selectedGator.eggCollectionDate;
             if ("".equals(collectionDate))
             {
                 collectionDate = "(Not provided)";
             }
             
-            JLabel headerLabel3 = new JLabel("Nest Location: " + location + "       Nest Condition: " + condition + "       Collection Date: " + collectionDate);
+            String location = selectedGator.eggNestLocation;
+            if ("".equals(location))
+            {
+                location = "(Not provided)";
+            }
+            
+            String number = selectedGator.eggNumber;
+            if ("".equals(number))
+            {
+                number = "(Not provided)";
+            }
+            
+            String length = selectedGator.eggLength;
+            if ("".equals(length))
+            {
+                length = "(Not provided)";
+            }
+            
+            String weight = selectedGator.eggWeight;
+            if ("".equals(weight))
+            {
+                weight = "(Not provided)";
+            }
+            
+            JLabel headerLabel3 = new JLabel("Collection Date: " + collectionDate + "   Nest Location: " + location + "   Egg Number: " + number + "   Egg Length: " + length + "   Egg Weight: " + weight);
             headerLabel3.setFont(font);
             gatorPanel.add(headerLabel3, gatorc);
             
+            
+                //Then split the panel into rows and display dynamic information column names
             gatorc.gridy = 3;
             gatorc.anchor = GridBagConstraints.LINE_START;
             gatorc.gridwidth = 1;
@@ -425,8 +453,14 @@ public class ModifyWindow extends JFrame
             topLabel7.setFont(font);
             gatorPanel.add(topLabel7, gatorc);
             
+            gatorc.gridx = 7;
+            JLabel topLabel8 = new JLabel("Special Recipe");
+            topLabel8.setFont(font);
+            gatorPanel.add(topLabel8, gatorc);
+            
             int i = 4;
             
+                //and finally display the dynamic information for each entry
             for (Gator gator : allSelectedGatorEntries)
             {           
                 gatorc.gridy = i;
@@ -465,23 +499,34 @@ public class ModifyWindow extends JFrame
                 JLabel tempLabel7 = new JLabel(gator.weight);
                 tempLabel7.setFont(font);
                 gatorPanel.add(tempLabel7, gatorc);
+                
+                gatorc.gridx = 7;
+                JLabel tempLabel8 = new JLabel(gator.recipe);
+                tempLabel8.setFont(font);
+                gatorPanel.add(tempLabel8, gatorc);
             
                 i++;
             }
         
+            
+                //place an empty label at the bottom to take all of the empty space in the panel and push it to the bottom
+                //for formatting
             gatorc.gridy = i;
             gatorc.weighty = 1;
             JLabel dummyLabel2 = new JLabel("");
             gatorPanel.add(dummyLabel2, gatorc);
             
+                //Place the panel into a scrolling panel, so that it supports a large number of entries
             JScrollPane gatorScroll = new JScrollPane(gatorPanel);
             gatorScroll.getVerticalScrollBar().setPreferredSize(new Dimension(20, 0));
             gatorScroll.getVerticalScrollBar().setUnitIncrement(15);
-            
+                
+                //place the scroll panel onto the tabbed panel
             tabbedPanel.addTab("<html><body leftmargin=15 topmargin=8 marginwidth=30 marginheight=5>Gator " + selectedGator.tagNumber + "</body></html>", gatorScroll);
             tabbedPanel.setSelectedComponent(gatorScroll);
         }
         
+            //add the tabbed panel to the frame
         add(tabbedPanel);
     }
     
@@ -850,13 +895,13 @@ public class ModifyWindow extends JFrame
                     tagList.get(i).add("" + gator.tagNumber);
                 }
             }*/
-            int lastTag = -1;
+            String lastTag = "";
             for (int j = gatorRows.size() - 1; j >= 0; j--)
             {
                 Gator gator = gatorRows.get(j);
-                int thisTag = gator.tagNumber;
+                String thisTag = gator.tagNumber;
                 
-                if (thisTag - lastTag != 0)
+                if (!thisTag.equals(lastTag))
                 {
                     if ( gator.to.equals(penRows.get(i).get("Pen Number").toString()) && !("Yes".equals(gator.harvested)) )
                     {

@@ -34,9 +34,11 @@ public class InitDatabases
                 .addIndex(new IndexBuilder("IDIndex").addColumns("ID"))
                 .addColumn(new ColumnBuilder("Tag Number", DataType.TEXT))
                 .addIndex(new IndexBuilder("TagIndex").addColumns("Tag Number"))
-                .addColumn(new ColumnBuilder("Egg Nest Location", DataType.TEXT))
-                .addColumn(new ColumnBuilder("Egg Nest Condition", DataType.TEXT))
                 .addColumn(new ColumnBuilder("Egg Collection Date", DataType.TEXT))
+                .addColumn(new ColumnBuilder("Egg Nest Location", DataType.TEXT))
+                .addColumn(new ColumnBuilder("Egg Number", DataType.TEXT))
+                .addColumn(new ColumnBuilder("Egg Length", DataType.TEXT))
+                .addColumn(new ColumnBuilder("Egg Weight", DataType.TEXT))
                 .addColumn(new ColumnBuilder("Hatch Year", DataType.TEXT))
                 .addColumn(new ColumnBuilder("Gender", DataType.TEXT))
                 .addColumn(new ColumnBuilder("Umbilical", DataType.TEXT))
@@ -87,7 +89,7 @@ public class InitDatabases
         }
         
         InitPenDatabase(penTable);
-        InitGatorDatabase(gatorTable);
+        //InitGatorDatabase(gatorTable);
     }
     
     public static void InitPenDatabase(Table penTable)
@@ -174,6 +176,7 @@ public class InitDatabases
             
             System.out.println("Iteration: " + j + ", Time: " + dateFormat.format(new Date()));
             
+                //Place 200 gators into each pen 101-127
             for (int i = 0; i < 200; i++)
             {
                 gatorTable.addRow("", "" + i, "", "", "", "", "", "", currentDate, "", "101", "15", "25", "25", currentDate, "EG3", currentDate, "no comments", "");
@@ -289,6 +292,7 @@ public class InitDatabases
             System.out.println();
             
             
+                //Transfer each gator into each pen
             for (int k = 0; k < 27; k++)
             {
                 long iterationStart = System.nanoTime();

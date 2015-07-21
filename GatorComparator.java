@@ -17,10 +17,10 @@ public class GatorComparator implements Comparator<Gator>
         int ID1 = gator1.ID;
         int ID2 = gator2.ID;
         
-        int tag1 = gator1.tagNumber;
-        int tag2 = gator2.tagNumber;
+        String tag1 = gator1.tagNumber;
+        String tag2 = gator2.tagNumber;
         
-        int tagCompare = tag1 - tag2;
+        int tagCompare = tag1.compareTo(tag2);
         if(tagCompare == 0)
         {
             return ID1 - ID2;
