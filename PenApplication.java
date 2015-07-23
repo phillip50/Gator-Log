@@ -139,14 +139,9 @@ public class PenApplication extends JFrame
         modifyFrame.addGators(); 
         modifyFrame.Initialize();
         modifyFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        Rectangle rect = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
-        double length = rect.getHeight();
-        double width = rect.getWidth();
-        Dimension screenSize = new Dimension((int)width, (int)length - 50);
-        modifyFrame.getContentPane().setPreferredSize(screenSize);
         modifyFrame.addComponents();
         modifyFrame.pack();
-        modifyFrame.setLocationRelativeTo(null);
+        modifyFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         modifyFrame.setVisible(true);
     }
     

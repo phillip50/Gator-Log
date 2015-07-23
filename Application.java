@@ -882,10 +882,10 @@ public class Application extends JFrame implements SerialPortEventListener
             label.setFont(font2);
             panel2.add(label);
             Panel panel3 = new Panel(new FlowLayout());
-            String temp = previousRow.get("Belly Size").toString();
+            String temp = (previousRow != null) ? previousRow.get("Belly Size").toString() : "";
             if (isInteger(temp))
             {
-                for (int i = Integer.parseInt(temp) - 5; i < Integer.parseInt(temp) + 20; i++)
+                for (int i = Integer.parseInt(temp) - 10; i < Integer.parseInt(temp) + 20; i++)
                 {
                     numbers[i].setPreferredSize(size);
                     numbers[i].setFont(font1);
@@ -894,7 +894,7 @@ public class Application extends JFrame implements SerialPortEventListener
             }
             else
             {
-                for (int i = 15; i < 30; i++)
+                for (int i = 15; i < 40; i++)
                 {
                     numbers[i].setPreferredSize(size);
                     numbers[i].setFont(font1);
@@ -919,7 +919,7 @@ public class Application extends JFrame implements SerialPortEventListener
             label.setFont(font2);
             panel2.add(label);
             Panel panel3 = new Panel(new FlowLayout());
-            String temp = previousRow.get("Length").toString();
+            String temp = (previousRow != null) ? previousRow.get("Length").toString() : "";
             if (isInteger(temp))
             {
                 for (int i = Integer.parseInt(temp) - 5; i < Integer.parseInt(temp) + 20; i++)
@@ -960,7 +960,7 @@ public class Application extends JFrame implements SerialPortEventListener
             label.setFont(font2);
             panel2.add(label);
             Panel panel3 = new Panel(new FlowLayout());
-            String temp = previousRow.get("Weight").toString();
+            String temp = (previousRow != null) ? previousRow.get("Weight").toString() : "";
             if (isInteger(temp))
             {
                 for (int i = Integer.parseInt(temp) - 5; i < Integer.parseInt(temp) + 20; i++)
@@ -993,6 +993,7 @@ public class Application extends JFrame implements SerialPortEventListener
             //5th transfer page
         else if (transferPage5)
         {
+            System.out.println(vaccinatedDate);
             panel.setLayout(new GridBagLayout());
             GridBagConstraints cRight = new GridBagConstraints();
             cRight.insets = new Insets(10, 30, 10, 30);
@@ -1042,7 +1043,9 @@ public class Application extends JFrame implements SerialPortEventListener
             cLeft.gridy = 1;
             panel.add(tempLabel3, cLeft);
             
-            JLabel tempLabel4 = new JLabel("" + previousRow.get("To").toString());
+            String fromPen = (previousRow != null) ? previousRow.get("To").toString() : "";
+            
+            JLabel tempLabel4 = new JLabel("" + fromPen);
             tempLabel4.setFont(font1);
             cRight.gridx = 1;
             cRight.gridy = 1;
@@ -1221,14 +1224,9 @@ public class Application extends JFrame implements SerialPortEventListener
         frame.initializeButtonArray();
         frame.initialize();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Rectangle rect = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
-        double length = rect.getHeight();
-        double width = rect.getWidth();
-        Dimension screenSize = new Dimension((int)width, (int)length - 50);
-        frame.getContentPane().setPreferredSize(screenSize);
         frame.addComponents();
         frame.pack();
-        frame.setLocationRelativeTo(null);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);   
     }
     
@@ -1738,19 +1736,29 @@ public class Application extends JFrame implements SerialPortEventListener
             {
                 try
                 {
+                    if (isVaccinated)
+                    {
+                        vaccinatedDate = vaccinateField.getText();
+                    }
+                    
+                    if (isFormula)
+                    {
+                        formulaDate = formulaField.getText();
+                    }
+                    
                     if (previousRow != null)
                     {
                         String lengthEntry = (skipLength) ? previousRow.get("Length").toString() : length;
                         String weightEntry = (skipWeight) ? previousRow.get("Weight").toString() : weight;
                             
-                        gatorTable.addRow(0, tag, previousRow.get("Egg Nest Location"), previousRow.get("Egg Nest Condition"), previousRow.get("Egg Collection Date"), previousRow.get("Hatch Year"), previousRow.get("Gender"), previousRow.get("Umbilical"), currentDate, previousRow.get("To"), toPen, bellySize, lengthEntry, weightEntry, formulaDate, experimentalCode.getText(), vaccinatedDate, comments.getText(), "");
+                        gatorTable.addRow(0, tag, previousRow.get("Egg Collection Date"), previousRow.get("Egg Nest Location"), previousRow.get("Egg Number"), previousRow.get("Egg Length"), previousRow.get("Egg Weight"), previousRow.get("Hatch Year"), previousRow.get("Gender"), previousRow.get("Umbilical"), currentDate, previousRow.get("To"), toPen, bellySize, lengthEntry, weightEntry, formulaDate, experimentalCode.getText(), vaccinatedDate, comments.getText(), "");
                     }
                     else
                     {
                         String lengthEntry = (skipLength) ? "" : length;
                         String weightEntry = (skipWeight) ? "" : weight;
                             
-                        gatorTable.addRow(0, tag, "", "", "", "", "", "", currentDate, previousRow.get("To"), toPen, bellySize, lengthEntry, weightEntry, formulaDate, experimentalCode.getText(), vaccinatedDate, comments.getText(), "");
+                        gatorTable.addRow(0, tag, "", "", "", "", "", "", "", "", currentDate, "", toPen, bellySize, lengthEntry, weightEntry, formulaDate, experimentalCode.getText(), vaccinatedDate, comments.getText(), "");
                     }
                     IndexCursor cursor = CursorBuilder.createCursor(gatorTable.getIndex("IDIndex"));
                     cursor.beforeFirst();
@@ -1834,7 +1842,7 @@ public class Application extends JFrame implements SerialPortEventListener
                     String lengthEntry = (skipLength) ? previousRow.get("Length").toString() : length;
                     String weightEntry = (skipWeight) ? previousRow.get("Weight").toString() : weight;
                         
-                    gatorTable.addRow(0, tag, previousRow.get("Egg Nest Location"), previousRow.get("Egg Nest Condition"), previousRow.get("Egg Collection Date"), previousRow.get("Hatch Year"), previousRow.get("Gender"), previousRow.get("Umbilical"), currentDate, previousRow.get("To"), "", bellySize, lengthEntry, weightEntry, previousRow.get("Special Recipe"), "", previousRow.get("Vaccinated"), comments.getText(), "Yes");
+                    gatorTable.addRow(0, tag, previousRow.get("Egg Collection Date"), previousRow.get("Egg Nest Location"), previousRow.get("Egg Number"), previousRow.get("Egg Length"), previousRow.get("Egg Weight"), previousRow.get("Hatch Year"), previousRow.get("Gender"), previousRow.get("Umbilical"), currentDate, previousRow.get("To"), "", bellySize, lengthEntry, weightEntry, previousRow.get("Special Recipe"), "", previousRow.get("Vaccinated"), comments.getText(), "Yes");
                     for(Map<String,Object> row : CursorBuilder.createCursor(gatorTable.getIndex("IDIndex")))
                     {
  
@@ -1981,7 +1989,7 @@ public class Application extends JFrame implements SerialPortEventListener
         didVaccinate.addActionListener(e -> {
             if (isVaccinated)
             {
-                vaccinatedDate = previousRow.get("Vaccinated").toString();
+                vaccinatedDate = (previousRow != null) ? previousRow.get("Vaccinated").toString() : "";
             }
             else
             {
@@ -1991,38 +1999,12 @@ public class Application extends JFrame implements SerialPortEventListener
             vaccinateField.setEnabled(isVaccinated);     
         });
         
-            //enters date for last vaccination
-        vaccinateField.getDocument().addDocumentListener(new DocumentListener()
-        {
-            @Override
-            public void changedUpdate(DocumentEvent e)
-            {
-                check();
-            }
-            
-            @Override
-            public void removeUpdate(DocumentEvent e)
-            {
-                check();
-            }
-            
-            @Override
-            public void insertUpdate(DocumentEvent e)
-            {
-                check();
-            }
-            public void check()
-            {
-                vaccinatedDate = vaccinateField.getText();
-            }
-        });
-        
             //toggle enable on formulaField when this button is click
             //works in the same way as didVaccination
         didFormula.addActionListener(e -> {
             if (isFormula)
             {
-                formulaDate = previousRow.get("Special Recipe").toString();
+                formulaDate = (previousRow != null) ? previousRow.get("Special Recipe").toString() : "";
             }
             else
             {
@@ -2030,32 +2012,6 @@ public class Application extends JFrame implements SerialPortEventListener
             }
             isFormula = !isFormula;
             formulaField.setEnabled(isFormula);
-        });
-        
-            //enters date for last special formula
-        formulaField.getDocument().addDocumentListener(new DocumentListener()
-        {
-            @Override
-            public void changedUpdate(DocumentEvent e)
-            {
-                check();
-            }
-            
-            @Override
-            public void removeUpdate(DocumentEvent e)
-            {
-                check();
-            }
-            
-            @Override
-            public void insertUpdate(DocumentEvent e)
-            {
-                check();
-            }
-            public void check()
-            {
-                formulaDate = formulaField.getText();
-            }
         });
     }
     
