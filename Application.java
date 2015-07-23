@@ -127,6 +127,7 @@ public class Application extends JFrame implements SerialPortEventListener
     private final JButton harvestGator;
     private final JButton quitButton;
     private final JComboBox penList;
+    private JComboBox toPensComboBox;
     private final JTextField capacityInput;
     private final JTextField collectionDate;
     private final JTextField eggLocation;
@@ -162,6 +163,8 @@ public class Application extends JFrame implements SerialPortEventListener
     private boolean transferPage4;
     private boolean transferPage5;
     private boolean quit;
+    
+    private String portNumber = "COM3";
     
     public Application()
     {
@@ -1057,11 +1060,23 @@ public class Application extends JFrame implements SerialPortEventListener
             cLeft.gridy = 2;
             panel.add(tempLabel5, cLeft);
             
-            JLabel tempLabel6 = new JLabel("" + toPen);
-            tempLabel6.setFont(font1);
+            java.util.List<String> toPensArrayList = new ArrayList<>();
+            toPensArrayList.add(null);
+            for (int i = 0; i < toPens.length; i++)
+            {
+                if (toPens[i] != null)
+                {
+                    toPensArrayList.add(toPens[i]);
+                }
+            }
+            
+            toPensComboBox = new JComboBox(toPensArrayList.toArray());
+            toPensComboBox.setSelectedItem(toPen);
+            toPensComboBox.setFont(font1);
+            
             cRight.gridx = 1;
             cRight.gridy = 2;
-            panel.add(tempLabel6, cRight);
+            panel.add(toPensComboBox, cRight);
 
             JLabel tempLabel7 = new JLabel("Belly Size: ");
             tempLabel7.setFont(font1);
@@ -1311,7 +1326,7 @@ public class Application extends JFrame implements SerialPortEventListener
 	CommPortIdentifier portId = null;
         try
         {
-            portId = CommPortIdentifier.getPortIdentifier("COM3");
+            portId = CommPortIdentifier.getPortIdentifier(portNumber);
         }
         catch (NoSuchPortException e)
         {
@@ -1362,7 +1377,7 @@ public class Application extends JFrame implements SerialPortEventListener
                     //in every case, read the information and flush the stream
                 temp = serialInput.readLine();
                 int index = temp.indexOf('.');
-                tag = temp.substring(0, index);
+                tag = temp.substring(index + 1);
                     //if on the 1st transfer page, read the tag, get the previous row in the gator database, and move to the next transfer page
                 if (transferPage1)
                 {
@@ -1688,48 +1703,6 @@ public class Application extends JFrame implements SerialPortEventListener
                         hasToPen = true;
                         toCounter++;
                     }
-                    /*
-                    switch (classSize)
-                    {
-                        case "Empty":   
-                            errorMessage = "Cannot transfer to designated empty pen";
-                            break;
-                            
-                        case "Hatchling":
-                        case "Family":  
-                            toPens[toCounter] = pen;
-                            toLowerBounds[toCounter] = -1;
-                            toUpperBounds[toCounter] = -1;
-                            toClassSizes[toCounter] = classSize;
-                            capacities[toCounter] = Integer.parseInt(capacityInput.getText());
-                            capacityCounters[toCounter] = 0;
-                            hasToPen = true;
-                            toCounter++;
-                            break;
-                            
-                        case "39+":     
-                            toPens[toCounter] = pen;
-                            toLowerBounds[toCounter] = 39;
-                            toUpperBounds[toCounter] = 46;
-                            toClassSizes[toCounter] = classSize;
-                            capacities[toCounter] = Integer.parseInt(capacityInput.getText());
-                            capacityCounters[toCounter] = 0;
-                            hasToPen = true;
-                            toCounter++;
-                            break;
-                            
-                        default:        
-                            int index = classSize.indexOf('-');
-                            toPens[toCounter] = pen;
-                            toLowerBounds[toCounter] = Integer.parseInt(classSize.substring(0, index));
-                            toUpperBounds[toCounter] = Integer.parseInt(classSize.substring(index+1));
-                            toClassSizes[toCounter] = classSize;
-                            capacities[toCounter] = Integer.parseInt(capacityInput.getText());
-                            capacityCounters[toCounter] = 0;
-                            hasToPen = true;
-                            toCounter++;
-                            break;
-                    }*/
                 }   
             }
             else if (transferPage5)
@@ -1751,14 +1724,14 @@ public class Application extends JFrame implements SerialPortEventListener
                         String lengthEntry = (skipLength) ? previousRow.get("Length").toString() : length;
                         String weightEntry = (skipWeight) ? previousRow.get("Weight").toString() : weight;
                             
-                        gatorTable.addRow(0, tag, previousRow.get("Egg Collection Date"), previousRow.get("Egg Nest Location"), previousRow.get("Egg Number"), previousRow.get("Egg Length"), previousRow.get("Egg Weight"), previousRow.get("Hatch Year"), previousRow.get("Gender"), previousRow.get("Umbilical"), currentDate, previousRow.get("To"), toPen, bellySize, lengthEntry, weightEntry, formulaDate, experimentalCode.getText(), vaccinatedDate, comments.getText(), "");
+                        gatorTable.addRow(0, tag, previousRow.get("Egg Collection Date"), previousRow.get("Egg Nest Location"), previousRow.get("Egg Number"), previousRow.get("Egg Length"), previousRow.get("Egg Weight"), previousRow.get("Hatch Year"), previousRow.get("Gender"), previousRow.get("Umbilical"), currentDate, previousRow.get("To"), toPensComboBox.getSelectedItem().toString(), bellySize, lengthEntry, weightEntry, formulaDate, experimentalCode.getText(), vaccinatedDate, comments.getText(), "");
                     }
                     else
                     {
                         String lengthEntry = (skipLength) ? "" : length;
                         String weightEntry = (skipWeight) ? "" : weight;
                             
-                        gatorTable.addRow(0, tag, "", "", "", "", "", "", "", "", currentDate, "", toPen, bellySize, lengthEntry, weightEntry, formulaDate, experimentalCode.getText(), vaccinatedDate, comments.getText(), "");
+                        gatorTable.addRow(0, tag, "", "", "", "", "", "", "", "", currentDate, "", toPensComboBox.getSelectedItem().toString(), bellySize, lengthEntry, weightEntry, formulaDate, experimentalCode.getText(), vaccinatedDate, comments.getText(), "");
                     }
                     IndexCursor cursor = CursorBuilder.createCursor(gatorTable.getIndex("IDIndex"));
                     cursor.beforeFirst();
