@@ -71,6 +71,7 @@ public class InitDatabases
                 .addColumn(new ColumnBuilder("Feed Type", DataType.TEXT))
                 .addColumn(new ColumnBuilder("Feed Amount", DataType.TEXT))
                 .addColumn(new ColumnBuilder("Size Class", DataType.TEXT))
+                .addColumn(new ColumnBuilder("Belly Quality", DataType.TEXT))
                 .addColumn(new ColumnBuilder("Comments", DataType.TEXT))
                 .toTable(pendb);
             
@@ -96,65 +97,125 @@ public class InitDatabases
     {
         try
         {
-            for (int i = 101; i <= 127; i++)
+            for (int i = 101; i <= 113; i++)
             {
-                penTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "39+", "");
+                penTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "39+", "Good", "");
             }
-            for (int i = 201; i <= 226; i++)
+            for (int i = 114; i <= 127; i++)
             {
-                penTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "15-18", "");
+                penTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "39+", "Bad", "");
             }
-            for (int i = 1; i <= 4; i++)
+            for (int i = 201; i <= 213; i++)
             {
-                penTable.addRow(0, "227." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "");
+                penTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "15-18", "Good", "");
             }
-            for (int i = 228; i <= 231; i++)
+            for (int i = 214; i <= 226; i++)
             {
-                penTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "19-23", "");
+                penTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "15-18", "Bad", "");
             }
-            for (int i = 1; i <= 4; i++)
+            for (int i = 1; i <= 2; i++)
             {
-                penTable.addRow(0, "232." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "");
+                penTable.addRow(0, "227." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "Good", "");
             }
-            for (int i = 301; i <= 326; i++)
+            for (int i = 3; i <= 4; i++)
             {
-                penTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "24-28", "");
+                penTable.addRow(0, "227." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "Bad", "");
             }
-            for (int i = 401; i <= 409; i++)
+            for (int i = 228; i <= 229; i++)
             {
-                penTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "29-33", "");
+                penTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "19-23", "Good", "");
             }
-            for (int i = 1; i <= 4; i++)
+            for (int i = 230; i <= 231; i++)
             {
-                penTable.addRow(0, "410." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "");
+                penTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "19-23", "Bad", "");
             }
-            for (int i = 1; i <= 4; i++)
+            for (int i = 1; i <= 2; i++)
             {
-                penTable.addRow(0, "411." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "");
+                penTable.addRow(0, "232." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "Good", "");
             }
-            for (int i = 412; i <= 419; i++)
+            for (int i = 3; i <= 4; i++)
             {
-                penTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "34-36", "");
+                penTable.addRow(0, "232." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "Bad", "");
             }
-            for (int i = 1; i <= 4; i++)
+            for (int i = 301; i <= 313; i++)
             {
-                penTable.addRow(0, "420." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "");
+                penTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "24-28", "Good", "");
             }
-            for (int i = 1; i <= 4; i++)
+            for (int i = 314; i <= 326; i++)
             {
-                penTable.addRow(0, "421." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "");
+                penTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "24-28", "Bad", "");
             }
-            for (int i = 422; i <= 437; i++)
+            for (int i = 401; i <= 404; i++)
             {
-                penTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "37-38", "");
+                penTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "29-33", "Good", "");
             }
-            for (int i = 801; i <= 816; i++)
+            for (int i = 405; i <= 409; i++)
             {
-                penTable.addRow(0, i, "Small", 200, "06-01-2015", "88", "H", "50", "Family", "");
+                penTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "29-33", "Bad", "");
             }
-            for (int i = 901; i <= 910; i++)
+            for (int i = 1; i <= 2; i++)
             {
-                penTable.addRow(0, i, "Small", 200, "06-01-2015", "88", "H", "50", "Empty", "");
+                penTable.addRow(0, "410." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "Good", "");
+            }
+            for (int i = 3; i <= 4; i++)
+            {
+                penTable.addRow(0, "410." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "Bad", "");
+            }
+            for (int i = 1; i <= 2; i++)
+            {
+                penTable.addRow(0, "411." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "Good", "");
+            }
+            for (int i = 3; i <= 4; i++)
+            {
+                penTable.addRow(0, "411." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "Bad", "");
+            }
+            for (int i = 412; i <= 415; i++)
+            {
+                penTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "34-36", "Good", "");
+            }
+            for (int i = 416; i <= 419; i++)
+            {
+                penTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "34-36", "Bad", "");
+            }
+            for (int i = 1; i <= 2; i++)
+            {
+                penTable.addRow(0, "420." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "Good", "");
+            }
+            for (int i = 3; i <= 4; i++)
+            {
+                penTable.addRow(0, "420." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "Bad", "");
+            }
+            for (int i = 1; i <= 2; i++)
+            {
+                penTable.addRow(0, "421." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "Good", "");
+            }
+            for (int i = 3; i <= 4; i++)
+            {
+                penTable.addRow(0, "421." + i, "Quartered", 150, "06-01-2015", "88", "H", "50", "Hatchling", "Bad", "");
+            }
+            for (int i = 422; i <= 430; i++)
+            {
+                penTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "37-38", "Good", "");
+            }
+            for (int i = 431; i <= 437; i++)
+            {
+                penTable.addRow(0, i, "Large", 600, "06-01-2015", "88", "R", "500", "37-38", "Bad", "");
+            }
+            for (int i = 801; i <= 808; i++)
+            {
+                penTable.addRow(0, i, "Small", 200, "06-01-2015", "88", "H", "50", "Family", "Good", "");
+            }
+            for (int i = 809; i <= 816; i++)
+            {
+                penTable.addRow(0, i, "Small", 200, "06-01-2015", "88", "H", "50", "Family", "Bad", "");
+            }
+            for (int i = 901; i <= 905; i++)
+            {
+                penTable.addRow(0, i, "Small", 200, "06-01-2015", "88", "H", "50", "Empty", "Good", "");
+            }
+            for (int i = 906; i <= 910; i++)
+            {
+                penTable.addRow(0, i, "Small", 200, "06-01-2015", "88", "H", "50", "Empty", "Bad", "");
             }
         }
         catch (IOException e)

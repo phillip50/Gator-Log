@@ -69,12 +69,13 @@ public class Application extends JFrame implements SerialPortEventListener
     private boolean isVaccinated;
     private boolean isFormula;
     
-    
         //Date of last vaccination and special formula
         //if the above booleans are false, it is the date recorded in the gator's previous row
         //if true, it is a user-entered value
     private String vaccinatedDate;
     private String formulaDate;
+    
+    private boolean isGoodBelly;
     
         //When transferring gators, a "to" pen needs to be selected
         //toPens refers to the selected pens, and their class size and ranges are stored
@@ -144,6 +145,8 @@ public class Application extends JFrame implements SerialPortEventListener
     private final JButton didFormula;
     private final JTextField formulaField;
     private final JTextField comments;
+    private final JButton goodBelly;
+    private final JButton badBelly;
     
         //Boolean values to determine which components to display
     private boolean start;
@@ -162,6 +165,7 @@ public class Application extends JFrame implements SerialPortEventListener
     private boolean transferPage3;
     private boolean transferPage4;
     private boolean transferPage5;
+    private boolean transferPage6;
     private boolean quit;
     
     private String portNumber = "COM3";
@@ -197,6 +201,7 @@ public class Application extends JFrame implements SerialPortEventListener
         formulaDate = "";
         skipLength = false;
         skipWeight = false;
+        isGoodBelly = false;
         
         isVaccinated = false;
         isFormula = false;
@@ -234,6 +239,7 @@ public class Application extends JFrame implements SerialPortEventListener
         transferPage3 = false;
         transferPage4 = false;
         transferPage5 = false;
+        transferPage6 = false;
         quit = false;
               
         BufferedReader reader;
@@ -352,12 +358,9 @@ public class Application extends JFrame implements SerialPortEventListener
         cancel = new JButton("Cancel");      
         confirm = new JButton("Confirm");
         didVaccinate = new JButton("Yes");            
-        vaccinateField = new JTextField(10);
         didFormula = new JButton("Yes");     
-        formulaField = new JTextField(10);
-        
-        vaccinateField.setEnabled(false);
-        formulaField.setEnabled(false);
+        goodBelly = new JButton("Good Belly");
+        badBelly = new JButton("Bad Belly");
         
         penList = new JComboBox(pens.toArray());
         penList.setEditable(false);
@@ -370,6 +373,8 @@ public class Application extends JFrame implements SerialPortEventListener
         eggWeight = new JTextField(10);
         experimentalCode = new JTextField(10);
         comments = new JTextField(10);
+        vaccinateField = new JTextField(10);
+        formulaField = new JTextField(10);
         
         capacityInput.setFont(font1);
         collectionDate.setFont(font1);
@@ -379,6 +384,9 @@ public class Application extends JFrame implements SerialPortEventListener
         eggWeight.setFont(font1);
         experimentalCode.setFont(font1);
         comments.setFont(font1);
+        
+        vaccinateField.setEnabled(false);
+        formulaField.setEnabled(false);
         
         String[] genderList = {"Female", "Male"};
         String[] umbilicalList = {"Y", "N"};
@@ -874,8 +882,34 @@ public class Application extends JFrame implements SerialPortEventListener
             panel.add(panel2, BorderLayout.NORTH);
             panel.add(panel3, BorderLayout.SOUTH);
         }
-            //2nd transfer and harvest page
-        else if (transferPage2 || harvestPage2)
+            //2nd transfer page
+        else if (transferPage2)
+        {
+            panel.setLayout(new GridBagLayout());
+            GridBagConstraints c = new GridBagConstraints();
+            c.insets = new Insets(20, 5, 20, 5);
+            
+            Dimension size = new Dimension((int)(width/8), (int)(height/10));
+            
+            goodBelly.setFont(font1);
+            badBelly.setFont(font1);
+            goodBelly.setPreferredSize(size);
+            badBelly.setPreferredSize(size);
+            
+            c.gridy = 0;
+            c.gridx = 0;
+            panel.add(goodBelly, c);
+            
+            c.gridx = 1;
+            panel.add(badBelly, c);
+            
+            c.gridwidth = 2;
+            c.gridy = 1;
+            c.gridx = 0;
+            panel.add(cancel, c);
+        }
+            //3rd transfer and 2nd harvest page
+        else if (transferPage3 || harvestPage2)
         {
             Dimension size = new Dimension((int)(width/7), (int)(height/9));
             
@@ -911,8 +945,8 @@ public class Application extends JFrame implements SerialPortEventListener
             panel.add(panel3, BorderLayout.CENTER);
             panel.add(panel6, BorderLayout.SOUTH);
         }
-            //3rd transfer and harvest page
-        else if (transferPage3 || harvestPage3)
+            //4rd transfer and 3rd harvest page
+        else if (transferPage4 || harvestPage3)
         {
             Dimension size = new Dimension((int)(width/7), (int)(height/9));
             
@@ -952,8 +986,8 @@ public class Application extends JFrame implements SerialPortEventListener
             panel.add(panel3, BorderLayout.CENTER);
             panel.add(panel6, BorderLayout.SOUTH);
         }
-            //4th transfer and harvest page
-        else if (transferPage4 || harvestPage4)
+            //5th transfer and 4th harvest page
+        else if (transferPage5 || harvestPage4)
         {
             Dimension size = new Dimension((int)(width/7), (int)(height/9));
             
@@ -993,8 +1027,8 @@ public class Application extends JFrame implements SerialPortEventListener
             panel.add(panel3, BorderLayout.CENTER);
             panel.add(panel6, BorderLayout.SOUTH);
         }
-            //5th transfer page
-        else if (transferPage5)
+            //6th transfer page
+        else if (transferPage6)
         {
             System.out.println(vaccinatedDate);
             panel.setLayout(new GridBagLayout());
@@ -1062,11 +1096,11 @@ public class Application extends JFrame implements SerialPortEventListener
             
             java.util.List<String> toPensArrayList = new ArrayList<>();
             toPensArrayList.add(null);
-            for (int i = 0; i < toPens.length; i++)
+            for (String pen : toPens)
             {
-                if (toPens[i] != null)
+                if (pen != null)
                 {
-                    toPensArrayList.add(toPens[i]);
+                    toPensArrayList.add(pen);
                 }
             }
             
@@ -1210,6 +1244,7 @@ public class Application extends JFrame implements SerialPortEventListener
                 transferPage3 = false;
                 transferPage4 = false;
                 transferPage5 = false;
+                transferPage6 = false;
                 quit = false;
                 addComponents();
                 frame2.dispose();
@@ -1376,6 +1411,7 @@ public class Application extends JFrame implements SerialPortEventListener
             {
                     //in every case, read the information and flush the stream
                 temp = serialInput.readLine();
+                System.out.println(temp);
                 int index = temp.indexOf('.');
                 tag = temp.substring(index + 1);
                     //if on the 1st transfer page, read the tag, get the previous row in the gator database, and move to the next transfer page
@@ -1454,18 +1490,32 @@ public class Application extends JFrame implements SerialPortEventListener
             //button to skip length and weight measurements
             //page3 = length, page4 = weight
         skip.addActionListener(e -> {
-            if (transferPage3 || harvestPage3)
+            if (transferPage4)
             {
                 skipLength = true;
-                transferPage4 = true;
-                transferPage3 = false;
+                transferPage5 = true;
+                transferPage4 = false;
                 addComponents();
             }
-            else if (transferPage4 || harvestPage4)
+            else if (transferPage5)
             {
                 skipWeight = true;
-                transferPage4 = false;
-                transferPage5 = true;
+                transferPage5 = false;
+                transferPage6 = true;
+                addComponents();
+            }
+            else if (harvestPage3)
+            {
+                skipLength = true;
+                harvestPage3 = false;
+                harvestPage4 = true;
+                addComponents();
+            }
+            else if (harvestPage4)
+            {
+                skipWeight = true;
+                harvestPage4 = false;
+                harvestPage5 = true;
                 addComponents();
             }
         });
@@ -1598,6 +1648,20 @@ public class Application extends JFrame implements SerialPortEventListener
             addComponents();
         });
         
+        goodBelly.addActionListener(e -> {
+            isGoodBelly = true;
+            transferPage2 = false;
+            transferPage3 = true;
+            addComponents();
+        });
+        
+        badBelly.addActionListener(e -> {
+            isGoodBelly = false;
+            transferPage2 = false;
+            transferPage3 = true;
+            addComponents();
+        });
+        
             //when transferring a gator, leads back to the transfer start screen
         cancel.addActionListener(e -> {
             start = false;
@@ -1613,6 +1677,7 @@ public class Application extends JFrame implements SerialPortEventListener
             transferPage3 = false;
             transferPage4 = false;
             transferPage5 = false;
+            transferPage6 = false;
             quit = false;
             addComponents();
         });
@@ -1705,7 +1770,7 @@ public class Application extends JFrame implements SerialPortEventListener
                     }
                 }   
             }
-            else if (transferPage5)
+            else if (transferPage6)
             {
                 try
                 {
@@ -1835,7 +1900,7 @@ public class Application extends JFrame implements SerialPortEventListener
                 newGatorPage1 = false;
                 harvestPage1 = false;
             }
-            else if (transferPage5)
+            else if (transferPage6)
             {
                 transferStart = false;
                 transferPage1 = true;
@@ -1868,7 +1933,7 @@ public class Application extends JFrame implements SerialPortEventListener
             harvestPage5 = false;
             addTo = false;
             removeTo = false;
-            transferPage5 = false;
+            transferPage6 = false;
             quit = false;
             addComponents();
         });
@@ -1998,7 +2063,7 @@ public class Application extends JFrame implements SerialPortEventListener
             button.addActionListener(e -> {
                 String entry = ((JButton) e.getSource()).getText();
                 int number = Integer.parseInt(entry);
-                if (transferPage2)
+                if (transferPage3)
                 {
                     bellySize = number;
                     String classSize = "";
@@ -2032,22 +2097,22 @@ public class Application extends JFrame implements SerialPortEventListener
                             j = toCounter;
                         }
                     }
-                    transferPage2 = false;
-                    transferPage3 = true;
-                    addComponents();
-                }
-                else if (transferPage3)
-                {
-                    length = entry;
                     transferPage3 = false;
                     transferPage4 = true;
                     addComponents();
                 }
                 else if (transferPage4)
                 {
-                    weight = entry;
+                    length = entry;
                     transferPage4 = false;
                     transferPage5 = true;
+                    addComponents();
+                }
+                else if (transferPage5)
+                {
+                    weight = entry;
+                    transferPage5 = false;
+                    transferPage6 = true;
                     addComponents();
                 }
                 else if (harvestPage2)

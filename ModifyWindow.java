@@ -66,6 +66,11 @@ public class ModifyWindow extends JFrame
     private final java.util.List<String> waterChangeDates;
     private final java.util.List<JTextField> waterChangeDateFields;
     
+        //
+    private final java.util.List<JButton> bellyQualityButton;
+    private final java.util.List<Boolean> bellyQuality;
+    
+    
         //Temperature in pen
     private final java.util.List<JComboBox> temperatures;
     
@@ -96,6 +101,7 @@ public class ModifyWindow extends JFrame
     private final java.util.List<JLabel> feedLabel;
     private final java.util.List<JLabel> amountLabel;
     private final java.util.List<JLabel> classLabel;
+    private final java.util.List<JLabel> qualityLabel;
     private final java.util.List<JLabel> commentLabel;
     
     
@@ -143,6 +149,9 @@ public class ModifyWindow extends JFrame
         waterChangeDates = new ArrayList<>();
         waterChangeDateFields = new ArrayList<>();
         
+        bellyQualityButton = new ArrayList<>();
+        bellyQuality = new ArrayList<>();
+        
         temperatures = new ArrayList<>();
         
         feeds = new ArrayList<>();
@@ -164,6 +173,7 @@ public class ModifyWindow extends JFrame
         feedLabel = new ArrayList<>();
         amountLabel = new ArrayList<>();
         classLabel = new ArrayList<>();
+        qualityLabel = new ArrayList<>();
         commentLabel = new ArrayList<>();
     }
     
@@ -246,12 +256,21 @@ public class ModifyWindow extends JFrame
             modc.gridx = 1;
             modc.gridy = 6;
             modifyPanel.add(classes.get(i), modc);
-        
+            
             modc.gridx = 0;
             modc.gridy = 7;
-            modifyPanel.add(commentLabel.get(i), modc);
+            modifyPanel.add(qualityLabel.get(i), modc);
+            modc.fill = GridBagConstraints.BOTH;
             modc.gridx = 1;
             modc.gridy = 7;
+            modifyPanel.add(bellyQualityButton.get(i), modc);
+        
+            modc.fill = GridBagConstraints.NONE;
+            modc.gridx = 0;
+            modc.gridy = 8;
+            modifyPanel.add(commentLabel.get(i), modc);
+            modc.gridx = 1;
+            modc.gridy = 8;
             modc.fill = GridBagConstraints.BOTH;
             modifyPanel.add(comments.get(i), modc);
         
@@ -259,11 +278,11 @@ public class ModifyWindow extends JFrame
             modc.fill = GridBagConstraints.NONE;
             modc.anchor = GridBagConstraints.LINE_END;
             modc.gridx = 0;
-            modc.gridy = 8;
+            modc.gridy = 9;
             modifyPanel.add(confirm.get(i), modc);
             modc.anchor = GridBagConstraints.LINE_START;
             modc.gridx = 1;
-            modc.gridy = 8;
+            modc.gridy = 9;
             modifyPanel.add(cancel.get(i), modc);
             
                 //add the panel to the frame
@@ -622,6 +641,26 @@ public class ModifyWindow extends JFrame
             changeWater.add(false);
             waterChangeDates.add(penRows.get(i).get("Water Change Date").toString());
             
+            String quality = penRows.get(i).get("Belly Quality").toString();
+            
+            boolean qualityEntry = quality.equals("Good");
+            bellyQuality.add(qualityEntry);
+            
+            String buttonName = qualityEntry ? "Good" : "Bad";
+            JButton tempBellyQualityButton = new JButton(buttonName);
+            tempBellyQualityButton.setEnabled(true);
+            tempBellyQualityButton.setPreferredSize(size);
+            tempBellyQualityButton.setFont(font);
+            tempBellyQualityButton.addActionListener(e -> {
+                int j = tabbedPanel.getSelectedIndex();
+                boolean temp = bellyQuality.get(j);
+                bellyQuality.remove(j);
+                bellyQuality.add(j, !temp);
+                String newButtonName = (!temp) ? "Good" : "Bad";
+                bellyQualityButton.get(j).setText(newButtonName);
+                
+            });
+            bellyQualityButton.add(tempBellyQualityButton);
             
                 //text field to record the date of a water change, if the water has been changed
                 //if the doChange button has not been clicked, this field is disabled
@@ -814,7 +853,8 @@ public class ModifyWindow extends JFrame
                 int j = tabbedPanel.getSelectedIndex();
                 try
                 {
-                    penTable.addRow(0, penRows.get(j).get("Pen Number"), penRows.get(j).get("Pen Type"), penRows.get(j).get("Square Footage"), waterChangeDates.get(j), temperatures.get(j).getSelectedItem().toString(), feeds.get(j).getSelectedItem().toString().charAt(1), amounts.get(j).getText(), classes.get(j).getSelectedItem().toString(), comments.get(j).getText());
+                    String entry = bellyQuality.get(j) ? "Good" : "Bad";
+                    penTable.addRow(0, penRows.get(j).get("Pen Number"), penRows.get(j).get("Pen Type"), penRows.get(j).get("Square Footage"), waterChangeDates.get(j), temperatures.get(j).getSelectedItem().toString(), feeds.get(j).getSelectedItem().toString().charAt(1), amounts.get(j).getText(), classes.get(j).getSelectedItem().toString(), entry, comments.get(j).getText());
                 }
                 catch (IOException e1)
                 {
@@ -865,9 +905,13 @@ public class ModifyWindow extends JFrame
             tempLabel7.setFont(font);
             classLabel.add(tempLabel7);
             
-            JLabel tempLabel8 = new JLabel("Any additional comments: ");
+            JLabel tempLabel8 = new JLabel("Belly Quality: ");
             tempLabel8.setFont(font);
-            commentLabel.add(tempLabel8);
+            qualityLabel.add(tempLabel8);
+            
+            JLabel tempLabel9 = new JLabel("Any additional comments: ");
+            tempLabel9.setFont(font);
+            commentLabel.add(tempLabel9);
         }
     }
     
