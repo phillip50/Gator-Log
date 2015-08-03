@@ -23,7 +23,7 @@ public class Application extends JFrame implements SerialPortEventListener
         //"this" object
     private static Application frame;
     
-        //Panel that every conponent is place on
+        //Panel that every conponent is placed on
     private final Container contentPane;
     
         //Database files
@@ -86,6 +86,7 @@ public class Application extends JFrame implements SerialPortEventListener
     private int[] toUpperBounds;
     private int[] toLowerBounds;
     private String[] toClassSizes;
+    private java.util.List<Boolean> isGoodQuality;
     private int[] capacities;
     private int[] capacityCounters;
     private int toCounter;
@@ -210,6 +211,7 @@ public class Application extends JFrame implements SerialPortEventListener
         toUpperBounds = new int[10];
         toLowerBounds = new int[10];
         toClassSizes = new String[10];
+        isGoodQuality = new ArrayList<>();
         capacities = new int[10];
         capacityCounters = new int[10];
         toCounter = 0;
@@ -800,14 +802,16 @@ public class Application extends JFrame implements SerialPortEventListener
             {
                 panel2 = new Panel(new FlowLayout());
                 
-                JLabel label = new JLabel("Pen " + toPens[i] + ": " + toClassSizes[i] + ", Capacity: " + capacities[i]);
+                String quality = (isGoodQuality.get(i)) ? "Good" : "Bad";
+                
+                JLabel label = new JLabel("Pen " + toPens[i] + ": " + toClassSizes[i] + ", Quality: " + quality + ", Capacity: " + capacities[i]);
                 label.setFont(font1);
                 panel2.add(label);
                 
                 button = new JButton("Remove Pen " + toPens[i]);
                 button.addActionListener(e -> {
                     String temp = ((JButton) e.getSource()).getText();
-                    int index = temp.indexOf(' ');
+                    int index = temp.indexOf(" ");
                     int index2 = temp.indexOf(" ", index+1);
                     String pen = temp.substring(index2+1);
                     for (int j = 0; j < toCounter; j++)
@@ -823,6 +827,7 @@ public class Application extends JFrame implements SerialPortEventListener
                     toLowerBounds[index] = 0;
                     toUpperBounds[index] = 0;
                     toClassSizes[index] = null;
+                    isGoodQuality.remove(index);
                     capacities[index] = 0;
                     capacityCounters[index] = 0;
                             
@@ -1411,7 +1416,6 @@ public class Application extends JFrame implements SerialPortEventListener
             {
                     //in every case, read the information and flush the stream
                 temp = serialInput.readLine();
-                System.out.println(temp);
                 int index = temp.indexOf('.');
                 tag = temp.substring(index + 1);
                     //if on the 1st transfer page, read the tag, get the previous row in the gator database, and move to the next transfer page
@@ -1708,6 +1712,7 @@ public class Application extends JFrame implements SerialPortEventListener
                 {
                     String pen = penList.getSelectedItem().toString();
                     String classSize = "";
+                    String quality = "";
                         
                     try
                     {
@@ -1724,6 +1729,7 @@ public class Application extends JFrame implements SerialPortEventListener
                             }
                         }
                         classSize = latestRow.get("Size Class").toString();
+                        quality = latestRow.get("Belly Quality").toString();
                     }
                     catch (IOException e1)
                     {      
@@ -1740,6 +1746,7 @@ public class Application extends JFrame implements SerialPortEventListener
                         toLowerBounds[toCounter] = -1;
                         toUpperBounds[toCounter] = -1;
                         toClassSizes[toCounter] = classSize;
+                        isGoodQuality.add( (quality.equals("Good")) );
                         capacities[toCounter] = Integer.parseInt(capacityInput.getText());
                         capacityCounters[toCounter] = 0;
                         hasToPen = true;
@@ -1751,6 +1758,7 @@ public class Application extends JFrame implements SerialPortEventListener
                         toLowerBounds[toCounter] = Integer.parseInt(classSize.substring(0, 2));
                         toUpperBounds[toCounter] = 46;
                         toClassSizes[toCounter] = classSize;
+                        isGoodQuality.add( (quality.equals("Good")) );
                         capacities[toCounter] = Integer.parseInt(capacityInput.getText());
                         capacityCounters[toCounter] = 0;
                         hasToPen = true;
@@ -1763,6 +1771,7 @@ public class Application extends JFrame implements SerialPortEventListener
                         toLowerBounds[toCounter] = Integer.parseInt(classSize.substring(0, index));
                         toUpperBounds[toCounter] = Integer.parseInt(classSize.substring(index+1));
                         toClassSizes[toCounter] = classSize;
+                        isGoodQuality.add( (quality.equals("Good")) );
                         capacities[toCounter] = Integer.parseInt(capacityInput.getText());
                         capacityCounters[toCounter] = 0;
                         hasToPen = true;
@@ -1822,6 +1831,7 @@ public class Application extends JFrame implements SerialPortEventListener
                     toLowerBounds[toPenIndex] = 0;
                     toUpperBounds[toPenIndex] = 0;
                     toClassSizes[toPenIndex] = null;
+                    isGoodQuality.remove(toPenIndex);
                     capacities[toPenIndex] = 0;
                     capacityCounters[toPenIndex] = 0;
                             
@@ -2090,7 +2100,7 @@ public class Application extends JFrame implements SerialPortEventListener
                         {     
                         }
                         
-                        if (classSize.equals("Family") || (number >= toLowerBounds[j] && number <= toUpperBounds[j]) || (entry.equals("Hatchling") && classSize.equals("Hatchling")))
+                        if (classSize.equals("Family") || (number >= toLowerBounds[j] && number <= toUpperBounds[j] && isGoodQuality.get(j) == isGoodBelly) || (entry.equals("Hatchling") && classSize.equals("Hatchling")))
                         {
                             toPen = toPens[j];
                             toPenIndex = j;
