@@ -137,6 +137,7 @@ public class Application extends JFrame implements SerialPortEventListener
     private final JTextField eggLength;
     private final JTextField eggWeight;
     private final JTextField experimentalCode;
+    private final JTextField optionalText;
     private final JComboBox gender;
     private final JComboBox umbilical;
     private final JButton confirm;
@@ -153,6 +154,7 @@ public class Application extends JFrame implements SerialPortEventListener
     private boolean start;
     private boolean newGatorPage1;
     private boolean newGatorPage2;
+    private boolean newGatorOptionalPage;
     private boolean harvestPage1;
     private boolean harvestPage2;
     private boolean harvestPage3;
@@ -228,6 +230,7 @@ public class Application extends JFrame implements SerialPortEventListener
         start = true;
         newGatorPage1 = false;
         newGatorPage2 = false;
+        newGatorOptionalPage = false;
         transferStart = false;
         harvestPage1 = false;
         harvestPage2 = false;
@@ -277,6 +280,7 @@ public class Application extends JFrame implements SerialPortEventListener
             //List of pens on the farm
             //For quartered pens, add each of the 4 quarters
         pens = new ArrayList<>();
+        pens.add("");
         for (int i = 101; i <= 127; i++)
         {
             if (quarteredPens.indexOf("" + i) != -1)
@@ -377,6 +381,7 @@ public class Application extends JFrame implements SerialPortEventListener
         comments = new JTextField(10);
         vaccinateField = new JTextField(10);
         formulaField = new JTextField(10);
+        optionalText = new JTextField(10);
         
         capacityInput.setFont(font1);
         collectionDate.setFont(font1);
@@ -437,8 +442,8 @@ public class Application extends JFrame implements SerialPortEventListener
             penList.setSelectedIndex(0);
             gender.setSelectedIndex(0);
             umbilical.setSelectedIndex(0);
-            collectionDate.setText("");
-            eggLocation.setText("");
+            //collectionDate.setText("");
+            //eggLocation.setText("");
             eggNumber.setText("");
             eggLength.setText("");
             eggWeight.setText("");
@@ -447,7 +452,15 @@ public class Application extends JFrame implements SerialPortEventListener
             
             panel.setLayout(new BorderLayout());
             
-            Dimension size = new Dimension((int)(width/8), (int)(height/10));           
+            Dimension size = new Dimension((int)(width/8), (int)(height/10)); 
+            Dimension size2 = new Dimension((int)(width/4), (int)(height/10)); 
+            
+            JButton enterManually = new JButton("Or enter tag manually");
+            enterManually.addActionListener(e -> {
+                newGatorPage1 = false;
+                newGatorOptionalPage = true;
+                addComponents();
+            });
             
             Panel panel2 = new Panel(new FlowLayout());
             Panel panel3 = new Panel(new FlowLayout());
@@ -455,10 +468,46 @@ public class Application extends JFrame implements SerialPortEventListener
             tempLabel.setFont(font1);
             back.setPreferredSize(size);
             back.setFont(font1);
+            enterManually.setPreferredSize(size2);
+            enterManually.setFont(font1);
             panel2.add(back);
+            panel2.add(enterManually);
             panel3.add(tempLabel);
             panel.add(panel3, BorderLayout.NORTH);
             panel.add(panel2, BorderLayout.SOUTH);
+        }
+        else if (newGatorOptionalPage)
+        {
+            panel.setLayout(new BorderLayout());
+            
+            Dimension size = new Dimension((int)(width/8), (int)(height/10));
+            
+            Panel panel2 = new Panel(new FlowLayout());
+            Panel panel3 = new Panel(new FlowLayout());
+            
+            JButton enterTag = new JButton("Enter");
+            enterTag.addActionListener(e -> {
+                tag = optionalText.getText();
+                newGatorOptionalPage = false;
+                newGatorPage2 = true;
+                addComponents();
+            });
+            
+            JLabel tempLabel = new JLabel("Tag Number: ");
+            tempLabel.setFont(font1);
+            back.setPreferredSize(size);
+            back.setFont(font1);
+            enterTag.setPreferredSize(size);
+            enterTag.setFont(font1);
+            optionalText.setFont(font1);
+            
+            panel2.add(optionalText);
+            panel2.add(enterTag);
+            
+            panel3.add(back);
+            
+            panel.add(panel2, BorderLayout.NORTH);
+            panel.add(panel3, BorderLayout.SOUTH);
         }
             //2nd page of adding a new hatchling
         else if (newGatorPage2)
@@ -478,15 +527,15 @@ public class Application extends JFrame implements SerialPortEventListener
             gatorLabel1.setFont(font1);
             JLabel gatorLabel2 = new JLabel(tag);
             gatorLabel2.setFont(font1);
-            JLabel collectionDateLabel = new JLabel("Egg Collection Date: ");
+            JLabel collectionDateLabel = new JLabel("Tag Date: ");
             collectionDateLabel.setFont(font1);
             JLabel locationLabel = new JLabel("Egg Nest Location: ");
             locationLabel.setFont(font1);
-            JLabel numberLabel = new JLabel("Egg Number: ");
+            JLabel numberLabel = new JLabel("Tag Number: ");
             numberLabel.setFont(font1);
-            JLabel lengthLabel = new JLabel("Egg Length: ");
+            JLabel lengthLabel = new JLabel("Length: ");
             lengthLabel.setFont(font1);
-            JLabel weightLabel = new JLabel("Egg Weight: ");
+            JLabel weightLabel = new JLabel("Weight: ");
             weightLabel.setFont(font1);
             JLabel hatchYear1 = new JLabel("Hatch Year: ");
             hatchYear1.setFont(font1);
@@ -1416,6 +1465,7 @@ public class Application extends JFrame implements SerialPortEventListener
             {
                     //in every case, read the information and flush the stream
                 temp = serialInput.readLine();
+                System.out.println(temp);
                 int index = temp.indexOf('.');
                 tag = temp.substring(index + 1);
                     //if on the 1st transfer page, read the tag, get the previous row in the gator database, and move to the next transfer page
@@ -1642,6 +1692,7 @@ public class Application extends JFrame implements SerialPortEventListener
             transferStart = false;
             newGatorPage1 = false;
             newGatorPage2 = false;
+            newGatorOptionalPage = false;
             harvestPage1 = false;
             harvestPage2 = false;
             addTo = false;
@@ -1870,7 +1921,7 @@ public class Application extends JFrame implements SerialPortEventListener
             {
                 try
                 {
-                    gatorTable.addRow(0, tag, collectionDate.getText(), eggLocation.getText(), eggNumber.getText(), eggLength.getText(), eggWeight.getText(), currentDate.substring(6), gender.getSelectedItem().toString(), umbilical.getSelectedItem().toString(), currentDate, "", penList.getSelectedItem().toString(), "", "", "", "", "", "", comments.getText(), "");
+                    gatorTable.addRow(0, tag, collectionDate.getText(), eggLocation.getText(), eggNumber.getText(), "", "", currentDate.substring(6), gender.getSelectedItem().toString(), umbilical.getSelectedItem().toString(), currentDate, "", penList.getSelectedItem().toString(), "", eggLength.getText(), eggWeight.getText(), "", "", "", comments.getText(), "");
                     IndexCursor cursor = CursorBuilder.createCursor(gatorTable.getIndex("IDIndex"));
                     cursor.beforeFirst();
                     for(Map<String,Object> row : cursor)
