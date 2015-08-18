@@ -111,7 +111,7 @@ public class PenApplication extends JFrame
                 gator.bellySize = currentRow.get("Belly Size").toString();
                 gator.length = currentRow.get("Length").toString();
                 gator.weight = currentRow.get("Weight").toString();
-                gator.recipe = currentRow.get("Special Recipe").toString();
+                gator.recipe = (currentRow.get("Special Recipe") != null) ? currentRow.get("Special Recipe").toString() : "";
                 gator.code = currentRow.get("Experiment Code").toString();
                 gator.vaccinate = currentRow.get("Vaccinated").toString();
                 gator.comments = currentRow.get("Comments").toString();

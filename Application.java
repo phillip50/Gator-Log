@@ -32,6 +32,8 @@ public class Application extends JFrame implements SerialPortEventListener
     private File penFile;
     private Table penTable;
     
+    private File logFile;
+    
         //The current day when the application is running
     private String currentDate;
     
@@ -94,6 +96,12 @@ public class Application extends JFrame implements SerialPortEventListener
     private int[] pensAtCapacityAmount;
     private String[] pensAtCapacityRange;
     private int pensAtCapacityCounter;
+    
+    private java.util.List<String> fromPens;
+    private java.util.List<Integer> fromPensAmount;
+    
+    private java.util.List<String> toPensNewGator;
+    private java.util.List<Integer> toPensNewGatorAmount;
     
         //Boolean checks when adding a "to" pen to the above arrays
         //if there is atleast 1 "to" pen, hasToPen is true
@@ -222,6 +230,12 @@ public class Application extends JFrame implements SerialPortEventListener
         pensAtCapacityRange = new String[10];
         pensAtCapacityCounter = 0;
         
+        fromPens = new ArrayList<>();
+        fromPensAmount = new ArrayList<>();
+        
+        toPensNewGator = new ArrayList<>();
+        toPensNewGatorAmount = new ArrayList<>();
+        
         penTaken = false;
         hasToPen = false;
         
@@ -264,6 +278,14 @@ public class Application extends JFrame implements SerialPortEventListener
         catch (IOException e1)
         {
             
+        }
+        
+        logFile = new File("log1.txt");
+        int k = 1;
+        while (logFile.exists())
+        {
+            k++;
+            logFile = new File("log" + k + ".txt");
         }
         
             //format of text file is comma-separated elements
@@ -410,7 +432,7 @@ public class Application extends JFrame implements SerialPortEventListener
     {  
             //reset the frame and components
         contentPane.removeAll();
-        penList.setSelectedIndex(0);
+        //penList.setSelectedIndex(0);
         capacityInput.setText("");
         
         JPanel panel = new JPanel();
@@ -439,7 +461,6 @@ public class Application extends JFrame implements SerialPortEventListener
             //1st page when adding a new hatchling
         else if (newGatorPage1)
         {
-            penList.setSelectedIndex(0);
             gender.setSelectedIndex(0);
             umbilical.setSelectedIndex(0);
             //collectionDate.setText("");
@@ -1465,7 +1486,6 @@ public class Application extends JFrame implements SerialPortEventListener
             {
                     //in every case, read the information and flush the stream
                 temp = serialInput.readLine();
-                System.out.println(temp);
                 int index = temp.indexOf('.');
                 tag = temp.substring(index + 1);
                     //if on the 1st transfer page, read the tag, get the previous row in the gator database, and move to the next transfer page
@@ -1832,8 +1852,11 @@ public class Application extends JFrame implements SerialPortEventListener
             }
             else if (transferPage6)
             {
+                String from = "";
+                String to = "";
                 try
                 {
+                    to = toPensComboBox.getSelectedItem().toString();
                     if (isVaccinated)
                     {
                         vaccinatedDate = vaccinateField.getText();
@@ -1846,17 +1869,18 @@ public class Application extends JFrame implements SerialPortEventListener
                     
                     if (previousRow != null)
                     {
+                        from = previousRow.get("To").toString();
                         String lengthEntry = (skipLength) ? previousRow.get("Length").toString() : length;
                         String weightEntry = (skipWeight) ? previousRow.get("Weight").toString() : weight;
                             
-                        gatorTable.addRow(0, tag, previousRow.get("Egg Collection Date"), previousRow.get("Egg Nest Location"), previousRow.get("Egg Number"), previousRow.get("Egg Length"), previousRow.get("Egg Weight"), previousRow.get("Hatch Year"), previousRow.get("Gender"), previousRow.get("Umbilical"), currentDate, previousRow.get("To"), toPensComboBox.getSelectedItem().toString(), bellySize, lengthEntry, weightEntry, formulaDate, experimentalCode.getText(), vaccinatedDate, comments.getText(), "");
+                        gatorTable.addRow(0, tag, previousRow.get("Egg Collection Date"), previousRow.get("Egg Nest Location"), previousRow.get("Egg Number"), previousRow.get("Egg Length"), previousRow.get("Egg Weight"), previousRow.get("Hatch Year"), previousRow.get("Gender"), previousRow.get("Umbilical"), currentDate, from, to, bellySize, lengthEntry, weightEntry, formulaDate, experimentalCode.getText(), vaccinatedDate, comments.getText(), "");
                     }
                     else
                     {
                         String lengthEntry = (skipLength) ? "" : length;
                         String weightEntry = (skipWeight) ? "" : weight;
                             
-                        gatorTable.addRow(0, tag, "", "", "", "", "", "", "", "", currentDate, "", toPensComboBox.getSelectedItem().toString(), bellySize, lengthEntry, weightEntry, formulaDate, experimentalCode.getText(), vaccinatedDate, comments.getText(), "");
+                        gatorTable.addRow(0, tag, "", "", "", "", "", "", "", "", currentDate, from, to, bellySize, lengthEntry, weightEntry, formulaDate, experimentalCode.getText(), vaccinatedDate, comments.getText(), "");
                     }
                     IndexCursor cursor = CursorBuilder.createCursor(gatorTable.getIndex("IDIndex"));
                     cursor.beforeFirst();
@@ -1868,6 +1892,7 @@ public class Application extends JFrame implements SerialPortEventListener
                 catch (IOException e1)
                 {    
                 }
+                toPenIndex = Arrays.asList(toPens).indexOf(to);
                 if (toPenIndex != -1)
                 {
                     capacityCounters[toPenIndex]++;
@@ -1916,23 +1941,48 @@ public class Application extends JFrame implements SerialPortEventListener
                     
                 toPen = "";
                 toPenIndex = -1;
+                
+                int index = fromPens.indexOf(from);
+                if (index == -1)
+                {
+                    fromPens.add(from);
+                    fromPensAmount.add(1);
+                }
+                else
+                {
+                    fromPensAmount.set(index, fromPensAmount.get(index) + 1);
+                }
+                
+                outputFile();
             }
             else if (newGatorPage2)
             {
                 try
                 {
-                    gatorTable.addRow(0, tag, collectionDate.getText(), eggLocation.getText(), eggNumber.getText(), "", "", currentDate.substring(6), gender.getSelectedItem().toString(), umbilical.getSelectedItem().toString(), currentDate, "", penList.getSelectedItem().toString(), "", eggLength.getText(), eggWeight.getText(), "", "", "", comments.getText(), "");
+                    gatorTable.addRow(0, tag, collectionDate.getText(), eggLocation.getText(), eggNumber.getText(), eggLength.getText(), eggWeight.getText(), currentDate.substring(6), gender.getSelectedItem().toString(), umbilical.getSelectedItem().toString(), currentDate, "", penList.getSelectedItem().toString(), "", "", "", "", "", "", comments.getText(), "");
                     IndexCursor cursor = CursorBuilder.createCursor(gatorTable.getIndex("IDIndex"));
                     cursor.beforeFirst();
                     for(Map<String,Object> row : cursor)
                     {
  
                     }
+                    
+                    int index = toPensNewGator.indexOf(penList.getSelectedItem().toString());
+                    if (index == -1)
+                    {
+                        toPensNewGator.add(penList.getSelectedItem().toString());
+                        toPensNewGatorAmount.add(1);
+                    }
+                    else
+                    {
+                        toPensNewGatorAmount.set(index, toPensNewGatorAmount.get(index) + 1);
+                    }
                 }
                 catch (IOException e1)
                 {
                         
                 }
+                outputFile();
             }
             else if (harvestPage5)
             {
@@ -2199,6 +2249,61 @@ public class Application extends JFrame implements SerialPortEventListener
                 }
             });
             numbers[i] = button;
+        }
+    }
+    
+    public void outputFile()
+    {
+        try
+        {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(logFile, false));
+            
+            writer.write("Transferred Gators");
+            writer.newLine();
+            writer.newLine();
+            
+            for (int i = 0; i < fromPens.size(); i++)
+            {
+                String fromPen = (fromPens.get(i).equals("")) ? "No Pen" : "Pen " + fromPens.get(i);
+                
+                writer.write("\tFrom " + fromPen + ": " + fromPensAmount.get(i));
+                writer.newLine();
+            }
+            
+            for (int i = 0; i < toPens.length; i++)
+            {
+                if (toPens[i] != null)
+                {
+                    writer.write("\tTo Pen " + toPens[i] + ": " + capacityCounters[i]);
+                    writer.newLine();
+                }
+            }
+            
+            for (int i = 0; i < pensAtCapacity.length; i++)
+            {
+                if (pensAtCapacity[i] != null)
+                {
+                    writer.write("\tTo Pen " + pensAtCapacity[i] + ": " + pensAtCapacityAmount[i]);
+                    writer.newLine();
+                }
+            }
+            
+            writer.newLine();
+            writer.write("New Gators");
+            writer.newLine();
+            writer.newLine();
+            
+            for (int i = 0; i < toPensNewGator.size(); i++)
+            {
+                writer.write("\t" + toPensNewGator.get(i) + ": " + toPensNewGatorAmount.get(i));
+                writer.newLine();
+            }
+            
+            writer.close();
+        }
+        catch (IOException e)
+        {
+            
         }
     }
 }
