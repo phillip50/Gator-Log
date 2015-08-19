@@ -1,7 +1,7 @@
 # Gator-Log
 Simple user interface to track gators through their lifetime with the use of microchips
 
-Gators are initially loaded into a pen then can be transferred from pen to pen,
+Gators are initially loaded into a pen, then can be transferred from pen to pen,
 with each new gator, transfer and harvest being logged into an access database.
 
 The cage application can be run to view the current contents of each pen,

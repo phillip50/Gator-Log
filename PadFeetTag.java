@@ -5,7 +5,7 @@ import java.io.*;
 import org.apache.commons.lang.StringUtils;
 
 public class PadFeetTag
-{
+{    
     public static void main(String[] args)
     {
         try
@@ -24,7 +24,6 @@ public class PadFeetTag
                 if (row.get("Egg Number") != null)
                 {
                     String tag = row.get("Egg Number").toString();
-
 
                     int index = tag.indexOf("-");
 

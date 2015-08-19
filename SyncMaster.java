@@ -8,11 +8,9 @@ public class SyncMaster
     public static void main(String[] args)
     {        
         File gatorFile;
-        Database gatordb;
-        Table gatorTable = null;
+        Table gatorTable;
         File masterFile;
-        Database masterdb;
-        Table masterTable = null;
+        Table masterTable;
         File startFile;
         BufferedReader reader;
         

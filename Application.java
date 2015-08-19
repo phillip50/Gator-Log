@@ -577,6 +577,7 @@ public class Application extends JFrame implements SerialPortEventListener
             
             confirm.setPreferredSize(size);
             confirm.setFont(font1);
+            confirm.setEnabled(false);
             back.setPreferredSize(size);
             back.setFont(font1);
             penList.setFont(font1);
@@ -1286,9 +1287,7 @@ public class Application extends JFrame implements SerialPortEventListener
         }
             //quit page exits the application
         else if (quit)
-        {            
-                //output file
-            
+        {         
             frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
             System.exit(0);
         }
@@ -2183,6 +2182,81 @@ public class Application extends JFrame implements SerialPortEventListener
             isFormula = !isFormula;
             formulaField.setEnabled(isFormula);
         });
+        
+        eggNumber.getDocument().addDocumentListener(new DocumentListener()
+        {
+            @Override
+            public void changedUpdate(DocumentEvent e)
+            {
+                check();
+            }
+            
+            @Override
+            public void removeUpdate(DocumentEvent e)
+            {
+                check();
+            }
+            
+            @Override
+            public void insertUpdate(DocumentEvent e)
+            {
+                check();
+            }
+            public void check()
+            {
+                confirm.setEnabled(eggNumber.getText().length() > 0 && eggLength.getText().length() > 0 && eggWeight.getText().length() > 0);
+            }
+        });
+        
+        eggLength.getDocument().addDocumentListener(new DocumentListener()
+        {
+            @Override
+            public void changedUpdate(DocumentEvent e)
+            {
+                check();
+            }
+            
+            @Override
+            public void removeUpdate(DocumentEvent e)
+            {
+                check();
+            }
+            
+            @Override
+            public void insertUpdate(DocumentEvent e)
+            {
+                check();
+            }
+            public void check()
+            {
+                confirm.setEnabled(eggNumber.getText().length() > 0 && eggLength.getText().length() > 0 && eggWeight.getText().length() > 0);
+            }
+        });
+        
+        eggWeight.getDocument().addDocumentListener(new DocumentListener()
+        {
+            @Override
+            public void changedUpdate(DocumentEvent e)
+            {
+                check();
+            }
+            
+            @Override
+            public void removeUpdate(DocumentEvent e)
+            {
+                check();
+            }
+            
+            @Override
+            public void insertUpdate(DocumentEvent e)
+            {
+                check();
+            }
+            public void check()
+            {
+                confirm.setEnabled(eggNumber.getText().length() > 0 && eggLength.getText().length() > 0 && eggWeight.getText().length() > 0);
+            }
+        });
     }
     
         //initialize the list of numbered buttons 0-200 which are used as belly size, length and weight inputs
@@ -2275,18 +2349,17 @@ public class Application extends JFrame implements SerialPortEventListener
     
     public void outputFile()
     {
-        try
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(logFile, false)))
         {
             Date currentTime = Calendar.getInstance().getTime();
             
             DateFormat df1 = new SimpleDateFormat("MM/dd/yyyy");
             DateFormat df2 = new SimpleDateFormat("h:mm a");
             
-            BufferedWriter writer = new BufferedWriter(new FileWriter(logFile, false));
-            
             writer.write(df1.format(startTime));
             writer.newLine();
             writer.write(df2.format(startTime) + " - " + df2.format(currentTime));
+            writer.newLine();
             writer.newLine();
             
             writer.write("Transferred Gators");
