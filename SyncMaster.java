@@ -6,9 +6,7 @@ import java.io.*;
 public class SyncMaster
 {
     public static void main(String[] args)
-    {
-        System.out.println("Hello");
-        
+    {        
         File gatorFile;
         Database gatordb;
         Table gatorTable = null;
@@ -29,7 +27,6 @@ public class SyncMaster
             
             int start = Integer.parseInt(reader.readLine());
             reader.close();
-            System.out.println("" + start);
             
             Cursor gatorCursor = CursorBuilder.createCursor(gatorTable);
             

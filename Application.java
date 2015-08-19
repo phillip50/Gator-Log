@@ -17,6 +17,7 @@ import com.healthmarketscience.jackcess.*;
 import gnu.io.*;
 import java.io.*;
 import java.text.*;
+import org.apache.commons.lang.StringUtils;
 
 public class Application extends JFrame implements SerialPortEventListener
 {
@@ -33,6 +34,7 @@ public class Application extends JFrame implements SerialPortEventListener
     private Table penTable;
     
     private File logFile;
+    private Date startTime;
     
         //The current day when the application is running
     private String currentDate;
@@ -184,6 +186,8 @@ public class Application extends JFrame implements SerialPortEventListener
     public Application()
     {
         super("Gator Application");
+        
+        startTime = Calendar.getInstance().getTime();
         
             //initialize the fields
         gatorFile = null;
@@ -1959,7 +1963,24 @@ public class Application extends JFrame implements SerialPortEventListener
             {
                 try
                 {
-                    gatorTable.addRow(0, tag, collectionDate.getText(), eggLocation.getText(), eggNumber.getText(), eggLength.getText(), eggWeight.getText(), currentDate.substring(6), gender.getSelectedItem().toString(), umbilical.getSelectedItem().toString(), currentDate, "", penList.getSelectedItem().toString(), "", "", "", "", "", "", comments.getText(), "");
+                    String footTag = eggNumber.getText();
+                    String newTag;
+                    int index = footTag.indexOf("-");
+                    
+                    if (index == -1)
+                    {
+                        newTag = StringUtils.leftPad(footTag, 5, "0");
+                    }
+                    else
+                    {
+                        String s1 = footTag.substring(0, index);
+                        String s2 = footTag.substring(index + 1);
+                        
+                        newTag = StringUtils.leftPad(s1, 5, "0") + "-" + StringUtils.leftPad(s2, 5, "0");
+                    }
+                    
+                    
+                    gatorTable.addRow(0, tag, collectionDate.getText(), eggLocation.getText(), newTag, eggLength.getText(), eggWeight.getText(), currentDate.substring(6), gender.getSelectedItem().toString(), umbilical.getSelectedItem().toString(), currentDate, "", penList.getSelectedItem().toString(), "", "", "", "", "", "", comments.getText(), "");
                     IndexCursor cursor = CursorBuilder.createCursor(gatorTable.getIndex("IDIndex"));
                     cursor.beforeFirst();
                     for(Map<String,Object> row : cursor)
@@ -1967,7 +1988,7 @@ public class Application extends JFrame implements SerialPortEventListener
  
                     }
                     
-                    int index = toPensNewGator.indexOf(penList.getSelectedItem().toString());
+                    index = toPensNewGator.indexOf(penList.getSelectedItem().toString());
                     if (index == -1)
                     {
                         toPensNewGator.add(penList.getSelectedItem().toString());
@@ -2256,7 +2277,17 @@ public class Application extends JFrame implements SerialPortEventListener
     {
         try
         {
+            Date currentTime = Calendar.getInstance().getTime();
+            
+            DateFormat df1 = new SimpleDateFormat("MM/dd/yyyy");
+            DateFormat df2 = new SimpleDateFormat("h:mm a");
+            
             BufferedWriter writer = new BufferedWriter(new FileWriter(logFile, false));
+            
+            writer.write(df1.format(startTime));
+            writer.newLine();
+            writer.write(df2.format(startTime) + " - " + df2.format(currentTime));
+            writer.newLine();
             
             writer.write("Transferred Gators");
             writer.newLine();
