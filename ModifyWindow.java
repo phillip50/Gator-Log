@@ -427,7 +427,7 @@ public class ModifyWindow extends JFrame
                 weight = "(Not provided)";
             }
             
-            JLabel headerLabel3 = new JLabel("Collection Date: " + collectionDate + "   Nest Location: " + location + "   Egg Number: " + number + "   Egg Length: " + length + "   Egg Weight: " + weight);
+            JLabel headerLabel3 = new JLabel("Collection Date: " + collectionDate + "   Nest Location: " + location + "   Foot Tag: " + number + "   Hatchling Length: " + length + "   Hatchling Weight: " + weight);
             headerLabel3.setFont(font);
             gatorPanel.add(headerLabel3, gatorc);
             

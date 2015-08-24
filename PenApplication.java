@@ -5,9 +5,6 @@
  * 
  * @Phillip Dingler [phil50@ufl.edu]
  */
-
-//TODO: load all rows at begininng of application
-
 package test;
 
 import javax.swing.*;
@@ -48,7 +45,7 @@ public class PenApplication extends JFrame
     {
         super("Pen Application");
         
-            //read in the pen database file
+            //read in the database files
         try
         {
             penFile = new File("PenDatabase.accdb");
@@ -96,26 +93,26 @@ public class PenApplication extends JFrame
                 
                 Gator gator = new Gator();
                 gator.ID = Integer.parseInt( currentRow.get("ID").toString() );
-                gator.tagNumber = currentRow.get("Tag Number").toString();
-                gator.eggNestLocation = currentRow.get("Egg Nest Location").toString();
-                gator.eggCollectionDate = currentRow.get("Egg Collection Date").toString();
-                gator.eggNumber = currentRow.get("Egg Number").toString();
-                gator.eggLength = currentRow.get("Egg Length").toString();
-                gator.eggWeight = currentRow.get("Egg Weight").toString();
-                gator.hatchYear = currentRow.get("Hatch Year").toString();
-                gator.gender = currentRow.get("Gender").toString();
-                gator.umbilical = currentRow.get("Umbilical").toString();
-                gator.date = currentRow.get("Date").toString();
-                gator.from = currentRow.get("From").toString();
-                gator.to = currentRow.get("To").toString();
-                gator.bellySize = currentRow.get("Belly Size").toString();
-                gator.length = currentRow.get("Length").toString();
-                gator.weight = currentRow.get("Weight").toString();
+                gator.tagNumber = (currentRow.get("Tag Number") != null) ? currentRow.get("Tag Number").toString() : "";
+                gator.eggNestLocation = (currentRow.get("Egg Nest Location") != null) ? currentRow.get("Egg Nest Location").toString() : "";
+                gator.eggCollectionDate = (currentRow.get("Egg Collection Date") != null) ? currentRow.get("Egg Collection Date").toString() : "";
+                gator.eggNumber = (currentRow.get("Foot Tag") != null) ? currentRow.get("Foot Tag").toString() : "";
+                gator.eggLength = (currentRow.get("Hatchling Length") != null) ? currentRow.get("Hatchling Length").toString() : "";
+                gator.eggWeight = (currentRow.get("Hatchling Weight") != null) ? currentRow.get("Hatchling Weight").toString() : "";
+                gator.hatchYear = (currentRow.get("Hatch Year") != null) ? currentRow.get("Hatch Year").toString() : "";
+                gator.gender = (currentRow.get("Gender") != null) ? currentRow.get("Gender").toString() : "";
+                gator.umbilical = (currentRow.get("Umbilical") != null) ? currentRow.get("Umbilical").toString() : "";
+                gator.date = (currentRow.get("Date") != null) ? currentRow.get("Date").toString() : "";
+                gator.from = (currentRow.get("From") != null) ? currentRow.get("From").toString() : "";
+                gator.to = (currentRow.get("To") != null) ? currentRow.get("To").toString() : "";
+                gator.bellySize = (currentRow.get("Belly Size") != null) ? currentRow.get("Belly Size").toString() : "";
+                gator.length = (currentRow.get("Length") != null) ? currentRow.get("Length").toString() : "";
+                gator.weight = (currentRow.get("Weight") != null) ? currentRow.get("Weight").toString() : "";
                 gator.recipe = (currentRow.get("Special Recipe") != null) ? currentRow.get("Special Recipe").toString() : "";
-                gator.code = currentRow.get("Experiment Code").toString();
-                gator.vaccinate = currentRow.get("Vaccinated").toString();
-                gator.comments = currentRow.get("Comments").toString();
-                gator.harvested = currentRow.get("Harvested?").toString();
+                gator.code = (currentRow.get("Experiment Code") != null) ? currentRow.get("Experiment Code").toString() : "";
+                gator.vaccinate = (currentRow.get("Vaccinated") != null) ? currentRow.get("Vaccinated").toString() : "";
+                gator.comments = (currentRow.get("Comments") != null) ? currentRow.get("Comments").toString() : "";
+                gator.harvested = (currentRow.get("Harvested?") != null) ? currentRow.get("Harvested?").toString() : "";
                 
                 gatorRows.add(gator);
                 

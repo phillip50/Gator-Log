@@ -183,6 +183,9 @@ public class Application extends JFrame implements SerialPortEventListener
     
     private String portNumber = "COM3";
     
+    private int addedRows;
+    private File rowsToSync;
+    
     public Application()
     {
         super("Gator Application");
@@ -265,7 +268,6 @@ public class Application extends JFrame implements SerialPortEventListener
         transferPage6 = false;
         quit = false;
               
-        BufferedReader reader;
         String temp = "";
         
             //read in the gator and pen databases and the list of quartered pens
@@ -276,7 +278,7 @@ public class Application extends JFrame implements SerialPortEventListener
             penFile = new File("PenDatabase.accdb");
             penTable = DatabaseBuilder.open(penFile).getTable("Database");
             
-            reader = new BufferedReader(new FileReader("QuarteredPens.txt"));
+            BufferedReader reader = new BufferedReader(new FileReader("QuarteredPens.txt"));
             temp = reader.readLine();
         }
         catch (IOException e1)
@@ -429,6 +431,18 @@ public class Application extends JFrame implements SerialPortEventListener
         
         gender.setEditable(false);
         umbilical.setEditable(false);
+        
+        rowsToSync = new File("RowsToSync.txt");
+        try
+        {
+            BufferedReader reader = new BufferedReader(new FileReader(rowsToSync));
+            addedRows = Integer.parseInt(reader.readLine());
+            System.out.println(addedRows);
+        }
+        catch (IOException e)
+        {
+            
+        }
     }
     
         //methods to place components onto the frame, depending on the page boolean values
@@ -1876,7 +1890,7 @@ public class Application extends JFrame implements SerialPortEventListener
                         String lengthEntry = (skipLength) ? previousRow.get("Length").toString() : length;
                         String weightEntry = (skipWeight) ? previousRow.get("Weight").toString() : weight;
                             
-                        gatorTable.addRow(0, tag, previousRow.get("Egg Collection Date"), previousRow.get("Egg Nest Location"), previousRow.get("Egg Number"), previousRow.get("Egg Length"), previousRow.get("Egg Weight"), previousRow.get("Hatch Year"), previousRow.get("Gender"), previousRow.get("Umbilical"), currentDate, from, to, bellySize, lengthEntry, weightEntry, formulaDate, experimentalCode.getText(), vaccinatedDate, comments.getText(), "");
+                        gatorTable.addRow(0, tag, previousRow.get("Egg Collection Date"), previousRow.get("Egg Nest Location"), previousRow.get("Foot Tag"), previousRow.get("Hatchling Length"), previousRow.get("Hatchling Weight"), previousRow.get("Hatch Year"), previousRow.get("Gender"), previousRow.get("Umbilical"), currentDate, from, to, bellySize, lengthEntry, weightEntry, formulaDate, experimentalCode.getText(), vaccinatedDate, comments.getText(), "");
                     }
                     else
                     {
@@ -1891,6 +1905,11 @@ public class Application extends JFrame implements SerialPortEventListener
                     {
  
                     }
+                    
+                    addedRows++;
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(rowsToSync, false));
+                    writer.write("" + addedRows);
+                    writer.close();
                 }
                 catch (IOException e1)
                 {    
@@ -1997,6 +2016,11 @@ public class Application extends JFrame implements SerialPortEventListener
                     {
                         toPensNewGatorAmount.set(index, toPensNewGatorAmount.get(index) + 1);
                     }
+                    
+                    addedRows++;
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(rowsToSync, false));
+                    writer.write("" + addedRows);
+                    writer.close();
                 }
                 catch (IOException e1)
                 {
@@ -2011,11 +2035,16 @@ public class Application extends JFrame implements SerialPortEventListener
                     String lengthEntry = (skipLength) ? previousRow.get("Length").toString() : length;
                     String weightEntry = (skipWeight) ? previousRow.get("Weight").toString() : weight;
                         
-                    gatorTable.addRow(0, tag, previousRow.get("Egg Collection Date"), previousRow.get("Egg Nest Location"), previousRow.get("Egg Number"), previousRow.get("Egg Length"), previousRow.get("Egg Weight"), previousRow.get("Hatch Year"), previousRow.get("Gender"), previousRow.get("Umbilical"), currentDate, previousRow.get("To"), "", bellySize, lengthEntry, weightEntry, previousRow.get("Special Recipe"), "", previousRow.get("Vaccinated"), comments.getText(), "Yes");
+                    gatorTable.addRow(0, tag, previousRow.get("Egg Collection Date"), previousRow.get("Egg Nest Location"), previousRow.get("Foot Tag"), previousRow.get("Hatchling Length"), previousRow.get("Hatchling Weight"), previousRow.get("Hatch Year"), previousRow.get("Gender"), previousRow.get("Umbilical"), currentDate, previousRow.get("To"), "", bellySize, lengthEntry, weightEntry, previousRow.get("Special Recipe"), "", previousRow.get("Vaccinated"), comments.getText(), "Yes");
                     for(Map<String,Object> row : CursorBuilder.createCursor(gatorTable.getIndex("IDIndex")))
                     {
  
                     }
+                    
+                    addedRows++;
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(rowsToSync, false));
+                    writer.write("" + addedRows);
+                    writer.close();
                 }
                 catch (IOException e1)
                 {
