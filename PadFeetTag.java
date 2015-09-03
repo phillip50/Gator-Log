@@ -21,9 +21,9 @@ public class PadFeetTag
             {
                 Row row = gatorCursor.getCurrentRow();
                 
-                if (row.get("Egg Number") != null)
+                if (row.get("Foot Tag") != null)
                 {
-                    String tag = row.get("Egg Number").toString();
+                    String tag = row.get("Foot Tag").toString();
 
                     int index = tag.indexOf("-");
 
@@ -40,9 +40,10 @@ public class PadFeetTag
                         newTag = StringUtils.leftPad(s1, 5, "0") + "-" + StringUtils.leftPad(s2, 5, "0");
                     }
 
-                    row.replace("Egg Number", newTag);
+                    row.replace("Foot Tag", newTag);
                     
                     gatorTable.updateRow(row);
+                    System.out.println(row.get("ID").toString());
                 }
             }
         }

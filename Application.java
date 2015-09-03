@@ -29,7 +29,6 @@ public class Application extends JFrame implements SerialPortEventListener
     
         //Database files
     private File gatorFile;
-    private Table gatorTable;
     private File penFile;
     private Table penTable;
     
@@ -194,7 +193,6 @@ public class Application extends JFrame implements SerialPortEventListener
         
             //initialize the fields
         gatorFile = null;
-        gatorTable = null;
         penFile = null;
         penTable = null;
         
@@ -270,11 +268,10 @@ public class Application extends JFrame implements SerialPortEventListener
               
         String temp = "";
         
+        gatorFile = new File("AnimalDatabase.accdb");
             //read in the gator and pen databases and the list of quartered pens
         try
         {
-            gatorFile = new File("AnimalDatabase.accdb");
-            gatorTable = DatabaseBuilder.open(gatorFile).getTable("Database");
             penFile = new File("PenDatabase.accdb");
             penTable = DatabaseBuilder.open(penFile).getTable("Database");
             
@@ -437,7 +434,6 @@ public class Application extends JFrame implements SerialPortEventListener
         {
             BufferedReader reader = new BufferedReader(new FileReader(rowsToSync));
             addedRows = Integer.parseInt(reader.readLine());
-            System.out.println(addedRows);
         }
         catch (IOException e)
         {
@@ -1501,13 +1497,16 @@ public class Application extends JFrame implements SerialPortEventListener
         {
             try
             {
+                Database db = DatabaseBuilder.open(gatorFile);
+                Table gatorTable = db.getTable("Database");
                     //in every case, read the information and flush the stream
                 temp = serialInput.readLine();
-                int index = temp.indexOf('.');
-                tag = temp.substring(index + 1);
                     //if on the 1st transfer page, read the tag, get the previous row in the gator database, and move to the next transfer page
                 if (transferPage1)
                 {
+                    int index = temp.indexOf('.');
+                    tag = temp.substring(index + 1);
+                
                     IndexCursor cursor = CursorBuilder.createCursor(gatorTable.getIndex("TagIndex"));
                     cursor.beforeFirst();
                     Row latestRow = null;
@@ -1535,6 +1534,9 @@ public class Application extends JFrame implements SerialPortEventListener
                     //if on the 1st harvest page, read the tag, get the previous row in the gator database, and move to the next harvest page
                 else if (harvestPage1)
                 {
+                    int index = temp.indexOf('.');
+                    tag = temp.substring(index + 1);
+                    
                     IndexCursor cursor = CursorBuilder.createCursor(gatorTable.getIndex("TagIndex"));
                     cursor.beforeFirst();
                     Row latestRow = null;
@@ -1562,11 +1564,16 @@ public class Application extends JFrame implements SerialPortEventListener
                     //if on the first new gator page, read the tag then move to the next new gator page
                 else if (newGatorPage1)
                 {
+                    int index = temp.indexOf('.');
+                    tag = temp.substring(index + 1);
+                    
                     newGatorPage1 = false;
                     newGatorPage2 = true;
                     addComponents();                   
                 }
                     //in every other case just ignore the event
+                
+                db.close();
             }
             catch (Exception e)
             {
@@ -1873,6 +1880,9 @@ public class Application extends JFrame implements SerialPortEventListener
                 String to = "";
                 try
                 {
+                    Database db = DatabaseBuilder.open(gatorFile);
+                    Table gatorTable = db.getTable("Database");
+                    
                     to = toPensComboBox.getSelectedItem().toString();
                     if (isVaccinated)
                     {
@@ -1905,6 +1915,8 @@ public class Application extends JFrame implements SerialPortEventListener
                     {
  
                     }
+                    
+                    db.close();
                     
                     addedRows++;
                     BufferedWriter writer = new BufferedWriter(new FileWriter(rowsToSync, false));
@@ -1997,6 +2009,8 @@ public class Application extends JFrame implements SerialPortEventListener
                         newTag = StringUtils.leftPad(s1, 5, "0") + "-" + StringUtils.leftPad(s2, 5, "0");
                     }
                     
+                    Database db = DatabaseBuilder.open(gatorFile);
+                    Table gatorTable = db.getTable("Database");                  
                     
                     gatorTable.addRow(0, tag, collectionDate.getText(), eggLocation.getText(), newTag, eggLength.getText(), eggWeight.getText(), currentDate.substring(6), gender.getSelectedItem().toString(), umbilical.getSelectedItem().toString(), currentDate, "", penList.getSelectedItem().toString(), "", "", "", "", "", "", comments.getText(), "");
                     IndexCursor cursor = CursorBuilder.createCursor(gatorTable.getIndex("IDIndex"));
@@ -2005,6 +2019,8 @@ public class Application extends JFrame implements SerialPortEventListener
                     {
  
                     }
+                    
+                    db.close();
                     
                     index = toPensNewGator.indexOf(penList.getSelectedItem().toString());
                     if (index == -1)
@@ -2035,11 +2051,16 @@ public class Application extends JFrame implements SerialPortEventListener
                     String lengthEntry = (skipLength) ? previousRow.get("Length").toString() : length;
                     String weightEntry = (skipWeight) ? previousRow.get("Weight").toString() : weight;
                         
+                    Database db = DatabaseBuilder.open(gatorFile);
+                    Table gatorTable = db.getTable("Database");
+                    
                     gatorTable.addRow(0, tag, previousRow.get("Egg Collection Date"), previousRow.get("Egg Nest Location"), previousRow.get("Foot Tag"), previousRow.get("Hatchling Length"), previousRow.get("Hatchling Weight"), previousRow.get("Hatch Year"), previousRow.get("Gender"), previousRow.get("Umbilical"), currentDate, previousRow.get("To"), "", bellySize, lengthEntry, weightEntry, previousRow.get("Special Recipe"), "", previousRow.get("Vaccinated"), comments.getText(), "Yes");
                     for(Map<String,Object> row : CursorBuilder.createCursor(gatorTable.getIndex("IDIndex")))
                     {
  
                     }
+                    
+                    db.close();
                     
                     addedRows++;
                     BufferedWriter writer = new BufferedWriter(new FileWriter(rowsToSync, false));
